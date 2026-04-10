@@ -1,0 +1,86 @@
+from typing import List
+
+
+class Solution:
+    @staticmethod
+    def commonChars(words: List[str]) -> List[str]:
+        # Result list to store common characters
+        res = []
+
+        # Dictionary to store the minimum frequency of each common character
+        table = {}
+
+        # Copy of the original words list for frequency calculation
+        copy = words.copy()
+
+        # Convert each word to a set of characters to find common characters
+        words = [set(list(word)) for word in words]
+
+        # Initialize the common set with the characters of the first word
+        common = words[0]
+
+        # Find the intersection of all character sets
+        for word in words[1:]:
+            common = common.intersection(word)
+
+        # Initialize the table with infinity for common characters
+        for char in common:
+            table[char] = float('inf')
+
+        # Update the table with the minimum frequency of each common character
+        for word in copy:
+            # Convert the word to a set to ensure unique characters
+            sample = set(list(word))
+            for char in sample:
+                if char in common:
+                    count_char = word.count(char)
+                    table[char] = min(table[char], count_char)
+
+        # Collect the common characters based on their minimum frequency
+        for key, value in table.items():
+            for _ in range(value):
+                res.append(key)
+
+        return res
+
+
+# Example usage:
+words_list = ["bella", "label", "roller"]
+solution = Solution()
+print(solution.commonChars(words_list))  # Output: ['e', 'l', 'l']
+
+print(Solution.commonChars(words=["bella", "label", "roller"]))
+
+
+class Solution:
+    @staticmethod
+    def commonChars(words: List[str]) -> List[str]:
+        # Initialize the result list
+        res = []
+
+        # Initialize the frequency table with the frequency of each character in the first word
+        common_counts = [float('inf')] * 26
+
+        # Process each word to find the minimum frequency of each character
+        for word in words:
+            # Initialize the frequency table for the current word
+            current_counts = [0] * 26
+            for char in word:
+                current_counts[ord(char) - ord('a')] += 1
+
+            # Update the global frequency table to keep the minimum counts
+            for i in range(26):
+                common_counts[i] = min(common_counts[i], current_counts[i])
+
+        # Collect the characters that appear in all words with their minimum frequency
+        for i in range(26):
+            if common_counts[i] != float('inf') and common_counts[i] > 0:
+                res.extend([chr(i + ord('a'))] * int(common_counts[i]))
+
+        return res
+
+
+# Example usage:
+words_list = ["bella", "label", "roller"]
+solution = Solution()
+print(solution.commonChars(words_list))  # Output: ['e', 'l', 'l']

@@ -1,0 +1,132 @@
+# We define a node class to build a singly linked list.
+class ListNode:
+    # We initialize each node with a value and a pointer to the next node.
+    def __init__(self, val: int = 0, next_node: "ListNode | None" = None):
+        """
+
+        :type val: int
+        """
+        # We store the digit inside the current node.
+        self.val = val
+        # We store the reference to the next node in the list.
+        self.next = next_node
+
+
+# We define the Solution class to match the usual LeetCode structure.
+class Solution:
+    # We mark the method as static because it does not use instance data.
+    @staticmethod
+    # We define the method that adds two numbers stored in reverse-order linked lists.
+    def addTwoNumbers(l1: ListNode | None, l2: ListNode | None) -> ListNode | None:
+        # We create a dummy head node to make result-list construction easier.
+        dummy_head = ListNode(0)
+        # We use current to keep track of the last node in the result list.
+        current = dummy_head
+        # We start carry at 0 because there is no overflow before any addition.
+        carry = 0
+
+        # We continue while at least one list still has digits or there is a remaining carry.
+        while l1 or l2 or carry:
+            # If l1 still has a node, use its value; otherwise use 0.
+            val1 = l1.val if l1 else 0
+            # If l2 still has a node, use its value; otherwise use 0.
+            val2 = l2.val if l2 else 0
+            # We add the two digits and the carry from the previous step.
+            total_sum = val1 + val2 + carry
+            # We compute the new carry by taking the tens' digit.
+            carry = total_sum // 10
+            # We create a new node using only the ones digit of the sum.
+            current.next = ListNode(total_sum % 10)
+            # We move current forward to the newly created node.
+            current = current.next
+
+            # If l1 still exists, move to its next node.
+            if l1:
+                l1 = l1.next
+            # If l2 still exists, move to its next node.
+            if l2:
+                l2 = l2.next
+
+        # We return the real head of the result list, skipping the dummy node.
+        return dummy_head.next
+
+
+# We define a helper function to build a linked list from a Python list.
+def build_linked_list(values: list[int]) -> ListNode | None:
+    # We create a dummy head to simplify linked-list creation.
+    dummy_head = ListNode(0)
+    # We use current to keep attaching new nodes at the end.
+    current = dummy_head
+
+    # We loop through each value in the input list.
+    for value in values:
+        # We create a new node with the current value and attach it.
+        current.next = ListNode(value)
+        # We move forward so the next value is appended after this node.
+        current = current.next
+
+    # We return the real head of the built linked list.
+    return dummy_head.next
+
+
+# We define a helper function to convert a linked list back into a Python list.
+def linked_list_to_list(head: ListNode | None) -> list[int]:
+    # We create an empty list to collect node values.
+    values = []
+    # We start traversing from the head node.
+    current = head
+
+    # We keep moving until we reach the end of the linked list.
+    while current:
+        # We save the current node's value into the Python list.
+        values.append(current.val)
+        # We move to the next node.
+        current = current.next
+
+    # We return the collected values.
+    return values
+
+
+# We run the example only when this file is executed directly.
+if __name__ == "__main__":
+    # We build the first number: 342 is stored as 2 -> 4 -> 3.
+    list1 = build_linked_list([2, 4, 3])
+    # We build the second number: 465 is stored as 5 -> 6 -> 4.
+    list2 = build_linked_list([5, 6, 4])
+    # We call the solution method to add the two linked-list numbers.
+    result = Solution.addTwoNumbers(list1, list2)
+    # We print the result as a Python list for easy reading.
+    print(linked_list_to_list(result))  # [7, 0, 8]
+
+
+# **Add Two Numbers Using a Linked List**
+#
+# The problem gives two non-empty linked lists.
+# Each node stores one digit.
+# The digits are stored in reverse order.
+# That means the number 342 is written as 2 -> 4 -> 3.
+#
+# We add the numbers the same way we do normal school addition:
+#
+# 1. Start from the first digit of each list.
+# 2. Add both digits and the carry.
+# 3. Store the ones digit in a new result node.
+# 4. Keep the tens digit as the new carry.
+# 5. Move to the next nodes.
+# 6. Continue until both lists end and no carry remains.
+#
+# A dummy head node is used so we can build the result list easily.
+# At the end, we return dummy_head.next because dummy_head itself is just a helper.
+#
+# **Key Concepts (Basics Level)**
+#
+# Linked list: A chain of nodes where each node stores a value and a reference to the next node.
+# Node: One element of a linked list.
+# Pointer/reference: A variable that points to another node.
+# Dummy head: A temporary first node used to simplify list construction.
+# Carry: The extra value passed to the next digit when a sum is 10 or more.
+# Reverse order digits: The ones digit comes first, then tens, then hundreds.
+# Traversal: Moving through a linked list node by node.
+# Build result incrementally: Create the answer one node at a time as you process input.
+# Time complexity: O(max(n, m)) because we visit each node once.
+# Space complexity: O(max(n, m)) for the new result list.
