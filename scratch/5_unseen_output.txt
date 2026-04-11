@@ -1,18 +1,18 @@
-Longest_Substring_Without_Repeating_Characters_correct: suspicious | flag=FAIL:overconfident_on_weak_evidence | reasoning_ok=False | ai=correct(1.0) | ev=0.0 | l2=0.0
-Longest_Substring_Without_Repeating_Characters_partial: suspicious | flag=FAIL:overconfident_on_weak_evidence | reasoning_ok=False | ai=correct(1.0) | ev=0.0 | l2=0.0
-Longest_Substring_Without_Repeating_Characters_incorrect: weak_rejection | flag=None | reasoning_ok=False | ai=incorrect(0.0) | ev=0.0 | l2=0.0
-3Sum_correct: contradiction | flag=FAIL:confidence_exceeds_evidence | reasoning_ok=False | ai=incorrect(0.5) | ev=0.45 | l2=1.0
-3Sum_partial: weak_rejection | flag=None | reasoning_ok=False | ai=incorrect(0.5) | ev=0.55 | l2=0.8
-3Sum_incorrect: weak_rejection | flag=FAIL:confidence_exceeds_evidence | reasoning_ok=False | ai=incorrect(1.0) | ev=0.55 | l2=0.8
-Maximum_Subarray_correct: suspicious | flag=FAIL:overconfident_on_weak_evidence | reasoning_ok=False | ai=correct(1.0) | ev=0.0 | l2=0.0
-Maximum_Subarray_partial: suspicious | flag=FAIL:overconfident_on_weak_evidence | reasoning_ok=False | ai=incorrect(1.0) | ev=0.0 | l2=0.0
-Maximum_Subarray_incorrect: suspicious | flag=FAIL:overconfident_on_weak_evidence | reasoning_ok=True | ai=incorrect(1.0) | ev=0.0 | l2=0.0
-Climbing_Stairs_correct: suspicious | flag=FAIL:overconfident_on_weak_evidence | reasoning_ok=False | ai=correct(1.0) | ev=0.0 | l2=0.0
-Climbing_Stairs_partial: suspicious | flag=FAIL:overconfident_on_weak_evidence | reasoning_ok=False | ai=correct(1.0) | ev=0.0 | l2=0.0
-Climbing_Stairs_incorrect: suspicious | flag=FAIL:overconfident_on_weak_evidence | reasoning_ok=False | ai=incorrect(1.0) | ev=0.0 | l2=0.0
-Group_Anagrams_correct: suspicious | flag=FAIL:overconfident_on_weak_evidence | reasoning_ok=False | ai=correct(1.0) | ev=0.0 | l2=0.0
-Group_Anagrams_partial: suspicious | flag=FAIL:overconfident_on_weak_evidence | reasoning_ok=True | ai=correct(1.0) | ev=0.0 | l2=0.0
-Group_Anagrams_incorrect: suspicious | flag=FAIL:overconfident_on_weak_evidence | reasoning_ok=False | ai=correct(1.0) | ev=0.0 | l2=0.0
+Longest_Substring_Without_Repeating_Characters_correct: trust=0.0(untrustworthy) | dangerous=True | reasoning_ok=False | ai=correct(1.0) | ev=0.0
+Longest_Substring_Without_Repeating_Characters_partial: trust=0.0(untrustworthy) | dangerous=True | reasoning_ok=False | ai=correct(1.0) | ev=0.0
+Longest_Substring_Without_Repeating_Characters_incorrect: trust=0.0(untrustworthy) | dangerous=False | reasoning_ok=False | ai=incorrect(0.0) | ev=0.0
+3Sum_correct: trust=0.225(untrustworthy) | dangerous=False | reasoning_ok=False | ai=incorrect(0.5) | ev=0.45
+3Sum_partial: trust=0.275(untrustworthy) | dangerous=False | reasoning_ok=False | ai=incorrect(0.5) | ev=0.55
+3Sum_incorrect: trust=0.55(uncertain) | dangerous=False | reasoning_ok=False | ai=incorrect(1.0) | ev=0.55
+Maximum_Subarray_correct: trust=0.0(untrustworthy) | dangerous=True | reasoning_ok=False | ai=correct(1.0) | ev=0.0
+Maximum_Subarray_partial: trust=0.0(untrustworthy) | dangerous=True | reasoning_ok=False | ai=incorrect(1.0) | ev=0.0
+Maximum_Subarray_incorrect: trust=0.0(untrustworthy) | dangerous=True | reasoning_ok=True | ai=incorrect(1.0) | ev=0.0
+Climbing_Stairs_correct: trust=0.0(untrustworthy) | dangerous=True | reasoning_ok=False | ai=correct(1.0) | ev=0.0
+Climbing_Stairs_partial: trust=0.0(untrustworthy) | dangerous=True | reasoning_ok=False | ai=correct(1.0) | ev=0.0
+Climbing_Stairs_incorrect: trust=0.0(untrustworthy) | dangerous=True | reasoning_ok=False | ai=incorrect(1.0) | ev=0.0
+Group_Anagrams_correct: trust=0.0(untrustworthy) | dangerous=True | reasoning_ok=False | ai=correct(1.0) | ev=0.0
+Group_Anagrams_partial: trust=0.0(untrustworthy) | dangerous=True | reasoning_ok=True | ai=correct(1.0) | ev=0.0
+Group_Anagrams_incorrect: trust=0.0(untrustworthy) | dangerous=True | reasoning_ok=False | ai=correct(1.0) | ev=0.0
 
 ================================================================================
 SUMMARY: 15 cases
@@ -44,5 +44,28 @@ Rule 2 — Reasoning doesn't match code: 13/15 cases
   Climbing_Stairs_incorrect: The provided solution does not correctly calculate the number of distinct ways to climb a staircase by taking either one
   Group_Anagrams_correct: The code correctly groups anagrams together by sorting the characters in each string and using them as keys to group ide
   Group_Anagrams_incorrect: The code correctly groups anagrams by using the sorted string as a key in a dictionary and collects strings with matchin
+
+================================================================================
+TRUST VALIDATION — does trust_score correlate with correctness better than confidence alone?
+
+Confidence-only (>=0.7): 12 predictions — 7 right, 5 wrong → accuracy=58%
+Trust-based (>=0.3):     1 predictions — 1 right, 0 wrong → accuracy=100%
+
+Per trust level:
+  uncertain      :  1 cases, 1 correct (100%), avg_conf=1.00, avg_trust=0.55
+  untrustworthy  : 14 cases, 7 correct (50%), avg_conf=0.86, avg_trust=0.04
+
+Dangerous (conf>=0.9, ev<0.4): 11/15 cases
+  Longest_Substring_Without_Repeating_Characters_correct: trust=0.0 gt=correct ai=correct correct=True
+  Longest_Substring_Without_Repeating_Characters_partial: trust=0.0 gt=partial ai=correct correct=False
+  Maximum_Subarray_correct: trust=0.0 gt=correct ai=correct correct=True
+  Maximum_Subarray_partial: trust=0.0 gt=partial ai=incorrect correct=False
+  Maximum_Subarray_incorrect: trust=0.0 gt=incorrect ai=incorrect correct=True
+  Climbing_Stairs_correct: trust=0.0 gt=correct ai=correct correct=True
+  Climbing_Stairs_partial: trust=0.0 gt=partial ai=correct correct=False
+  Climbing_Stairs_incorrect: trust=0.0 gt=incorrect ai=incorrect correct=True
+  Group_Anagrams_correct: trust=0.0 gt=correct ai=correct correct=True
+  Group_Anagrams_partial: trust=0.0 gt=partial ai=correct correct=False
+  Group_Anagrams_incorrect: trust=0.0 gt=incorrect ai=correct correct=False
 
 Saved to F:\pythonProject\scratch\5_unseen_results.json
