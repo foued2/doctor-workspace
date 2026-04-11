@@ -1,0 +1,35 @@
+Longest_Substring_Without_Repeating_Characters_correct: weak_rejection | flag=FAIL:confidence_exceeds_evidence | ai=incorrect(0.5) | ev=0.0 | l2=0.0
+Longest_Substring_Without_Repeating_Characters_partial: contradiction | flag=FAIL:confidence_exceeds_evidence | ai=correct(1.0) | ev=0.0 | l2=0.0
+Longest_Substring_Without_Repeating_Characters_incorrect: weak_rejection | flag=None | ai=incorrect(0.0) | ev=0.0 | l2=0.0
+3Sum_correct: contradiction | flag=FAIL:confidence_exceeds_evidence | ai=incorrect(0.5) | ev=0.45 | l2=1.0
+3Sum_partial: weak_rejection | flag=None | ai=incorrect(0.5) | ev=0.55 | l2=0.8
+3Sum_incorrect: weak_rejection | flag=FAIL:confidence_exceeds_evidence | ai=incorrect(1.0) | ev=0.55 | l2=0.8
+Maximum_Subarray_correct: contradiction | flag=FAIL:confidence_exceeds_evidence | ai=correct(1.0) | ev=0.0 | l2=0.0
+Maximum_Subarray_partial: weak_rejection | flag=FAIL:confidence_exceeds_evidence | ai=incorrect(1.0) | ev=0.0 | l2=0.0
+Maximum_Subarray_incorrect: weak_rejection | flag=FAIL:confidence_exceeds_evidence | ai=incorrect(1.0) | ev=0.0 | l2=0.0
+Climbing_Stairs_correct: weak_rejection | flag=FAIL:confidence_exceeds_evidence | ai=incorrect(0.5) | ev=0.0 | l2=0.0
+Climbing_Stairs_partial: contradiction | flag=FAIL:confidence_exceeds_evidence | ai=correct(1.0) | ev=0.0 | l2=0.0
+Climbing_Stairs_incorrect: weak_rejection | flag=FAIL:confidence_exceeds_evidence | ai=incorrect(1.0) | ev=0.0 | l2=0.0
+Group_Anagrams_correct: contradiction | flag=FAIL:confidence_exceeds_evidence | ai=correct(1.0) | ev=0.0 | l2=0.0
+Group_Anagrams_partial: contradiction | flag=FAIL:confidence_exceeds_evidence | ai=correct(1.0) | ev=0.0 | l2=0.0
+Group_Anagrams_incorrect: contradiction | flag=FAIL:confidence_exceeds_evidence | ai=correct(1.0) | ev=0.0 | l2=0.0
+
+================================================================================
+SUMMARY: 15 cases
+  Labels: {'weak_rejection': 8, 'contradiction': 7}
+  Failure flags: 13
+    Longest_Substring_Without_Repeating_Characters_correct: FAIL:confidence_exceeds_evidence
+    Longest_Substring_Without_Repeating_Characters_partial: FAIL:confidence_exceeds_evidence
+    3Sum_correct: FAIL:confidence_exceeds_evidence
+    3Sum_incorrect: FAIL:confidence_exceeds_evidence
+    Maximum_Subarray_correct: FAIL:confidence_exceeds_evidence
+    Maximum_Subarray_partial: FAIL:confidence_exceeds_evidence
+    Maximum_Subarray_incorrect: FAIL:confidence_exceeds_evidence
+    Climbing_Stairs_correct: FAIL:confidence_exceeds_evidence
+    Climbing_Stairs_partial: FAIL:confidence_exceeds_evidence
+    Climbing_Stairs_incorrect: FAIL:confidence_exceeds_evidence
+    Group_Anagrams_correct: FAIL:confidence_exceeds_evidence
+    Group_Anagrams_partial: FAIL:confidence_exceeds_evidence
+    Group_Anagrams_incorrect: FAIL:confidence_exceeds_evidence
+
+Saved to F:\pythonProject\scratch\5_unseen_results.json

@@ -1,0 +1,4 @@
+258: def _extract_problem_and_solution(prompt: str) -> tuple:
+284: def classify_solution(prompt: str) -> Dict[str, Any]:
+307: def _resolve_problem_name(problem_text: str) -> str:
+353: def predict(prompt: str) -> Dict[str, object]:
