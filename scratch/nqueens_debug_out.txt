@@ -1,0 +1,4 @@
+n=1: count=1 expected=1 PASS=True
+n=4: count=2 expected=2 PASS=True
+n=0: count=1 expected=0 PASS=False
+n=0 result: [[]]

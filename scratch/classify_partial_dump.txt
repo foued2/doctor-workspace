@@ -1,0 +1,50 @@
+76: def classify_partial_vs_incorrect(failure_reasons: list[str]) -> str:
+77:     """Decide whether a failing solution is partial or incorrect.
+78: 
+79:     Input: list of failed test labels from Layer 2 execution.
+80: 
+81:     **partial** = passes all standard cases, fails only edge/constraint labels.
+82:     **incorrect** = fails at least one standard (non-edge) case.
+83:     """
+84:     if not failure_reasons:
+85:         return "correct"
+86: 
+87:     failures_lower = [f.lower() for f in failure_reasons]
+88: 
+89:     # Check if any standard case failed → incorrect
+90:     for label in failures_lower:
+91:         for std in STANDARD_CASE_LABELS:
+92:             if std in label:
+93:                 return "incorrect"
+94: 
+95:     # All failures are edge-case or constraint violation → partial
+96:     return "partial"
+97: 
+98: 
+99: # ===========================================================================
+100: # FIX 2 — Insufficient evidence gate
+101: # ===========================================================================
+102: 
+103: def check_insufficient_evidence(
+104:     tests_total: int,
+105:     failure_reasons: list[str] | None = None,
+106: ) -> str | None:
+107:     """Return a reason string if evidence is too thin to justify any verdict.
+108: 
+109:     Trigger conditions:
+110:     - tests_total < 2, OR
+111:     - tests_total < 4 AND solution touches known edge-case-sensitive patterns.
+112: 
+113:     Returns None when evidence is sufficient (grading should proceed normally).
+114:     """
+115:     if tests_total < 2:
+116:         return f"only {tests_total} test(s) executed — insufficient coverage"
+117: 
+118:     if tests_total < 4 and failure_reasons:
+119:         edge_patterns = {"empty", "single", "negative", "overflow", "edge"}
+120:         for reason in failure_reasons:
+121:             if any(kw in reason.lower() for kw in edge_patterns):
+122:                 return (
+123:                     f"only {tests_total} tests and edge-case-sensitive "
+124:                     f"pattern detected: {reason}"
+125:                 )

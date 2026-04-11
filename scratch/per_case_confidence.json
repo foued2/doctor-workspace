@@ -56,17 +56,6 @@
       "l2": "?",
       "l2_fail": [],
       "viol": []
-    },
-    {
-      "name": "Two_Sum_partial",
-      "gt": "partial",
-      "pred": "insufficient_evidence",
-      "conf": null,
-      "kind": "?",
-      "l1": "?",
-      "l2": "?",
-      "l2_fail": [],
-      "viol": []
     }
   ],
   "summary": {
