@@ -1,35 +1,48 @@
-Longest_Substring_Without_Repeating_Characters_correct: weak_rejection | flag=FAIL:confidence_exceeds_evidence | ai=incorrect(0.5) | ev=0.0 | l2=0.0
-Longest_Substring_Without_Repeating_Characters_partial: contradiction | flag=FAIL:confidence_exceeds_evidence | ai=correct(1.0) | ev=0.0 | l2=0.0
-Longest_Substring_Without_Repeating_Characters_incorrect: weak_rejection | flag=None | ai=incorrect(0.0) | ev=0.0 | l2=0.0
-3Sum_correct: contradiction | flag=FAIL:confidence_exceeds_evidence | ai=incorrect(0.5) | ev=0.45 | l2=1.0
-3Sum_partial: weak_rejection | flag=None | ai=incorrect(0.5) | ev=0.55 | l2=0.8
-3Sum_incorrect: weak_rejection | flag=FAIL:confidence_exceeds_evidence | ai=incorrect(1.0) | ev=0.55 | l2=0.8
-Maximum_Subarray_correct: contradiction | flag=FAIL:confidence_exceeds_evidence | ai=correct(1.0) | ev=0.0 | l2=0.0
-Maximum_Subarray_partial: weak_rejection | flag=FAIL:confidence_exceeds_evidence | ai=incorrect(1.0) | ev=0.0 | l2=0.0
-Maximum_Subarray_incorrect: weak_rejection | flag=FAIL:confidence_exceeds_evidence | ai=incorrect(1.0) | ev=0.0 | l2=0.0
-Climbing_Stairs_correct: weak_rejection | flag=FAIL:confidence_exceeds_evidence | ai=incorrect(0.5) | ev=0.0 | l2=0.0
-Climbing_Stairs_partial: contradiction | flag=FAIL:confidence_exceeds_evidence | ai=correct(1.0) | ev=0.0 | l2=0.0
-Climbing_Stairs_incorrect: weak_rejection | flag=FAIL:confidence_exceeds_evidence | ai=incorrect(1.0) | ev=0.0 | l2=0.0
-Group_Anagrams_correct: contradiction | flag=FAIL:confidence_exceeds_evidence | ai=correct(1.0) | ev=0.0 | l2=0.0
-Group_Anagrams_partial: contradiction | flag=FAIL:confidence_exceeds_evidence | ai=correct(1.0) | ev=0.0 | l2=0.0
-Group_Anagrams_incorrect: contradiction | flag=FAIL:confidence_exceeds_evidence | ai=correct(1.0) | ev=0.0 | l2=0.0
+Longest_Substring_Without_Repeating_Characters_correct: suspicious | flag=FAIL:overconfident_on_weak_evidence | reasoning_ok=False | ai=correct(1.0) | ev=0.0 | l2=0.0
+Longest_Substring_Without_Repeating_Characters_partial: suspicious | flag=FAIL:overconfident_on_weak_evidence | reasoning_ok=False | ai=correct(1.0) | ev=0.0 | l2=0.0
+Longest_Substring_Without_Repeating_Characters_incorrect: weak_rejection | flag=None | reasoning_ok=False | ai=incorrect(0.0) | ev=0.0 | l2=0.0
+3Sum_correct: contradiction | flag=FAIL:confidence_exceeds_evidence | reasoning_ok=False | ai=incorrect(0.5) | ev=0.45 | l2=1.0
+3Sum_partial: weak_rejection | flag=None | reasoning_ok=False | ai=incorrect(0.5) | ev=0.55 | l2=0.8
+3Sum_incorrect: weak_rejection | flag=FAIL:confidence_exceeds_evidence | reasoning_ok=False | ai=incorrect(1.0) | ev=0.55 | l2=0.8
+Maximum_Subarray_correct: suspicious | flag=FAIL:overconfident_on_weak_evidence | reasoning_ok=False | ai=correct(1.0) | ev=0.0 | l2=0.0
+Maximum_Subarray_partial: suspicious | flag=FAIL:overconfident_on_weak_evidence | reasoning_ok=False | ai=incorrect(1.0) | ev=0.0 | l2=0.0
+Maximum_Subarray_incorrect: suspicious | flag=FAIL:overconfident_on_weak_evidence | reasoning_ok=True | ai=incorrect(1.0) | ev=0.0 | l2=0.0
+Climbing_Stairs_correct: suspicious | flag=FAIL:overconfident_on_weak_evidence | reasoning_ok=False | ai=correct(1.0) | ev=0.0 | l2=0.0
+Climbing_Stairs_partial: suspicious | flag=FAIL:overconfident_on_weak_evidence | reasoning_ok=False | ai=correct(1.0) | ev=0.0 | l2=0.0
+Climbing_Stairs_incorrect: suspicious | flag=FAIL:overconfident_on_weak_evidence | reasoning_ok=False | ai=incorrect(1.0) | ev=0.0 | l2=0.0
+Group_Anagrams_correct: suspicious | flag=FAIL:overconfident_on_weak_evidence | reasoning_ok=False | ai=correct(1.0) | ev=0.0 | l2=0.0
+Group_Anagrams_partial: suspicious | flag=FAIL:overconfident_on_weak_evidence | reasoning_ok=True | ai=correct(1.0) | ev=0.0 | l2=0.0
+Group_Anagrams_incorrect: suspicious | flag=FAIL:overconfident_on_weak_evidence | reasoning_ok=False | ai=correct(1.0) | ev=0.0 | l2=0.0
 
 ================================================================================
 SUMMARY: 15 cases
-  Labels: {'weak_rejection': 8, 'contradiction': 7}
-  Failure flags: 13
-    Longest_Substring_Without_Repeating_Characters_correct: FAIL:confidence_exceeds_evidence
-    Longest_Substring_Without_Repeating_Characters_partial: FAIL:confidence_exceeds_evidence
-    3Sum_correct: FAIL:confidence_exceeds_evidence
-    3Sum_incorrect: FAIL:confidence_exceeds_evidence
-    Maximum_Subarray_correct: FAIL:confidence_exceeds_evidence
-    Maximum_Subarray_partial: FAIL:confidence_exceeds_evidence
-    Maximum_Subarray_incorrect: FAIL:confidence_exceeds_evidence
-    Climbing_Stairs_correct: FAIL:confidence_exceeds_evidence
-    Climbing_Stairs_partial: FAIL:confidence_exceeds_evidence
-    Climbing_Stairs_incorrect: FAIL:confidence_exceeds_evidence
-    Group_Anagrams_correct: FAIL:confidence_exceeds_evidence
-    Group_Anagrams_partial: FAIL:confidence_exceeds_evidence
-    Group_Anagrams_incorrect: FAIL:confidence_exceeds_evidence
+
+Rule 1 — Overconfident on weak evidence: 11/15 cases
+  Longest_Substring_Without_Repeating_Characters_correct: conf=1.0 ev=0.0 ai=correct
+  Longest_Substring_Without_Repeating_Characters_partial: conf=1.0 ev=0.0 ai=correct
+  Maximum_Subarray_correct: conf=1.0 ev=0.0 ai=correct
+  Maximum_Subarray_partial: conf=1.0 ev=0.0 ai=incorrect
+  Maximum_Subarray_incorrect: conf=1.0 ev=0.0 ai=incorrect
+  Climbing_Stairs_correct: conf=1.0 ev=0.0 ai=correct
+  Climbing_Stairs_partial: conf=1.0 ev=0.0 ai=correct
+  Climbing_Stairs_incorrect: conf=1.0 ev=0.0 ai=incorrect
+  Group_Anagrams_correct: conf=1.0 ev=0.0 ai=correct
+  Group_Anagrams_partial: conf=1.0 ev=0.0 ai=correct
+  Group_Anagrams_incorrect: conf=1.0 ev=0.0 ai=correct
+
+Rule 2 — Reasoning doesn't match code: 13/15 cases
+  Longest_Substring_Without_Repeating_Characters_correct: The code correctly implements the sliding window technique to find the longest substring without repeating characters.
+  Longest_Substring_Without_Repeating_Characters_partial: The code correctly implements the sliding window technique to find the longest substring without repeating characters.
+  Longest_Substring_Without_Repeating_Characters_incorrect: The provided code calculates the maximum count of any character in the string rather than finding the length of the long
+  3Sum_correct: HTTPConnectionPool(host='localhost', port=11434): Read timed out. (read timeout=120)
+  3Sum_partial: HTTPConnectionPool(host='localhost', port=11434): Read timed out. (read timeout=120)
+  3Sum_incorrect: The provided solution only returns the first triplet that sums to zero and does not handle duplicates or return all uniq
+  Maximum_Subarray_correct: The code correctly implements Kadane's algorithm to find the maximum subarray sum.
+  Maximum_Subarray_partial: The provided solution does not correctly implement the Kadane's algorithm for finding the maximum subarray sum.
+  Climbing_Stairs_correct: The code correctly implements the Fibonacci sequence to calculate distinct ways of climbing stairs.
+  Climbing_Stairs_partial: The code correctly implements the Fibonacci sequence to calculate the number of distinct ways to climb a staircase.
+  Climbing_Stairs_incorrect: The provided solution does not correctly calculate the number of distinct ways to climb a staircase by taking either one
+  Group_Anagrams_correct: The code correctly groups anagrams together by sorting the characters in each string and using them as keys to group ide
+  Group_Anagrams_incorrect: The code correctly groups anagrams by using the sorted string as a key in a dictionary and collects strings with matchin
 
 Saved to F:\pythonProject\scratch\5_unseen_results.json
