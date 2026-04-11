@@ -251,7 +251,7 @@ def _has_index_out_of_bounds_risk(node: ast.AST) -> bool:
         if isinstance(n, ast.For):
             iter_src = ast.dump(n.iter)
             if "range" in iter_src and "len" in iter_src:
-                return True  # All index access is bounded by range(len(...))
+                return False  # All index access is bounded by range(len(...))
 
     # If code has while loop with left < right guard, access is safe
     for n in ast.walk(node):
@@ -259,7 +259,7 @@ def _has_index_out_of_bounds_risk(node: ast.AST) -> bool:
             test_src = ast.dump(n.test)
             if "left" in test_src and "right" in test_src:
                 if "Lt" in test_src or "Gt" in test_src:
-                    return True  # Bounded by while guard
+                    return False  # Bounded by while guard
 
     # If no loop guards at all, flag any array index access
     for n in ast.walk(node):
@@ -621,9 +621,10 @@ class CodeAnalyzer:
 
         # Certain failures are fatal — they mean the approach is fundamentally wrong
         # (not just failing on edge cases, but producing wrong answer on normal inputs)
-        FATAL_CHECKS = {
-            "time_complexity_viable",    # O(n²)/O(n³) where O(n) expected = wrong approach
-        }
+        # NOTE: time_complexity_viable removed from FATAL_CHECKS — complexity violations
+        # are handled by Rule 1 (constraint override → partial), not as fatal skip.
+        # This allows brute-force O(n²) solutions to run through Layer 2 execution.
+        FATAL_CHECKS = set()
 
         has_fatal = bool(set(failures) & FATAL_CHECKS)
 
@@ -957,12 +958,21 @@ class CodeAnalyzer:
 
         # N-Queens: missing diagonal check
         if "queen" in problem_lower and "n-queen" in problem_lower.lower():
-            # Check for diagonal check: abs(c - col) == abs(r - row)
-            # AST dump uses "Eq" not "=="
-            has_diagonal = (
+            # Two valid approaches:
+            # 1. Set-based: d1=row-col, d2=row+col stored in sets (backtracking)
+            #    AST dump shows: Name(id='diag1'), Name(id='d1'), op=Sub(), op=Add()
+            # 2. Explicit: abs(c - col) == abs(r - row) (permutation validation)
+            # NOTE: Both approaches include abs+Sub+== so checker can't distinguish
+            # correct from incorrect permutation approach. L2 handles differentiation.
+            has_set_diagonal = (
+                ("diag" in src or "d1" in src or "d2" in src) and
+                ("row" in src and "col" in src) and
+                ("Sub" in src or "Add" in src)
+            )
+            has_explicit_diagonal = (
                 "abs(" in src and ("Eq" in src or "==" in src)
             )
-            if not has_diagonal:
+            if not has_set_diagonal and not has_explicit_diagonal:
                 return False
 
         # Generate Parentheses: close_count should be < open_count, not < n

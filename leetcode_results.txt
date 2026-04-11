@@ -1,0 +1,329 @@
+============================================================
+LEETCODE PRODUCTION TEST
+============================================================
+
+[Step 1] Building LeetCode test set...
+  Selected: 29 problems
+  Distribution: Easy=9, Medium=10, Hard=10
+
+[Step 2] Converting to test cases...
+  Built 29 StressCase objects
+
+[Step 3] Running Doctor on 30 LeetCode problems...
+  ✓ Completed 29 predictions
+
+============================================================
+DETAILED PROBLEM VERDICTS
+============================================================
+
+Problem: Two Sum (Easy)
+  Doctor Verdict:    correct
+  Confidence:        0.85
+  Ground Truth:      correct
+  Correct:           ✓
+  Rule Violations:   none
+  Reasoning:         Path: FIX2:correct_signal_booster [Sound reasoning]
+  Grade contribution: +0.4
+
+Problem: Palindrome Number (Easy)
+  Doctor Verdict:    correct
+  Confidence:        0.85
+  Ground Truth:      correct
+  Correct:           ✓
+  Rule Violations:   none
+  Reasoning:         Path: FIX2:correct_signal_booster [Sound reasoning]
+  Grade contribution: +0.4
+
+Problem: Roman to Integer (Easy)
+  Doctor Verdict:    partial
+  Confidence:        0.45
+  Ground Truth:      correct
+  Correct:           ✗
+  Rule Violations:   none
+  Reasoning:         No decision path available
+  Grade contribution: +0.0
+
+Problem: Longest Common Prefix (Easy)
+  Doctor Verdict:    partial
+  Confidence:        0.45
+  Ground Truth:      correct
+  Correct:           ✗
+  Rule Violations:   none
+  Reasoning:         No decision path available
+  Grade contribution: +0.0
+
+Problem: Valid Parentheses (Easy)
+  Doctor Verdict:    partial
+  Confidence:        0.45
+  Ground Truth:      correct
+  Correct:           ✗
+  Rule Violations:   none
+  Reasoning:         No decision path available
+  Grade contribution: +0.0
+
+Problem: Merge Two Sorted Lists (Easy)
+  Doctor Verdict:    partial
+  Confidence:        0.45
+  Ground Truth:      correct
+  Correct:           ✗
+  Rule Violations:   none
+  Reasoning:         No decision path available
+  Grade contribution: +0.0
+
+Problem: Remove Duplicates from Sorted Array (Easy)
+  Doctor Verdict:    correct
+  Confidence:        0.6
+  Ground Truth:      correct
+  Correct:           ✓
+  Rule Violations:   none
+  Reasoning:         No decision path available
+  Grade contribution: +0.2
+
+Problem: Implement strStr() (Easy)
+  Doctor Verdict:    correct
+  Confidence:        0.6
+  Ground Truth:      correct
+  Correct:           ✓
+  Rule Violations:   none
+  Reasoning:         No decision path available
+  Grade contribution: +0.2
+
+Problem: Search Insert Position (Easy)
+  Doctor Verdict:    correct
+  Confidence:        0.6
+  Ground Truth:      correct
+  Correct:           ✓
+  Rule Violations:   none
+  Reasoning:         No decision path available
+  Grade contribution: +0.2
+
+Problem: Longest Palindromic Substring (Medium)
+  Doctor Verdict:    correct
+  Confidence:        0.6
+  Ground Truth:      correct
+  Correct:           ✓
+  Rule Violations:   none
+  Reasoning:         No decision path available
+  Grade contribution: +0.2
+
+Problem: Zigzag Conversion (Medium)
+  Doctor Verdict:    partial
+  Confidence:        0.74
+  Ground Truth:      partial
+  Correct:           ✓
+  Rule Violations:   none
+  Reasoning:         No decision path available
+  Grade contribution: +0.4
+
+Problem: Reverse Integer (Medium)
+  Doctor Verdict:    correct
+  Confidence:        0.6
+  Ground Truth:      correct
+  Correct:           ✓
+  Rule Violations:   none
+  Reasoning:         No decision path available
+  Grade contribution: +0.2
+
+Problem: String to Integer (atoi) (Medium)
+  Doctor Verdict:    partial
+  Confidence:        0.45
+  Ground Truth:      partial
+  Correct:           ✓
+  Rule Violations:   R1
+  Reasoning:         No decision path available
+  Grade contribution: +0.2
+
+Problem: Container With Most Water (Medium)
+  Doctor Verdict:    correct
+  Confidence:        0.6
+  Ground Truth:      correct
+  Correct:           ✓
+  Rule Violations:   none
+  Reasoning:         No decision path available
+  Grade contribution: +0.2
+
+Problem: Integer to Roman (Medium)
+  Doctor Verdict:    partial
+  Confidence:        0.74
+  Ground Truth:      partial
+  Correct:           ✓
+  Rule Violations:   none
+  Reasoning:         No decision path available
+  Grade contribution: +0.4
+
+Problem: 3Sum (Medium)
+  Doctor Verdict:    correct
+  Confidence:        0.6
+  Ground Truth:      partial
+  Correct:           ✗
+  Rule Violations:   none
+  Reasoning:         No decision path available
+  Grade contribution: +0.0
+
+Problem: Letter Combinations of a Phone Number (Medium)
+  Doctor Verdict:    correct
+  Confidence:        0.6
+  Ground Truth:      correct
+  Correct:           ✓
+  Rule Violations:   none
+  Reasoning:         No decision path available
+  Grade contribution: +0.2
+
+Problem: 4Sum (Medium)
+  Doctor Verdict:    correct
+  Confidence:        0.85
+  Ground Truth:      partial
+  Correct:           ✗
+  Rule Violations:   none
+  Reasoning:         Path: FIX2:correct_signal_booster [Sound reasoning]
+  Grade contribution: +0.0
+
+Problem: Generate Parentheses (Medium)
+  Doctor Verdict:    correct
+  Confidence:        0.85
+  Ground Truth:      correct
+  Correct:           ✓
+  Rule Violations:   none
+  Reasoning:         Path: FIX2:correct_signal_booster [Sound reasoning]
+  Grade contribution: +0.4
+
+Problem: Median of Two Sorted Arrays (Hard)
+  Doctor Verdict:    partial
+  Confidence:        0.74
+  Ground Truth:      partial
+  Correct:           ✓
+  Rule Violations:   none
+  Reasoning:         No decision path available
+  Grade contribution: +0.4
+
+Problem: Regular Expression Matching (Hard)
+  Doctor Verdict:    partial
+  Confidence:        0.45
+  Ground Truth:      correct
+  Correct:           ✗
+  Rule Violations:   none
+  Reasoning:         No decision path available
+  Grade contribution: +0.0
+
+Problem: Trapping Rain Water (Hard)
+  Doctor Verdict:    undefined
+  Confidence:        0.7
+  Ground Truth:      partial
+  Correct:           ✗
+  Rule Violations:   none
+  Reasoning:         Path: R1:explicit_undecidable (partial_attempt_softens=False) [Sound reasoning]
+  Grade contribution: +0.0
+
+Problem: First Missing Positive (Hard)
+  Doctor Verdict:    partial
+  Confidence:        0.74
+  Ground Truth:      partial
+  Correct:           ✓
+  Rule Violations:   none
+  Reasoning:         No decision path available
+  Grade contribution: +0.4
+
+Problem: N-Queens (Hard)
+  Doctor Verdict:    correct
+  Confidence:        0.85
+  Ground Truth:      correct
+  Correct:           ✓
+  Rule Violations:   none
+  Reasoning:         Path: FIX2:correct_signal_booster [Sound reasoning]
+  Grade contribution: +0.4
+
+Problem: Wildcard Matching (Hard)
+  Doctor Verdict:    partial
+  Confidence:        0.74
+  Ground Truth:      partial
+  Correct:           ✓
+  Rule Violations:   none
+  Reasoning:         No decision path available
+  Grade contribution: +0.4
+
+Problem: Edit Distance (Hard)
+  Doctor Verdict:    correct
+  Confidence:        0.6
+  Ground Truth:      partial
+  Correct:           ✗
+  Rule Violations:   none
+  Reasoning:         No decision path available
+  Grade contribution: +0.0
+
+Problem: Minimum Window Substring (Hard)
+  Doctor Verdict:    correct
+  Confidence:        0.6
+  Ground Truth:      partial
+  Correct:           ✗
+  Rule Violations:   none
+  Reasoning:         No decision path available
+  Grade contribution: +0.0
+
+Problem: Largest Rectangle in Histogram (Hard)
+  Doctor Verdict:    undefined
+  Confidence:        0.7
+  Ground Truth:      undefined
+  Correct:           ✓
+  Rule Violations:   none
+  Reasoning:         Path: R1:explicit_undecidable (partial_attempt_softens=False) [Sound reasoning]
+  Grade contribution: +0.4
+
+Problem: Sliding Window Maximum (Hard)
+  Doctor Verdict:    undefined
+  Confidence:        0.7
+  Ground Truth:      undefined
+  Correct:           ✓
+  Rule Violations:   none
+  Reasoning:         Path: R1:explicit_undecidable (partial_attempt_softens=False) [Sound reasoning]
+  Grade contribution: +0.4
+
+============================================================
+╔══════════════════════════════════════════════════════╗
+║       LEETCODE GRADING RESULTS                      ║
+╠══════════════════════════════════════════════════════╣
+║ Easy   ( 9):  5 correct   4 wrong       ║
+║ Medium (10):  8 correct   2 wrong       ║
+║ Hard   (10):  6 correct   4 wrong       ║
+╠══════════════════════════════════════════════════════╣
+║ Overall Grade:    0.52  (F)                    ║
+║ Rule_Score:       0.97                                   ║
+║ Undefined Recall: 100.0%                                  ║
+╠══════════════════════════════════════════════════════╣
+║ Failure breakdown:                                   ║
+║   Missed undefined:  0                                         ║
+║   Contradiction blind: 1                                       ║
+║   Correct by luck:   1                                       ║
+╚══════════════════════════════════════════════════════╝
+============================================================
+
+[Step 6] Computing user-facing error rate...
+
+============================================================
+USER-FACING ERROR RATE ANALYSIS
+============================================================
+
+  Total problems tested:     29
+  Wrong verdicts:            10
+  High-confidence wrong:     2
+  Correct by luck:           1
+
+  ┌─────────────────────────────────────────────────┐
+  │ USER-FACING ERROR RATE:  34.5%                    │
+  │ Dangerous error rate:     6.9%                    │
+  │ Unreliable (luck):        3.4%                    │
+  └─────────────────────────────────────────────────┘
+
+============================================================
+GAP ANALYSIS
+============================================================
+
+  Current Doctor grade: 0.52 (F)
+  User-facing error rate: 34.5%
+  Verdict: MARGINAL — needs improvement before production
+
+  At current grade, 10 out of 29 LeetCode problems would receive wrong verdicts in a live grading scenario.
+  This translates to a 34.5% user-facing error rate.
+
+============================================================
+PUBLIC-FACING METRIC: 34.5% ERROR RATE ON REAL LEETCODE PROBLEMS
+============================================================

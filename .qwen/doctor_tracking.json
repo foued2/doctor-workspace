@@ -1,0 +1,231 @@
+{
+  "evaluations": {
+    "3801 to 3900\\3856. Trim Trailing Vowels.py": {
+      "problem_statement": {
+        "grade": 10.0,
+        "status": "PASS",
+        "is_passed": true,
+        "attempts": 1,
+        "timestamp": "2026-04-05T11:09:46.752372"
+      },
+      "approach": {
+        "grade": 2.0,
+        "status": "FAIL",
+        "is_passed": false,
+        "attempts": 4,
+        "timestamp": "2026-04-06T13:53:52.082461"
+      }
+    },
+    "001 to 100\\9. Palindrome Number.py": {
+      "problem_statement": {
+        "grade": 10.0,
+        "status": "PASS",
+        "is_passed": true,
+        "attempts": 3,
+        "timestamp": "2026-04-05T13:35:35.681716"
+      }
+    },
+    "3801 to 3900\\3861. Minimum Capacity Box.py": {
+      "problem_statement": {
+        "grade": 10.0,
+        "status": "PASS",
+        "is_passed": true,
+        "attempts": 1,
+        "timestamp": "2026-04-06T13:10:39.462151"
+      },
+      "approach": {
+        "grade": 2.0,
+        "status": "FAIL",
+        "is_passed": false,
+        "attempts": 2,
+        "timestamp": "2026-04-06T13:50:18.094116"
+      }
+    },
+    "3801 to 3900\\3870. Count Commas in Range.py": {
+      "problem_statement": {
+        "grade": 10.0,
+        "status": "PASS",
+        "is_passed": true,
+        "attempts": 1,
+        "timestamp": "2026-04-06T13:31:21.373204"
+      },
+      "approach": {
+        "grade": 2.0,
+        "status": "FAIL",
+        "is_passed": false,
+        "attempts": 1,
+        "timestamp": "2026-04-06T13:52:31.955730"
+      }
+    },
+    "001 to 100\\1. Two Sum.py": {
+      "problem_statement": {
+        "grade": 10.0,
+        "status": "PASS",
+        "is_passed": true,
+        "attempts": 1,
+        "timestamp": "2026-04-06T13:56:17.951393"
+      },
+      "approach": {
+        "grade": 9.0,
+        "status": "PASS",
+        "is_passed": true,
+        "attempts": 1,
+        "timestamp": "2026-04-06T13:56:33.700640"
+      },
+      "complexity": {
+        "grade": 8.0,
+        "status": "PASS",
+        "is_passed": true,
+        "attempts": 1,
+        "timestamp": "2026-04-06T13:56:51.628204"
+      },
+      "solution": {
+        "grade": 10.0,
+        "status": "PASS",
+        "is_passed": true,
+        "attempts": 2,
+        "timestamp": "2026-04-06T15:15:20.372195"
+      }
+    },
+    "001 to 100\\10. Regular Expression Matching.py": {
+      "problem_statement": {
+        "grade": 10.0,
+        "status": "PASS",
+        "is_passed": true,
+        "attempts": 1,
+        "timestamp": "2026-04-06T15:17:33.594762"
+      }
+    },
+    "solutions\\1. Two Sum.py": {
+      "problem_statement": {
+        "grade": 10.0,
+        "status": "PASS",
+        "is_passed": true,
+        "attempts": 1,
+        "timestamp": "2026-04-07T06:31:50.135130"
+      },
+      "approach": {
+        "grade": 9.0,
+        "status": "PASS",
+        "is_passed": true,
+        "attempts": 1,
+        "timestamp": "2026-04-07T06:32:39.437796"
+      }
+    },
+    "solutions\\3856. Trim Trailing Vowels.py": {
+      "problem_statement": {
+        "grade": 10.0,
+        "status": "PASS",
+        "is_passed": true,
+        "attempts": 1,
+        "timestamp": "2026-04-07T06:32:50.109033"
+      }
+    },
+    "solutions\\3801 to 3900\\3842. Toggle Light Bulbs.py": {
+      "problem_statement": {
+        "grade": 10.0,
+        "status": "PASS",
+        "is_passed": true,
+        "attempts": 1,
+        "timestamp": "2026-04-07T08:16:44.285464"
+      }
+    },
+    "solutions\\3501 to 3600\\3516. Find Closest Person.py": {
+      "problem_statement": {
+        "grade": 10.0,
+        "status": "PASS",
+        "is_passed": true,
+        "attempts": 1,
+        "timestamp": "2026-04-07T22:20:32.442441"
+      },
+      "approach": {
+        "grade": 9.0,
+        "status": "PASS",
+        "is_passed": true,
+        "attempts": 1,
+        "timestamp": "2026-04-07T22:21:55.220384"
+      },
+      "complexity": {
+        "grade": 8.0,
+        "status": "PASS",
+        "is_passed": true,
+        "attempts": 1,
+        "timestamp": "2026-04-07T22:25:25.150473"
+      },
+      "solution": {
+        "grade": 10.0,
+        "status": "PASS",
+        "is_passed": true,
+        "attempts": 3,
+        "timestamp": "2026-04-07T22:29:27.999169"
+      }
+    },
+    "solutions\\3401 to 3500\\3467. Transform Array by Parity.py": {
+      "problem_statement": {
+        "grade": 10.0,
+        "status": "PASS",
+        "is_passed": true,
+        "attempts": 1,
+        "timestamp": "2026-04-07T22:40:54.869850"
+      },
+      "approach": {
+        "grade": 2.0,
+        "status": "FAIL",
+        "is_passed": false,
+        "attempts": 2,
+        "timestamp": "2026-04-07T22:43:24.662596"
+      }
+    },
+    "solutions\\3701 to 3800\\3783. Mirror Distance of an Integer.py": {
+      "file_hash": "f4a069deb3b8929f3e5ff6fc4dca085a",
+      "problem_statement": {
+        "grade": 10.0,
+        "status": "FAIL",
+        "mode": "rule_based",
+        "validity": "degraded",
+        "is_passed": false,
+        "attempts": 2,
+        "timestamp": "2026-04-08T10:29:02.268127"
+      }
+    },
+    "solutions\\3801 to 3900\\3833. Count Dominant Indices.py": {
+      "file_hash": "ae0216c432f308baf2d7035fd72cc9b8",
+      "problem_statement": {
+        "grade": 10.0,
+        "status": "FAIL",
+        "mode": "rule_based",
+        "validity": "degraded",
+        "is_passed": false,
+        "attempts": 1,
+        "timestamp": "2026-04-08T10:36:38.347312"
+      }
+    },
+    "solutions\\001 to 100\\1. Two Sum.py": {
+      "file_hash": "dbacdb898542fa46a3bf336b8de9f7cc",
+      "problem_statement": {
+        "grade": 10.0,
+        "status": "FAIL",
+        "mode": "rule_based",
+        "validity": "degraded",
+        "is_passed": false,
+        "attempts": 1,
+        "timestamp": "2026-04-08T11:15:42.072251"
+      }
+    },
+    "solutions\\001 to 100\\66. Plus One.py": {
+      "file_hash": "0e1352e9c07892cb0c0635595640be04"
+    },
+    "solutions\\3801 to 3900\\3870. Count Commas in Range.py": {
+      "file_hash": "17624e4b72d3b1eab61317d6f7370579",
+      "problem_statement": {
+        "grade": 10.0,
+        "status": "FAIL",
+        "mode": "rule_based",
+        "validity": "degraded",
+        "is_passed": false,
+        "attempts": 2,
+        "timestamp": "2026-04-08T14:05:21.187328"
+      }
+    }
+  }
+}

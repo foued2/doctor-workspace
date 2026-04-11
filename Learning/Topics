@@ -1,0 +1,256 @@
+2529.
+Binary search, Pivot
+1287.
+Binary search, majority element, bisect module
+965.
+Binary tree, Depth-First Search DFS, Preorder Traversal
+3120.
+Hash map, both lowercase and uppercase letters occurrence
+2574.
+Prefix sum, main idea
+2595.
+Bit manipulation, right-shifting, LSB (least significant bit)
+2485.
+Prefix sum, pivot
+1380.
+Matrix, iterating through columns
+941.
+Array, navigating up/down peak
+1475.
+Stack, Monotonic stack, unordered case
+1413.
+Prefix sum
+973.
+Heap, Heappush, Heappop
+3042.
+Prefix, Startswith, Suffix, Endswith
+2108.
+Two pointers
+2859.
+Bit manipulation, counting bits
+2206.
+Bit manipulation, comparing pairs, xor
+1337.
+Binary search, array division, Heap, Heappush
+1408.
+KMP algorithm, LPS array, Failure function
+1346.
+Binary search, Target
+2357.
+Heap, operation on heap items
+997.
+Graph theory
+844.
+Stack, Build String
+917.
+Two pointers, Stack
+1725.
+Heap, Max heap
+2848.
+Prefix sum, Merge intervals
+876.
+Linked list, Middle node, Slow fast pointers
+1492.
+Number Theory, Prime Factorization
+2980.
+Bit manipulation, OR operator, LSB
+1009.
+Bit manipulation, Bit masking, Complement
+989.
+Array, Handling carries
+2293.
+Recursion, Base case
+2299.
+Boolean flags
+2347.
+Counting, Counter
+921.
+Stack, Parentheses
+2309.
+Enumeration, Alphabet order
+1228.
+Arithmetic Progression
+2016.
+Prefix min
+2932.
+Sliding window, Trie
+766.
+Matrix, Partial row loading (large input)
+3136.
+Boolean flag
+2540.
+Binary search
+1099.
+Two pointers
+3000.
+Lambda function, More than one criteria
+1161.
+Binary tree, Breadth first search (BFS), Queue, Level order traversal
+1150.
+Binary search, Majority element, Bisect module
+3151.
+Bit manipulation
+2315.
+Boolean flag, Keeping track
+830.
+String, Sentinel character
+1833.
+Counting sort
+2239.
+Binary search, Closest to target
+1309.
+Encryption, Ord(), Chr()
+1356.
+Double sort
+1213.
+Two pointers, Intersection (common items) of more than 1 list
+1447.
+Simplified Fractions, math.gcd()
+2869.
+Bitmask
+2558.
+Heap, Max heap
+821.
+Two pointers, Two-pass approach
+2807.
+Linked list, In between insertion, Traversal
+2269.
+Sliding window
+2220.
+Bit manipulation, Xoring, Flipping bits
+2696.
+Stack, Matched items
+1837.
+Base k conversion
+1481.
+Heap, Min-heap
+1252.
+Bitmask, Xor, Flip bits, Matrix
+2639.
+Transposed Matrix
+1534.
+Counting triplets, Bisect module
+1381.
+Stack, Design
+2352.
+Hashing tuples
+1791.
+Graph, Adjacent list, Center
+1103.
+Simulation, Distribution
+872.
+Binary Tree, DFS, Preorder Traversal
+3010.
+Heap, Divide array
+1598.
+Stack
+1769.
+Two passes, Left sum, Right sum
+1539.
+Binary search, Missing number
+1991.
+Prefix sum, Left right sums
+806.
+Simulation, Limited distribution
+1266.
+Geometry, Distance points
+1051.
+Counting sort
+1338.
+Heap, Max heap
+783.
+Binary Tree, DFS, Inorder Traversal
+2331.
+Binary Tree, DFS, Postorder Traversal, Stack
+868.
+Bit manipulation, Checking bit, Right shifting
+1064.
+Binary search
+1710.
+Distribution law
+2058.
+Linked list, Nodes distance
+1021.
+Stack, Parentheses
+3163.
+Counting contiguous subarrays with a common property
+2079.
+Array, Distribution, Repass
+999.
+Matrix, Chess
+2130.
+Linked list, Middle, Reverse, Palindrome, Twin nodes
+1603.
+Design Object
+2095.
+Linked list, Delete middle node, Helper create/print functions
+1476.
+Design
+3090.
+Sliding window, Counter()
+1471.
+Two pointers, Left/Right
+2221.
+Triangular sum, Binomial coefficient
+2181.
+Linked list, Merge nodes
+1409.
+Binary Indexed Tree, Fenwick Tree
+938.
+Binary Tree, DFS, Inorder Traversal, Sum
+2389.
+Binary Search, Prefix Sum
+1588.
+Math, frequency contribution
+389.
+Bit manipulation, Xor, Chars cancelling
+413.
+Dynamic Programming
+451.
+Bucket sort, Heap sort
+1636.
+Custom sorting key
+674.
+Longest continuous increasing subsequence (LCIS)
+from itertools import accumulate, starmap, pairwise
+from operator import lt
+1759.
+Dynamic Programming
+1832.
+Bitmasking
+796.
+String Matching
+137.
+Bit manipulation
+2231.
+Heapq module
+376.
+Dynamic Programming
+3264.
+Heapq, heappush index
+1469.
+Binary tree, Depth-First Search DFS, Preorder Traversal
+190.
+Bit manipulation, Reverse bits
+1122.
+Relative Sorting function
+2365.
+Hash Table, Simulation
+2031.
+BIT, Binary Indexed Tree (Fenwick Tree)
+191.
+Set bit, Hamming weight
+1017.
+Convert a given integer to negative base-2 string.
+2865.
+Stack
+413.
+Dynamic Programming
+1855.
+Binary search, Smallest element greater than or equal to the target
+2615.
+Prefix and Suffix Sums
+2390.
+Stack
+1209.
+Stack, Remove adjacent duplicates

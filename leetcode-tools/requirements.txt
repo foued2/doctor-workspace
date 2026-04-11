@@ -1,0 +1,18 @@
+# Core Testing Framework
+pytest>=7.0.0
+pytest-cov>=4.0.0
+
+# Optional: Code Quality & Analysis
+flake8>=5.0.0
+black>=22.0.0
+pylint>=2.15.0
+
+# Optional: Type Checking
+mypy>=0.990
+
+# Optional: Development Tools
+ipython>=8.0.0
+jupyter>=1.0.0
+
+# Note: Most solutions use only Python standard library
+# Additional dependencies can be added as needed for specific projects

@@ -1,0 +1,7 @@
+{
+  "ai_provider": "qwen",
+  "qwen_model": "qwen-plus",
+  "openai_model": "gpt-4",
+  "ollama_model": "llama3",
+  "claude_model": "claude-3-sonnet-20240229"
+}

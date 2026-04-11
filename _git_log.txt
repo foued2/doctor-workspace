@@ -1,0 +1,12 @@
+LOG:
+d7fb84c [2026-04-10 20:54] Qwen: push current code for Claude review - predict and calibrator — complete
+2ea829f [2026-04-10 20:05] Qwen: add GPT second critique for Claude review — complete
+aa0f8b2 [2026-04-10 20:02] Qwen: update briefing with GPT critique and Claude-only approval rule — complete
+bdb657e Add Claude briefing doc
+5528676 [2026-04-10 19:09] Qwen: add claude briefing doc — complete
+a2dc412 [2026-04-10 18:30] Qwen: workspace setup — complete
+3735968 [2026-04-10 18:26] Qwen: workspace setup — complete
+0c2e767 Initial snapshot -- Doctor project baseline for shared workspace
+d2cb6d4 Your commit message here
+
+

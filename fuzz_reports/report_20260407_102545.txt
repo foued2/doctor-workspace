@@ -1,0 +1,45 @@
+
+======================================================================
+FUZZING TEST REPORT
+Timestamp: 20260407_102545
+======================================================================
+
+────────────────────────────────────────────────────────────
+Phase 1: Deterministic Fuzzing
+────────────────────────────────────────────────────────────
+  Total runs:    10000
+  Passed:        1000
+  Failed:        9000
+  Fatal errors:  0
+  Corruptions:   False
+  Duplicates:    0
+  Duration:      318.13s
+  Error breakdown:
+    - parse_errors:1: 7276
+    - parse_errors:2: 429
+    - parse_errors:3: 343
+    - parse_errors:4: 252
+    - parse_errors:5: 182
+    - parse_errors:6: 143
+    - parse_errors:7: 97
+    - parse_errors:8: 81
+    - parse_errors:9: 75
+    - parse_errors:10: 55
+    - parse_errors:11: 25
+    - parse_errors:12: 22
+    - parse_errors:13: 12
+    - parse_errors:14: 3
+    - parse_errors:17: 2
+    - parse_errors:18: 1
+    - parse_errors:16: 1
+    - parse_errors:15: 1
+
+======================================================================
+OVERALL RESULTS
+======================================================================
+  Total passed:  1000
+  Total failed:  9000
+  Fatal errors:  0
+  Pass rate:     10.00%
+
+  STATUS: FAILED — 0 fatal, 9000 non-fatal errors

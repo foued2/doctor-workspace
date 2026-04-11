@@ -158,6 +158,10 @@ TEST_SUITES: Dict[str, List[TestCase]] = {
         TestCase(("a",), "a", "single"),
         TestCase(("ac",), "a", "two_no_palindrome"),  # or "c"
         TestCase(("abcba",), "abcba", "full_string"),
+        # Additional LPS edge cases
+        TestCase(("abba",), "abba", "basic_even"),
+        TestCase(("aabbaa",), "aabbaa", "mixed"),
+        TestCase(("abacdfgdcaba",), "aba", "no_repeat_trap"),
     ],
     "zigzag_conversion": [
         TestCase(("PAYPALISHIRING", 3), "PAHNAPLSIIGYIR", "basic_3rows"),
@@ -333,6 +337,11 @@ PROBLEM_KEY_MAP = {
 
 def _results_equal(got, expected) -> bool:
     """Compare got vs expected, handling lists, floats, linked lists."""
+    # Handle None linked list as empty list
+    if got is None and expected == []:
+        return True
+    if expected is None and got == []:
+        return True
     if isinstance(expected, list) and isinstance(got, list):
         if len(got) != len(expected):
             return False

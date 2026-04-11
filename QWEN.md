@@ -1,4 +1,22 @@
 ## Qwen Added Memories
+- SESSION PROTOCOL — TWO RULES:
+
+**RULE 1: First command every session — run SESSION_START.py**
+File: `F:\pythonProject\SESSION_START.py`
+Command: `F:\pythonProject\venv\Scripts\python.exe F:\pythonProject\SESSION_START.py`
+If it prints "Ready." — proceed. If anything MISSING — stop and report.
+Python is ALWAYS at: `F:\pythonProject\venv\Scripts\python.exe` — never search for it.
+Git is ALWAYS at: `C:\Program Files\Git\cmd\git.exe` — never search for it.
+
+**RULE 2: Output files go to scratch/ — push to GitHub for Claude**
+Any diagnostic/output file Qwen creates → put in `scratch/` folder → push to repo → give Foued the raw URL.
+Pattern: `scratch/debug_merge_lists_output.txt`, `scratch/baseline_run_YYYYMMDD.txt`, etc.
+Push command: `F:\pythonProject\venv\Scripts\python.exe F:\pythonProject\git_push.py --task "description" --status "complete"`
+Then tell Foued: "Claude can read this at: https://raw.githubusercontent.com/foued2/doctor-workspace/main/scratch/FILENAME"
+This eliminates copy-pasting walls of text into chat.
+
+---
+
 - LEETCODE PRODUCTION TEST COMPLETE — 29 real LeetCode problems evaluated:
 
 RESULTS (29 problems: 9 Easy, 10 Medium, 10 Hard):
@@ -88,3 +106,14 @@ FILES MODIFIED: doctor/raw_prompt_doctor.py (regex fix + vocab), doctor/undefine
 - Phase A root cause: _extract_problem_and_solution fails on ADP/RW/HC natural-language prompts (no code block), causing hardcoded ANALYSIS_ERROR→incorrect. Fix: _classify_natural_language() fallback with NL keyword signals + LeetCode problem description detector. Result: 0/12→11/12 correct. Phase B: no_self_element_reuse checker extended to catch nums[i]+nums[i] same-element-twice pattern. Both fixes verified in e2e test and production eval. Full report at docs/production_report_phase_ab.md.
 - FINAL SCOPE DECISION: Doctor is code-only. NL evaluation is out of scope. Session state at F:\pythonProject\session_state.json has the complete picture: scope_decision, code_only_baseline results (27 cases, Correct F1=73.7%, Partial F1=22.2%, Incorrect F1=50.0%, Wrong@HighConf=100%), frozen modules (layer_05), key failures, and next action priorities. env_bootstrap.py verifies 7 required files. Real baseline test at tests/verify_code_only_baseline.py with 10 problems × 3 solution types = 27 cases using actual Python code.
 - THREE FIXES IMPLEMENTED (confidence calibration, insufficient_evidence verdict, partial redefinition). Results on 27-case code-only baseline: Grade 0.4231 (F), Correct F1=73.7% (unchanged), Partial F1=0.0% (was 26.7% - vocab mismatch between L1 checker names and L2 test labels), Incorrect F1=64.0% (was 50.0%), Wrong@HighConf=36.4% (was 100% - major improvement), 1 insufficient_evidence abstention. Key issue: classify_partial_vs_incorrect() uses Layer 1 checker names but Layer 2 produces test labels, causing partial F1 collapse. Fix needed: map test labels to checker failure categories.
+- THREE FIXES IMPLEMENTED (confidence calibration, insufficient_evidence verdict, partial redefinition). Results on 27-case code-only baseline: Grade 0.4231 (F), Correct F1=73.7% (unchanged), Partial F1=0.0% (was 26.7% - vocab mismatch between L1 checker names and L2 test labels), Incorrect F1=64.0% (was 50.0%), Wrong@HighConf=36.4% (was 100% - major improvement), 1 insufficient_evidence abstention. Key issue: classify_partial_vs_incorrect() uses Layer 1 checker names but Layer 2 produces test labels, causing partial F1 collapse. Fix needed: map test labels to checker failure categories.
+- Session end state - Partial F1 is the #1 remaining issue (47.1%). Root cause: l2_ftype=="standard" over-triggers on partial solutions. The classify_failure_type() in doctor_grader.py tags too many tests as "standard" when they're really edge cases. A partial solution that fails basic tests gets pushed to "incorrect" via Rule 2. Fix needed: audit failure_type classification - tests should be explicitly tagged as "standard" (core algorithm wrong) vs "edge" (constraints/completeness gap). Solution that passes core but fails edge = partial, not incorrect.
+
+Key misclassified partials to audit next session:
+- Longest_Palindromic_Substring_partial: GT=partial → Pred=incorrect (L2_fail=['basic_even', 'basic_even', 'mixed'])
+- Roman_to_Integer_partial: GT=partial → Pred=incorrect (L2_fail=['subtractive_IV', 'subtractive_IX', 'complex'])
+- Trapping_Rain_Water_partial: GT=partial → Pred=incorrect (L2_fail=['basic', 'tall', 'ascending'])
+- Valid_Parentheses_partial: GT=partial → Pred=incorrect (L2_fail=['wrong_order'])
+- Merge_Two_Sorted_Lists_partial: GT=partial → Pred=incorrect (all tests fail)
+
+Metrics: Grade=0.5192, Correct F1=87.5%, Partial F1=47.1%, Incorrect F1=63.2%, Wrong@HiConf=11.1%

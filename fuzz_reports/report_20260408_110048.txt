@@ -1,0 +1,30 @@
+
+======================================================================
+FUZZING REPORT — CORRECTNESS-DRIVEN
+Timestamp: 20260408_110048
+======================================================================
+
+────────────────────────────────────────────────────────────
+Phase 1: Deterministic Fuzzing (Correctness-Driven)
+────────────────────────────────────────────────────────────
+  Total runs:              300
+  Crashes:                 0
+  Silent failures:         125
+  Correct results:         175
+  Avg data retention:      77.28%
+  Avg ranking deviation:   43.83%
+  Top-1 valid rate:        83.33%
+  Top-1 baseline match:    48.67%
+  Duration:                23.1s
+  Error breakdown:
+    silent:high_ranking_deviation: 125
+
+======================================================================
+OVERALL
+======================================================================
+  Total runs:      300
+  Crashes:         0 (0.0%)
+  Silent failures: 125 (41.7%)
+  Correct:         175 (58.3%)
+
+  STATUS: FAILED — 0 crashes, 125 silent failures

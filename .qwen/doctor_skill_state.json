@@ -1,0 +1,44 @@
+{
+  "total_problems": 1,
+  "overall_accuracy": 1.0,
+  "skills": {
+    "dp": {
+      "score": 0.0,
+      "count": 0
+    },
+    "graph": {
+      "score": 0.0,
+      "count": 0
+    },
+    "greedy": {
+      "score": 0.0,
+      "count": 0
+    },
+    "recursion": {
+      "score": 0.0,
+      "count": 0
+    },
+    "string": {
+      "score": 1.0,
+      "count": 1
+    }
+  },
+  "efficiency": 0.85,
+  "robustness": 1.0,
+  "consistency": 1.0,
+  "recent_trend": [
+    1.0
+  ],
+  "_accuracy_history": [
+    1.0
+  ],
+  "_efficiency_history": [
+    0.85
+  ],
+  "_robustness_history": [
+    1.0
+  ],
+  "_consistency_history": [
+    1.0
+  ]
+}

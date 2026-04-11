@@ -1,0 +1,110 @@
+=== doctor/llm_doctor.py: 608 lines ===
+  L258: def _extract_problem_and_solution(prompt: str) -> tuple:
+  L284: def classify_solution(prompt: str) -> Dict[str, Any]:
+  L307: def _resolve_problem_name(problem_text: str) -> str:
+  L353: def predict(prompt: str) -> Dict[str, object]:
+  L566: def __init__(self):
+  L569: def predict(self, prompt: str) -> Dict[str, object]:
+  L572: def get_provider(self) -> str:
+  L575: def get_solution_count(self) -> int:
+  WARNING: duplicate defs: {'predict': 2}
+  WARNING: unbalanced parens (-1)
+  IMPORT L13: from __future__ import annotations
+  IMPORT L15: import json
+  IMPORT L16: import os
+  IMPORT L17: import re
+  IMPORT L18: from typing import Any, Dict, Optional
+  IMPORT L269: import re
+  IMPORT L292: from doctor.code_analyzer import CodeAnalyzer
+  IMPORT L309: from doctor.test_executor import PROBLEM_KEY_MAP
+  IMPORT L365: from doctor.undefined_detection import classify_undefined
+  IMPORT L412: from doctor.code_analyzer import CodeAnalyzer
+  IMPORT L441: from doctor.test_executor import TestExecutor
+  IMPORT L499: from doctor.doctor_grader import check_insufficient_evidence
+  IMPORT L580: import sys, io
+
+=== doctor/doctor_grader.py: 227 lines ===
+  L54: def classify_failure_type(failed_labels: list[str]) -> str | None:
+  L74: def classify_partial_vs_incorrect(failure_reasons: list[str]) -> str:
+  L101: def check_insufficient_evidence(
+  L129: def grade(self, cases, predictions, distribution_shift=None):
+  L192: def print_card(self, result):
+  IMPORT L4: from __future__ import annotations
+  IMPORT L5: from collections import defaultdict
+  IMPORT L6: from typing import Any, Dict, List
+
+=== doctor/code_analyzer.py: 1301 lines ===
+  L60: def _has_nested_loops(node: ast.AST) -> bool:
+  L76: def _has_nested_same_input_loops(node: ast.AST) -> bool:
+  L101: def _safe_parse(source: str) -> Optional[ast.Module]:
+  L109: def _find_all(node: ast.AST, type_: type) -> List[ast.AST]:
+  L118: def _has_guard_for_empty(node: ast.AST) -> bool:
+  L143: def _has_guard_for_single(node: ast.AST) -> bool:
+  L160: def _extract_iterable_names(iter_node: ast.AST) -> set:
+  L175: def _has_zero_init_for_aggregate(node: ast.AST) -> bool:
+  L213: def _has_array_index_access(node: ast.AST) -> bool:
+  L225: def _has_index_out_of_bounds_risk(node: ast.AST) -> bool:
+  L268: def _get_return_statements(node: ast.AST) -> List[ast.Return]:
+  L273: def _return_is_boolean(node: ast.AST) -> bool:
+  L300: def _return_is_index_pair(node: ast.AST) -> bool:
+  L320: def _expects_empty_stack_check(problem: str) -> bool:
+  L333: def _has_empty_state_check(node: ast.AST) -> bool:
+  L373: def _has_safe_pop_pattern(node: ast.AST) -> bool:
+  L416: def _has_brute_force_pattern(node: ast.AST) -> bool:
+  L434: def _has_triple_nested_sum(node: ast.AST) -> bool:
+  L470: def _is_substring_replace_approach(node: ast.AST) -> bool:
+  L494: def _problem_expects_index(problem: str) -> bool:
+  L500: def _problem_expects_value(problem: str) -> bool:
+  L506: def _problem_expects_boolean(problem: str) -> bool:
+  L517: def _extract_constraints(problem: str) -> Dict[str, Any]:
+  L584: def analyze(self, problem_statement: str, solution_code: str, problem_name: str = "") -> AnalysisResult:
+  L662: def _check_empty_input(self, tree: Optional[ast.Module],
+  L688: def _check_single_element(self, tree: Optional[ast.Module],
+  L704: def _check_bounds(self, tree: Optional[ast.Module],
+  L728: def _check_return_type(self, problem: str, tree: Optional[ast.Module],
+  L745: def _check_negatives(self, tree: Optional[ast.Module],
+  L764: def _check_self_element_reuse(self, tree: Optional[ast.Module],
+  L823: def _check_constraint_violation(self, tree: Optional[ast.Module],
+  L907: def _check_algorithm_completeness(self, tree: Optional[ast.Module],
+  L1013: def _check_return_semantics(self, tree: Optional[ast.Module],
+  L1183: def _check_complexity(self, tree: Optional[ast.Module],
+  L1216: def _check_complexity_constraint(self, tree: Optional[ast.Module],
+  L1251: def _check_problem_constraints(self, solution_code: str,
+  L1279: def _build_reasoning(self, checks: Dict[str, bool],
+  WARNING: unbalanced parens (+31)
+  WARNING: unbalanced brackets (+2)
+  IMPORT L14: from __future__ import annotations
+  IMPORT L16: import ast
+  IMPORT L17: import re
+  IMPORT L18: from dataclasses import dataclass, field
+  IMPORT L19: from typing import Any, Dict, List, Optional, Tuple
+  IMPORT L625: from doctor.doctor_grader import classify_partial_vs_incorrect
+  IMPORT L642: from doctor.confidence_calibrator import compute_confidence
+
+=== doctor/test_executor.py: 474 lines ===
+  L53: def __init__(self, val=0, next=None):
+  L58: def make_list(vals: list) -> Optional[ListNode]:
+  L70: def list_to_vals(head: Optional[ListNode]) -> list:
+  L334: def _results_equal(got, expected) -> bool:
+  L352: def _safe_exec(code: str) -> Optional[callable]:
+  L374: def verify(self, problem_name: str, solution_code: str) -> ExecutionReport:
+  WARNING: unbalanced parens (+2)
+  WARNING: unbalanced brackets (-1)
+  IMPORT L9: from __future__ import annotations
+  IMPORT L11: import copy
+  IMPORT L12: import traceback
+  IMPORT L13: from dataclasses import dataclass, field
+  IMPORT L14: from typing import Any, Dict, List, Optional, Tuple
+  IMPORT L446: from doctor.confidence_calibrator import compute_confidence
+  IMPORT L462: from doctor.doctor_grader import classify_partial_vs_incorrect, classify_failure_type
+
+=== predict() trace in llm_doctor.py ===
+  L569: LLMDoctor.predict found
+    Content: def predict(self, prompt: str) -> Dict[str, object]:
+  Module predict() starts at L353
+  ANOMALY: fuse_verdicts NOT found in predict() body
+  l1_fatal: REFERENCED in predict()
+  l2_ftype: REFERENCED in predict()
+  failure_type: REFERENCED in predict()
+  fatal_flags: REFERENCED in predict()
+  return statements in predict(): 4

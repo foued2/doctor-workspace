@@ -1,0 +1,623 @@
+0.
+function max(iterable):
+    if iterable is empty:
+        raise ValueError("max() arg is an empty sequence")
+
+    current_max = iterable[0]  # Initialize with the first element
+    for each element in iterable starting from the second element:
+        if element > current_max:
+            current_max = element
+    return current_max
+
+1.
+return address.replace(".", "[.]")
+
+This line illustrates how to replace all occurrences of a specific substring within a string with another substring.
+
+2.
+This:  while x > 0:                                     Faster than this:
+            # Add the last digit to the sum             sum(int(i) for i in str(x))
+            s += x % 10
+            # Remove the last digit from the number
+            x //= 10
+
+The reason why this method is faster than summing the digits one by one is primarily due to the absence of conversion
+operations. Both approaches iterate over the digits, but avoiding string conversion reduces overhead.
+
+In the provided code, the approach involves directly extracting each digit of the number and adding it to the sum. This
+operation doesn't involve any string manipulation or conversion, making it computationally more efficient.
+
+In contrast, converting the number to a string and then iterating over each character to sum the digits involves
+additional overhead. String operations typically require more computational resources compared to integer arithmetic
+operations. Additionally, converting the number to a string and back to an integer introduces unnecessary complexity and
+ can degrade performance, especially for larger numbers.
+
+By directly operating on the integer representation of the number and extracting digits using modulo and integer
+division operations, the code avoids the overhead associated with string manipulation, resulting in a faster execution.
+
+3.
+num_frequency[num] = num_frequency.get(num, 0) + 1
+Simpler way to hash the frequency of occurrences
+
+4.
+max_lucky_number = max(max_lucky_number, num)
+Keeping track of max/min result
+
+5.
+Slicing:
+ When you slice a list or a string, Python is designed to handle index out-of-range situations gracefully. If
+ the slicing index exceeds the length of the list or string, Python simply slices up to the maximum possible index
+ without raising an error. This behavior allows for more flexibility and convenience when working with slices.
+Indexing:
+  When you try to access an element in a list or string using indexing, Python will raise an IndexError if the index
+  exceeds the length of the list or string. This behavior is stricter because indexing directly accesses a specific
+  element, and accessing an index that doesn't exist violates the fundamental principle of indexing.
+
+6.
+Example of typical binary search:
+          def binary_search(row: List[int]) -> int:
+            left, right = 0, len(row) - 1
+            while left <= right:
+                mid = left + (right - left) // 2
+                if row[mid] < 0:
+                    # If the middle element is negative, move left to search for more negatives
+                    right = mid - 1
+                else:
+                    # If the middle element is non-negative, move right to search for more negatives
+                    left = mid + 1
+            # Example: count negatives in a non-increasing row
+            return len(row) - left
+
+7.
+In short arrays we may work/use the min/max items directly instead of sorting the array
+
+8.
+From binary to decimal, start a val of the first bit, multiply it by 2 and add the next bit,
+the result will be the new val
+
+9.
+mid = (low + high) >> 1 is similar to (low + high) // 2 for non-negative ints, used in binary search
+right shifting >> is dividing by 2 (floor for non-negative), and left shifting << is multiplying by 2
+left shifting is adding zeroes to the right of the 1 bit, for example 1 << 3 is 1000 which equals 8
+right shifting is removing the zeroes at the right:
+For example:
+Right shifting 1010 (which is 10 in decimal) by 1 position (1010 >> 1) results in 0101 (which is 5 in decimal).
+Right shifting 1100 (which is 12 in decimal) by 2 positions (1100 >> 2) results in 0011 (which is 3 in decimal).
+
+10.
+# Convert ASCII value to character
+ascii_value = 65
+character = chr(ascii_value)
+print(character)  # Output: 'A'
+
+# Convert character to ASCII value
+character = 'A'
+ascii_value = ord(character)
+print(ascii_value)  # Output: 65
+
+11.
+Strings are indexable, they are just immutable
+
+12.
+The |= operator is a bitwise OR assignment operator. It performs a bitwise OR operation between the bitmask and the
+result of the left shift operation, and assigns the result back to the bitmask. This ensures that the index-th bit in
+the bitmask is set to 1 without affecting the other bits.
+
+13.
+string.find(prefix) == 0, check if prefix in string. Incrementing from 0
+
+14.
+heapify transforms a list into a min-heap (it does not fully sort it).
+heappop removes and returns the smallest item; heappush inserts an item and maintains the heap property.
+
+15.
+In stack, 'top' means the [-1] index. When we 'push' that means we append. When we 'pop' we remove from the end.
+
+16.
+Gaussian summation
+# Sum from 1 to n divisible by 3:
+# To find the sum of all multiples of 3 up to n, we can express it as:
+# 3 * (1 + 2 + ... + k), where k is the largest integer such that k * 3 <= n.
+# This sum can be calculated using the gaussian summation formula: k * (k + 1) / 2,
+# where k is the number of multiples of 3 up to n.
+# Therefore, the sum of all multiples of 3 up to n is 3 * (k * (k + 1) / 2).
+
+sum_multiples_of_m = (n // m) * (n // m + 1) * m // 2
+sum_natural_numbers = n * (n + 1) // 2
+
+
+
+17.
+Most significant digit : The number of significant figures is determined by starting with the leftmost non-zero
+digit. The leftmost non-zero digit is sometimes called the most significant digit or the most significant figure. For
+example, in the number 0.004205, the '4' is the most significant figure.
+
+18.
+numerical value of a letter: ord(word[i]) - ord('a')
+numerical representations:
+                            # If digits
+                            res = res * 10 + (ord(word[i]) - ord('0'))
+                            # If letters (base 26)
+                            res = res * 26 + (ord(word[i]) - ord('a'))
+
+19.
+When looking for unique items, start with a set() for hashing better than a dict()
+Example:
+local_name = local_name.split('+')[0].replace('.', '')
+This code line split at the '+' character, retrieve the first part [0], then replace all '.' with empty spaces.
+
+20.
+s.strip('0'): removes leading and trailing occurrences of the character '0' from the string s. It returns a new
+string with those characters removed.
+
+21.
+### Least Significant Bit (LSB)
+
+- **Position**: The LSB is the rightmost bit in a binary number.
+- **Value**: It represents the smallest value, specifically 2^0 = 1.
+- **Significance**: Changing the LSB affects the overall number by the smallest possible amount
+(either adding or subtracting 1).
+- **Example**: In the binary number `1010`, the LSB is `0`.
+
+### Most Significant Bit (MSB)
+
+- **Position**: The MSB is the leftmost bit in a binary number.
+- **Value**: It represents the largest value based on the number's length. For an n-bit number,
+the MSB represents 2^{n-1}.
+- **Significance**: Changing the MSB affects the overall number by the largest amount
+(either adding or subtracting a significant portion of the number).
+- **Example**: In the binary number `1010`, the MSB is `1`.
+
+### Visual Example
+For the binary number `1101`:
+
+- **MSB (leftmost bit)**: `1`, which represents 2^3 = 8.
+- **LSB (rightmost bit)**: `1`, which represents 2^0 = 1.
+
+So, `1101` in binary translates to 1 * 2^3 + 1 * 2^2 + 0 * 2^1 + 1 * 2^0 = 8 + 4 + 0 + 1 = 13 in decimal.
+The MSB is `1` (the highest value bit) and the LSB is also `1` (the smallest value bit).
+
+22.
+# Check if 'prefix' is a prefix of 'word'
+is_prefix = word.startswith(prefix)
+# Check if 'prefix' is a suffix of 'word'
+is_suffix = word.endswith(prefix)
+
+23.
+The expression m & 1 checks if the least significant bit of m is 1.
+m >>= 1 right shifts m by one bit, effectively discarding the least significant bit
+and moving the next bit to the least significant position.
+
+24.
+You can modify a set as long as you're not currently iterating over it. The set.add() operation is perfectly fine;
+the key is to ensure you're not changing the set size during an iteration over that set.
+
+25.
+When you use insert(0, value) to insert at the beginning of a list, the following happens:
+All existing elements in the list must be shifted one position to the right to make space for the new element.
+This shifting operation takes O(n) time because each element needs to be moved.
+
+26.
+a XOR b just cancels both and return 0 if they are identical, it compares bit-by-bit two elements:
+1 xor 1 = 0, 1 ^ 0 = 1 and concatenate those bits returned to form the new result element.
+
+27.
+heapq.heappop(heap) removes and returns the smallest item from the heap.
+
+28.
+mid = left + (right - left) // 2 is the same as mid = (right + left) // 2
+
+29.
+set(word).isdisjoint(broken_set) returns True if word has no characters in broken_set
+
+30.
+When you use yield x inside a function, you're creating a generator. Each call to the generator's __next__() method
+(implicitly done by a for loop or by using next()) resumes the function from where it last left off and continues until
+it hits another yield statement.
+
+31.
+Use "if key in d" for membership and "d.get(key)" for retrieval; performance is similar, prefer clarity.
+
+32.
+str.isalpha() : check if string is letters
+
+33.
+Prime factorization on number n:
+1. Find the only factors that are primes too.
+2. Count their exponents 'e', which is how much the prime factor can divide n before it stops.
+3. Applying the product of those exponents added to '1' each
+For example, consider : The prime factorization of 60:
+60 = (2 ** 2) * (3 ** 1) * (5 ** 1)
+The number of factors is: (2+1) * (1+1) * (1+1) = 3 * 2 * 2 = 12.
+
+34.
+LSB, the least significant bit is the trailing bit at the end of the binary.
+We can find it by: lsb = result & 1 (&: is called AND operator)
+The OR bitwise '|' between multiple bits, if '1' is one of the bits. Then it returns '1'. Otherwise,
+all bits are '0' and the result is '0'
+An even number has an LSB of '0'. While the odd one has '1'
+
+35.
+# Divide the current digit num[i] by 10 to obtain the quotient (k) and the remainder (num[i])
+k, num[i] = divmod(num[i], 10)
+
+36.
+Merge two lists:
+# Place positive numbers at even indices in the result list
+        res[0: len(res): 2] = pos
+
+37.
+In recursive functions, it's best practice to handle the base case first to ensure the function terminates correctly.
+
+38.
+Intersection between two lists:
+inter = set(nums1).intersection(nums2)
+
+39.
+Interleave two lists (insert one by one) in a result list:
+res[0::2], res[1::2] = (chars, digits) if len(chars) > len(digits) else (digits, chars)
+
+40.
+The formula for the sum of the first n terms of an arithmetic progression is:
+sum = n * (first_term + last_term) / 2
+
+41.
+num.rstrip('02468') : it removes all trailing characters that match any digits in '02468' until otherwise
+
+42.
+Find the common intersection of two sets:
+common_set = set1.intersection(set2)
+
+43.
+Create lambda function that take more then one criteria for its key function and sort each dimension
+based on those criteria (diagonal_length_squared, area)
+a,b = max(dimensions, key = lambda x: (x[0]*x[0]+x[1]*x[1], (x[0]*x[1])))
+
+44.
+t.find(ch): finds the index of 'ch' in string 't'
+
+45.
+Using boolean flag to keep track of the state of the index while iterating:
+       # Initialize a flag to track whether we are between pairs of '|'
+        within_pipes = False
+
+        # Iterate through each character in the string
+        for char in s:
+            # If the character is '|', toggle the within_pipes flag
+            if char == '|':
+                within_pipes = not within_pipes
+
+46.
+Partial sorting by index:
+nums[0::2] = sorted(nums[0::2])
+nums[1::2] = sorted(nums[1::2],reverse = True)
+
+47.
+Add a 'sentinel character' to the end of the string or list to handle the final case
+where there is no simpler way to test it.
+
+48.
+cnt1 = Counter(s) will create a dictionary where each item in the iterable is hashed to its count.
+
+49.
+This calculates the signed area of the triangle formed by the points
+If the area is zero, the points are collinear (aligned)
+area = x1 * (y2 - y3) + x2 * (y3 - y1) + x3 * (y1 - y2)
+
+50.
+.isdigit(): checks an entire number not only one digit
+
+51.
+Transpose matrix:
+transposed_matrix[j][i] = matrix[i][j]
+
+52.
+Using class or function without 'return'
+arr = [1, 0, 2, 3, 0, 4, 5, 0]
+Solution().duplicateZeros(arr)
+print(arr)
+
+53.
+Rule Of Thumb:
+Counting in substring == Sliding Window Problem
+
+54.
+# Set of vowels for quick lookup
+vowels = set('aeiou')
+
+55.
+When looking for the simplified fractions of an integer, it gets to check if the numerator and denominator
+are coprimes: if gcd(numerator, denominator) == 1
+
+56.
+Using defaultdict() with a type object inside. We attribute directly each value to its key:
+        # Dictionary to hold lists of people's indices for each group size
+        groups = defaultdict(list)
+
+        # Result list to store the final groups
+        result = []
+
+        # Iterate over each person's group size
+        for person_index, group_size in enumerate(groupSizes):
+            # Append the person's index to the list corresponding to their group size
+            groups[group_size].append(person_index)
+
+57.
+Two Counters with different lengths could be combined:
+combined_counter = counter1 + counter2
+
+58.
+The union of two sets is a set containing all elements from both sets, with duplicates removed.
+set1 = {1, 2, 3}
+set2 = {3, 4, 5}
+union_set = set1 | set2  # or set1.union(set2)
+# Output: {1, 2, 3, 4, 5}
+
+59.
+Counting possible pairs where its elements are related by an operation:
+        # Create a Counter (dictionary) to count the occurrences of each number in the list
+        table = Counter(nums)
+
+        # Iterate through the unique numbers in the Counter
+        for num in table:
+            # Check if the number num + k exists in the Counter
+            if num + k in table:
+                # If it exists, add the product of their counts to ans
+                ans += table[num] * table[num + k]
+            # Check if the number num - k exists in the Counter
+            if num - k in table:
+                # If it exists, add the product of their counts to ans
+                ans += table[num] * table[num - k]
+
+        # Since each pair is counted twice (num, num + k) and (num + k, num), divide the result by 2
+        return ans // 2
+
+60.
+# Extract the smallest element from the heap
+smallest = heapq.heappop(nums)
+# Negate it and push it back to the heap as the new  minimum
+heapq.heappush(nums, -smallest)
+When using max heap, every time we use heappop() we multiply it by -1
+# Multiplying by -1 converts it back to a positive number
+pile = heapq.heappop(max_heap) * -1
+
+61.
+Two pointers two-pass approach example:
+The main trick is to use a two-pass approach to efficiently calculate the shortest distances:
+Left to Right Pass:
+Calculate the shortest distance to the target character encountered so far.
+Right to Left Pass:
+Refine the distances by considering the distances to the target character encountered from the right side.
+
+62.
+Iteration for every sliding window with size k:
+for i in range(n - k + 1):  # Ensure we have enough characters left for a full window of size k
+
+63.
+# Calculate the XOR of start and goal.
+# The XOR operation highlights the positions where the bits differ.
+xor = goal ^ start
+# Use the bit_count() method to count the number of 1s in the binary representation of xor.
+# Each 1 represents a differing bit that needs to be flipped.
+ans = xor.bit_count()
+
+64.
+Conversion from base 10 to base 6 can be done by dividing the number by 6 until the quotient is 0.
+34 divides 6, Quotient = 5, remaining = 4
+5 divides 6, Quotient = 0, remaining =5
+When the division is complete, connect all the remainders of the division. Starting from the bottom of the table we get 54
+
+65.
+Bitmasking Is Not Just XOR:
+
+XOR (^): Toggles bits. x ^= 1 flips the bit (0 to 1, 1 to 0).
+AND (&): Masks bits. x & 1 checks if the least significant bit is set (1) or not (0).
+OR (|): Sets bits. x |= 1 sets the least significant bit to 1.
+NOT (~): Inverts all bits.
+Examples of Bitmasking Operations
+Let's see some examples of how different bitwise operations are used in bitmasking:
+
+Toggling Bits with XOR:
+# Toggling a bit
+value = 0b1010  # Binary: 1010
+bit_to_toggle = 0b0100  # Binary: 0100
+result = value ^ bit_to_toggle  # Binary: 1110
+print(bin(result))  # Output: 0b1110
+
+Masking Bits with AND:
+# Masking to check if a specific bit is set
+value = 0b1010  # Binary: 1010
+bitmask = 0b0010  # Binary: 0010
+result = value & bitmask  # Binary: 0010
+print(result != 0)  # Output: True (second bit is set)
+
+Setting Bits with OR:
+# Setting a specific bit
+value = 0b1010  # Binary: 1010
+bit_to_set = 0b0100  # Binary: 0100
+result = value | bit_to_set  # Binary: 1110
+print(bin(result))  # Output: 0b1110
+
+Inverting Bits with NOT:
+# Inverting bits
+value = 0b1010  # Binary: 1010
+result = ~value  # Binary: 0101 (Inverted)
+print(bin(result))  # Output: -0b1011 (due to two's complement representation in Python)
+
+66.
+Transpose the grid using zip(*grid)
+zip(*grid) will group elements from each row into columns
+transposed_grid = list(zip(*grid))
+
+67.
+Lists are not hashable (check if a list exists in a bigger DS). Tuples are. Convert list to tuple to hash it
+
+68.
+heappush always works; it inserts the item and maintains the heap property regardless of its value
+
+69.
+Two passes technique consist of one pass (O(n)) from the left and one other pass (O(n)) from the right
+while updating the result during each pass
+
+70.
+Pre-order (Root-Left-Right):
+Visit the root node.
+Traverse the left subtree.
+Traverse the right subtree.
+
+In-order (Left-Root-Right):
+Traverse the left subtree.
+Visit the root node.
+Traverse the right subtree.
+
+Post-order (Left-Right-Root):
+Traverse the left subtree.
+Traverse the right subtree.
+Visit the root node.
+
+71.
+# Check if the current bit is '1'
+if (n & 1) == 1:
+# Right shift the number by 1 to check the next bit
+n >>= 1
+
+72.
+Distribution items up limit:
+        # Iterate over each type of box in the sorted list
+        for box in boxTypes:
+            # If the truck can carry more boxes, add as many boxes of the current type as possible
+            if size < truckSize:
+                # Calculate the number of boxes we can take of this type without exceeding the truck's capacity
+                boxes_to_take = min(box[0], truckSize - size)
+
+73.
+Integer Check:
+The c.is_integer() method is used to check if c is an integer.
+
+74.
+        for i, num in enumerate(nums):
+            # Calculate the triangular sum modulo 10 and update the result.
+            result = (result + num * ncr) % 10
+
+            # Update the binomial coefficient for the next iteration using the formula:
+            # nCr = nCr * (length - i) / (i + 1)
+            ncr = (ncr * (length - i) // (i + 1))
+
+75.
+# Perform bitwise AND between n and (n-1)
+# This operation removes the lowest set bit from n
+n &= n - 1
+Example : 11 & 10 = 10
+
+76.
+word.rfind(char): checks the last position of char
+word.find(char): checks the first position of char
+
+77.
+A bit is "set" if its value is 1.
+A bit is "unset" (or cleared) if its value is 0.
+For example, if i = 2, 1 << 2 results in 4, which is 100 in binary.
+
+78.
+Cyclical index: i % n
+
+79.
+Early exit: if the best possible answer cannot beat current best, break.
+
+80.
+When constraints allow, sort once to enable two pointers or binary search.
+
+81.
+Prefix sums: range sum [l..r] = pref[r+1] - pref[l]
+
+82.
+Difference array: range add [l..r] with diff[l] += val, diff[r+1] -= val, then prefix to rebuild.
+
+83.
+Two pointers for sorted arrays: move left/right based on comparison.
+
+84.
+Sliding window: maintain window invariant (e.g., at most k distinct, sum <= limit).
+
+85.
+Monotonic stack to find next greater/smaller element in O(n).
+
+86.
+BFS for shortest path in unweighted graphs or grids.
+
+87.
+Dijkstra for non-negative weights; use a min-heap and skip stale entries.
+
+88.
+Union-Find (DSU) for dynamic connectivity; union by rank + path compression.
+
+89.
+Topological sort for DAG scheduling; detect cycles if processed count < n.
+
+90.
+Backtracking: choose, explore, unchoose; prune early with constraints.
+
+91.
+Memoization: cache (state -> result) to avoid recomputation in recursion.
+
+92.
+DP state design: define state, transition, base case, and answer location.
+
+93.
+Bitmask DP: use when n <= 20..25; state = subset bitmask.
+
+94.
+Greedy proof: show exchange argument or that local choice leads to optimal.
+
+95.
+Coordinate compression: map values to 0..k-1 to use arrays or Fenwick.
+
+96.
+Fenwick tree (BIT): prefix sums with point updates in O(log n).
+
+97.
+Segment tree: range query + point update in O(log n) for custom operations.
+
+98.
+Mod arithmetic: normalize negative with (x % mod + mod) % mod.
+
+99.
+Binary search on answer: when feasibility is monotonic in the answer.
+
+100.
+Precompute reusable data (factorials, primes, smallest prime factor) when many queries.
+
+101.
+class: Defines a class, which is a blueprint that groups related data and functions (methods).
+@staticmethod: Decorator that makes a method independent of the class instance; it can be called on the class.
+def: Keyword used to define a function or method.
+while: Loop keyword that repeats code as long as a condition stays True.
+divmod(a, b): Built-in function that returns (a // b, a % b) in one step.
+return: Ends a function and sends a value back to the caller.
+% (modulo): Operator that gives the remainder of a division.
+if __name__ == "__main__": Runs the block only when the file is executed directly.
+__name__: Built-in variable that is "__main__" for direct runs, or the module name when imported.
+print(): Built-in function that writes output to the console.
+
+102.
+digit sum: The sum of all digits in a number (e.g., 132 -> 1 + 3 + 2 = 6).
+digit product: The product of all digits in a number (e.g., 132 -> 1 * 3 * 2 = 6).
+neutral value for multiplication: The starting value 1; multiplying by 1 keeps the value unchanged.
+temporary variable: A helper variable used to store intermediate values while processing.
+running sum: A total that is updated step by step as you process each item.
+running product: A product that is updated step by step as you process each item.
+extract last digit: Use % 10 to get the last digit of a number, then remove it with // 10.
+divisibility check: A test of whether one number divides another with remainder 0 (a % b == 0).
+
+103.
+variable initialization: Setting starting values before a loop so updates are correct.
+loop invariant: A fact that stays true during each loop iteration (e.g., sum/product reflect processed digits).
+integer division (//): Divides and drops the fractional part, useful for removing digits.
+modulo (%): Gives the remainder, useful for extracting digits.
+tuple unpacking: Assigning multiple values at once (e.g., temp, digit = divmod(...)).
+type hints: Optional annotations like n: int and -> bool that document expected types.
+boolean expression: An expression that evaluates to True or False (e.g., n % x == 0).
+main guard: The if __name__ == "__main__": block that runs only when executed directly.
+function call: Using a function or method (e.g., Solution.checkDivisibility(132)).
+return value: The result a function sends back to its caller.
+

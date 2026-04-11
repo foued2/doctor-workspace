@@ -1,0 +1,30 @@
+
+======================================================================
+FUZZING REPORT — CORRECTNESS-DRIVEN
+Timestamp: 20260407_114538
+======================================================================
+
+────────────────────────────────────────────────────────────
+Phase 3: State Corruption
+────────────────────────────────────────────────────────────
+  Total runs:              20
+  Crashes:                 0
+  Silent failures:         2
+  Correct results:         18
+  Avg data retention:      0.00%
+  Avg ranking deviation:   0.00%
+  Top-1 valid rate:        0.00%
+  Top-1 baseline match:    0.00%
+  Duration:                273.3s
+  Error breakdown:
+    silent:corrupted_ids: 2
+
+======================================================================
+OVERALL
+======================================================================
+  Total runs:      20
+  Crashes:         0 (0.0%)
+  Silent failures: 2 (10.0%)
+  Correct:         18 (90.0%)
+
+  STATUS: FAILED — 0 crashes, 2 silent failures

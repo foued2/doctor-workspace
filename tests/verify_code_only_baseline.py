@@ -128,7 +128,7 @@ SOLUTIONS = {
             "        count[c] += 1\n"
             "    return count['('] == count[')'] and count['{'] == count['}'] and count['['] == count[']']"
         ),
-        "ground_truth": "partial",
+        "ground_truth": "incorrect",  # Counting can't detect order — fundamental flaw
     },
     "Valid Parentheses::incorrect": {
         "problem": "Given a string s containing just the characters '(', ')', '{', '}', '[' and ']', determine if the input string is valid.",
@@ -162,7 +162,7 @@ SOLUTIONS = {
             "    roman = {'I': 1, 'V': 5, 'X': 10, 'L': 50, 'C': 100, 'D': 500, 'M': 1000}\n"
             "    return sum(roman[c] for c in s)"
         ),
-        "ground_truth": "partial",
+        "ground_truth": "incorrect",  # Missing subtractive logic — fundamental flaw
     },
     "Roman to Integer::incorrect": {
         "problem": "Given a roman numeral string s, convert it to an integer.",
@@ -286,7 +286,7 @@ SOLUTIONS = {
             "            r += 1\n"
             "    return best"
         ),
-        "ground_truth": "partial",
+        "ground_truth": "incorrect",  # Only odd-length palindromes — missing even-length is fundamental flaw
     },
     "Longest Palindromic Substring::incorrect": {
         "problem": "Given a string s, return the longest palindromic substring in s.",
@@ -383,7 +383,7 @@ SOLUTIONS = {
             "            total += local_max - height[i]\n"
             "    return total"
         ),
-        "ground_truth": "partial",
+        "ground_truth": "incorrect",  # Local-max approach is wrong algorithm — fundamental flaw
     },
     "Trapping Rain Water::incorrect": {
         "problem": "Given n non-negative integers representing an elevation map, compute how much water it can trap after raining.",

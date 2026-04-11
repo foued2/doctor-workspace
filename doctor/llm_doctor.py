@@ -350,6 +350,18 @@ def _resolve_problem_name(problem_text: str) -> str:
     return problem_text  # return as-is, executor will report no test suite
 
 
+def _try_ai_verdict(problem_text: str | None, code: str | None) -> dict | None:
+    """Call the Ollama AI verifier. Returns None if Ollama is unavailable or errors."""
+    try:
+        from doctor.layer1_ai import get_ai_verdict
+        if problem_text is None or code is None:
+            return None
+        return get_ai_verdict(problem_text, code)
+    except Exception:
+        # Ollama not running, model not loaded, or network error — degrade gracefully
+        return None
+
+
 def predict(prompt: str) -> Dict[str, object]:
     """Dual-layer Doctor: Layer 0.5 (undefined detection) + Layer 1 (static analysis) + Layer 2 (execution).
 
@@ -408,6 +420,9 @@ def predict(prompt: str) -> Dict[str, object]:
     # Resolve problem name for Layer 2 test executor
     problem_name = _resolve_problem_name(problem_text)
 
+    # ── Layer 1-AI: AI verifier (parallel, degrades gracefully) ──────
+    ai_result = _try_ai_verdict(problem_text, code)
+
     # ── Layer 1: Static Analysis ────────────────────────────────────────
     from doctor.code_analyzer import CodeAnalyzer
     analyzer = CodeAnalyzer()
@@ -418,7 +433,9 @@ def predict(prompt: str) -> Dict[str, object]:
     l1_details = l1_result.details
 
     # FATAL checkers: if Layer 1 already knows it's wrong, skip execution
-    FATAL_CHECKS = {"time_complexity_viable"}
+    # NOTE: time_complexity_viable removed — complexity violations are handled
+    # by Rule 1 (constraint override → partial), not as fatal skip.
+    FATAL_CHECKS = set()
     has_fatal = bool(set(l1_issues) & FATAL_CHECKS)
 
     # ── Layer 2: Execution (only if Layer 1 doesn't already know) ────────
@@ -481,7 +498,8 @@ def predict(prompt: str) -> Dict[str, object]:
         # Rule 2: L2 standard case failure → incorrect
         elif l2_ftype == "standard":
             final_verdict = "incorrect"
-            final_confidence = l2_report.confidence if l2_report.confidence is not None else 0.75
+            base_conf = l2_report.confidence if l2_report.confidence is not None else 0.75
+            final_confidence = min(base_conf, 0.69) if l1_verdict != "incorrect" else base_conf
         # Rule 3: L2 edge-only failure → partial
         elif l2_ftype == "edge_only":
             final_verdict = "partial"
@@ -560,6 +578,11 @@ def predict(prompt: str) -> Dict[str, object]:
             "layer2_pass_rate": l2_pass_rate,
             "layer2_failure_type": l2_ftype if l2_activated else None,
             "layer2_failures": l2_failures,
+            "layer1_ai_verdict": ai_result.get("verdict") if ai_result else None,
+            "layer1_ai_confidence": ai_result.get("confidence") if ai_result else None,
+            "layer1_ai_reasoning": ai_result.get("reasoning") if ai_result else None,
+            "layer1_ai_model": ai_result.get("model") if ai_result else None,
+            "layer1_ai_available": ai_result is not None,
         },
     }
 

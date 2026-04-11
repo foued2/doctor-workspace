@@ -1,111 +1,80 @@
-"""
-Auto-commit script for Doctor project shared workspace.
-Run after every completed task to push session log and modified files.
-Usage: python git_push.py --task "Track A fix" --status "complete"
-"""
+"""git_push.py — Push output/diagnostic files to GitHub so Claude can read them.
 
-import subprocess
+Usage:
+    python git_push.py --task "description" --status "complete"
+
+Pattern:
+    1. Add files from scratch/ to git
+    2. Commit with descriptive message
+    3. Push to origin/main
+    4. Print raw URLs for Claude to fetch
+"""
 import argparse
-import datetime
 import os
+import subprocess
+import glob
+import sys
+from datetime import datetime
 
+PYTHON = r"F:\pythonProject\venv\Scripts\python.exe"
 GIT = r"C:\Program Files\Git\cmd\git.exe"
-PROJECT_ROOT = r"F:\pythonProject"
+PROJECT = r"F:\pythonProject"
 
-DOCTOR_FILES = [
-    "doctor/llm_doctor.py",
-    "doctor/code_analyzer.py",
-    "doctor/test_executor.py",
-    "doctor/doctor_grader.py",
-    "doctor/undefined_detection.py",
-    "doctor/confidence_calibrator.py",
-    "doctor/__init__.py",
-    "external_stress_layer/enhanced_evaluator.py",
-    "external_stress_layer/__init__.py",
-    "tests/verify_code_only_baseline.py",
-    "tests/leetcode_grader.py",
-    "production_runner.py",
-    "code_only_baseline.json",
-    "workspace_log.md",
-    "QWEN.md",
-]
+os.chdir(PROJECT)
+sys.stdout.reconfigure(encoding='utf-8')
 
+REPO_RAW = "https://raw.githubusercontent.com/foued2/doctor-workspace/main"
 
-def run(cmd: str, cwd: str = PROJECT_ROOT) -> str:
-    result = subprocess.run(
-        cmd, shell=True, cwd=cwd,
-        capture_output=True, text=True
-    )
-    if result.returncode != 0:
-        print(f"[ERROR] {cmd}\n{result.stderr}")
-    return result.stdout.strip()
-
-
-def append_log(task: str, status: str, files: list, issues: str, action: str):
-    timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
-    entry = (
-        f"\n## {timestamp}\n"
-        f"- **AGENT**: Qwen\n"
-        f"- **TASK**: {task}\n"
-        f"- **STATUS**: {status}\n"
-        f"- **FILES_MODIFIED**: {', '.join(files) if files else 'none'}\n"
-        f"- **ISSUES**: {issues if issues else 'none'}\n"
-        f"- **ACTION_NEEDED**: {action if action else 'none'}\n"
-        f"---\n"
-    )
-    log_path = os.path.join(PROJECT_ROOT, "workspace_log.md")
-    with open(log_path, "a", encoding="utf-8") as f:
-        f.write(entry)
-    print(f"[LOG] Entry written to workspace_log.md")
-
-
-def get_modified_files() -> list:
-    output = run(f'"{GIT}" diff --name-only HEAD')
-    staged = run(f'"{GIT}" diff --cached --name-only')
-    untracked = run(f'"{GIT}" ls-files --others --exclude-standard')
-    all_files = set()
-    for line in (output + "\n" + staged + "\n" + untracked).splitlines():
-        line = line.strip()
-        if line:
-            all_files.add(line)
-    return list(all_files)
-
-
-def push(task: str, status: str, issues: str = "", action: str = ""):
-    print("[GIT] Staging doctor files...")
-    for f in DOCTOR_FILES:
-        full = os.path.join(PROJECT_ROOT, f)
-        if os.path.exists(full):
-            run(f'"{GIT}" add "{f}"')
-        else:
-            print(f"[WARN] File not found, skipping: {f}")
-
-    modified = get_modified_files()
-
-    append_log(task, status, modified, issues, action)
-    run(f'"{GIT}" add workspace_log.md')
-
-    timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
-    commit_msg = f"[{timestamp}] Qwen: {task} — {status}"
-
-    print(f"[GIT] Committing: {commit_msg}")
-    run(f'"{GIT}" commit -m "{commit_msg}"')
-
-    print("[GIT] Pushing to origin/main...")
-    result = run(f'"{GIT}" push origin main')
-    print(f"[GIT] Done. {result}")
-
-    print("\n[CLAUDE REVIEW URL]")
-    print(f"https://raw.githubusercontent.com/foued2/doctor-workspace/main/workspace_log.md")
-    print(f"https://raw.githubusercontent.com/foued2/doctor-workspace/main/doctor/llm_doctor.py")
-
-
-if __name__ == "__main__":
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--task", required=True, help="Task name")
-    parser.add_argument("--status", required=True, help="complete / partial / blocked")
-    parser.add_argument("--issues", default="", help="Any issues encountered")
-    parser.add_argument("--action", default="", help="Action needed from Claude")
+def main():
+    parser = argparse.ArgumentParser(description="Push scratch files to GitHub")
+    parser.add_argument("--task", default="update", help="Task description for commit message")
+    parser.add_argument("--status", default="in_progress", help="Status: complete, in_progress, failed")
+    parser.add_argument("--files", nargs="*", help="Specific files to push (default: all in scratch/)")
     args = parser.parse_args()
 
-    push(args.task, args.status, args.issues, args.action)
+    # Ensure scratch/ exists
+    os.makedirs(os.path.join(PROJECT, "scratch"), exist_ok=True)
+
+    # Determine which files to add
+    if args.files:
+        files = args.files
+    else:
+        files = glob.glob(os.path.join(PROJECT, "scratch", "*"))
+
+    if not files:
+        print("No files in scratch/ to push")
+        return
+
+    # Add files to git
+    for f in files:
+        rel = os.path.relpath(f, PROJECT)
+        subprocess.run([GIT, "add", rel], check=False, capture_output=True)
+
+    # Commit
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M")
+    msg = f"[{args.status}] {args.task} ({timestamp})"
+    result = subprocess.run([GIT, "commit", "-m", msg], capture_output=True, text=True)
+
+    if result.returncode != 0:
+        # Might be nothing to commit
+        if "nothing to commit" in result.stderr.lower() or "nothing added" in result.stderr.lower():
+            print("Nothing new to commit")
+        else:
+            print(f"Commit failed: {result.stderr.strip()}")
+            return
+
+    # Push
+    result = subprocess.run([GIT, "push", "origin", "main"], capture_output=True, text=True, timeout=30)
+    if result.returncode != 0:
+        print(f"Push failed: {result.stderr.strip()}")
+        return
+
+    print(f"Pushed: {msg}")
+    print()
+    print("Claude can read these at:")
+    for f in files:
+        rel = os.path.relpath(f, PROJECT).replace("\\", "/")
+        print(f"  {REPO_RAW}/{rel}")
+
+if __name__ == "__main__":
+    main()

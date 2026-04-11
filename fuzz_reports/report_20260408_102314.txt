@@ -1,0 +1,32 @@
+
+======================================================================
+FUZZING REPORT — CORRECTNESS-DRIVEN
+Timestamp: 20260408_102314
+======================================================================
+
+────────────────────────────────────────────────────────────
+Phase 4: Concurrency Stress
+────────────────────────────────────────────────────────────
+  Total runs:              50
+  Crashes:                 49
+  Silent failures:         0
+  Correct results:         1
+  Avg data retention:      0.00%
+  Avg ranking deviation:   0.00%
+  Top-1 valid rate:        0.00%
+  Top-1 baseline match:    0.00%
+  Duration:                29.4s
+  Error breakdown:
+    crash:OperationLimitExceeded:Batch 'scan-project-folders: 40
+    crash:OperationLimitExceeded:Batch 'worker-0-0' exceeded: 6
+    crash:OperationLimitExceeded:Batch 'worker-1-6' exceeded: 3
+
+======================================================================
+OVERALL
+======================================================================
+  Total runs:      50
+  Crashes:         49 (98.0%)
+  Silent failures: 0 (0.0%)
+  Correct:         1 (2.0%)
+
+  STATUS: FAILED — 49 crashes, 0 silent failures
