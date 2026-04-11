@@ -1,0 +1,53 @@
+{
+  "total_cases": 27,
+  "gt_distribution": {
+    "correct": 9,
+    "incorrect": 12,
+    "partial": 6
+  },
+  "confusion_matrix": {
+    "correct": {
+      "correct": 8,
+      "partial": 1,
+      "incorrect": 0,
+      "undefined": 0
+    },
+    "incorrect": {
+      "incorrect": 10,
+      "partial": 2,
+      "correct": 0,
+      "undefined": 0
+    },
+    "partial": {
+      "partial": 4,
+      "incorrect": 1,
+      "insufficient_evidence": 1,
+      "correct": 0,
+      "undefined": 0
+    },
+    "undefined": {}
+  },
+  "grade": 0.6346,
+  "grade_letter": "D",
+  "rule_score": 1.0,
+  "wrong_at_high_conf": 0.25,
+  "shift_score": null,
+  "per_class": {
+    "correct": {
+      "f1": 0.9411764705882353,
+      "recall": 0.8888888888888888
+    },
+    "partial": {
+      "f1": 0.6666666666666666,
+      "recall": 0.8
+    },
+    "incorrect": {
+      "f1": 0.8695652173913043,
+      "recall": 0.8333333333333334
+    },
+    "undefined": {
+      "f1": 0.0,
+      "recall": 0.0
+    }
+  }
+}
