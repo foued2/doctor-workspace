@@ -1,0 +1,21 @@
+{
+  "variables": {
+    "num_floors": "INT",
+    "num_elevators": "INT",
+    "elevator_capacity_per_unit": "INT",
+    "floor_labels": ["STR"],
+    "arrival_rate_by_hour": {"hour_0_to_23": "INT"},
+    "passenger_classes": ["STR"],
+    "priority_map": {"passenger_class": "INT"},
+    "target_wait_time_sec": "FLOAT",
+    "target_transit_time_sec": "FLOAT",
+    "max_load_percent": "FLOAT",
+    "peak_hours": [{"start_hour": "INT", "end_hour": "INT"}],
+    "emergency_floor_indices": ["INT"],
+    "operating_hours": {"start": "INT", "end": "INT"},
+    "wheelchair_access_required": "BOOL",
+    "cargo_transport_required": "BOOL"
+  },
+  "constraints": [],
+  "scenarios": []
+}
