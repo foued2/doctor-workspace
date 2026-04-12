@@ -1,0 +1,40 @@
+============================================================
+Problem: Two Sum
+============================================================
+Verdict: correct
+Pass rate: 1.0 (5/5)
+
+Raw traces:
+[{'passed': True, 'output': [0, 1], 'error': None, 'execution_time': 2.8e-05},
+ {'passed': True, 'output': [1, 2], 'error': None, 'execution_time': 1.2e-05},
+ {'passed': True, 'output': [0, 1], 'error': None, 'execution_time': 6e-06},
+ {'passed': True, 'output': [2, 4], 'error': None, 'execution_time': 8e-06},
+ {'passed': True, 'output': [2, 3], 'error': None, 'execution_time': 5e-06}]
+
+============================================================
+Problem: Trapping Rain Water
+============================================================
+Verdict: correct
+Pass rate: 1.0 (5/5)
+
+Raw traces:
+[{'passed': True, 'output': 6, 'error': None, 'execution_time': 1.1e-05},
+ {'passed': True, 'output': 9, 'error': None, 'execution_time': 3e-06},
+ {'passed': True, 'output': 0, 'error': None, 'execution_time': 0.0},
+ {'passed': True, 'output': 0, 'error': None, 'execution_time': 1e-06},
+ {'passed': True, 'output': 0, 'error': None, 'execution_time': 2e-06}]
+
+============================================================
+Problem: Valid Parentheses
+============================================================
+Verdict: correct
+Pass rate: 1.0 (7/7)
+
+Raw traces:
+[{'passed': True, 'output': True, 'error': None, 'execution_time': 1.4e-05},
+ {'passed': True, 'output': True, 'error': None, 'execution_time': 6e-06},
+ {'passed': True, 'output': False, 'error': None, 'execution_time': 2e-06},
+ {'passed': True, 'output': False, 'error': None, 'execution_time': 2e-06},
+ {'passed': True, 'output': False, 'error': None, 'execution_time': 1e-06},
+ {'passed': True, 'output': True, 'error': None, 'execution_time': 2e-06},
+ {'passed': True, 'output': True, 'error': None, 'execution_time': 1e-06}]
