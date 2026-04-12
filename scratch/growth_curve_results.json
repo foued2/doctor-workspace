@@ -1,0 +1,512 @@
+{
+  "n4": {
+    "backtracking_correct": {
+      "description": "Correct backtracking (all solutions)",
+      "solutions_found": 2,
+      "total_calls": 17,
+      "max_depth": 4,
+      "signature": {
+        "growth_rate": 3.4,
+        "curvature": -0.2941,
+        "total_work": 17,
+        "max_depth": 4
+      },
+      "curve_summary": [
+        {
+          "depth": 0,
+          "cumulative_states": 1,
+          "cumulative_calls": 1,
+          "states_at_depth": 1
+        },
+        {
+          "depth": 1,
+          "cumulative_states": 5,
+          "cumulative_calls": 5,
+          "states_at_depth": 4
+        },
+        {
+          "depth": 2,
+          "cumulative_states": 11,
+          "cumulative_calls": 11,
+          "states_at_depth": 6
+        },
+        {
+          "depth": 3,
+          "cumulative_states": 15,
+          "cumulative_calls": 15,
+          "states_at_depth": 4
+        },
+        {
+          "depth": 4,
+          "cumulative_states": 17,
+          "cumulative_calls": 17,
+          "states_at_depth": 2
+        }
+      ]
+    },
+    "partial": {
+      "description": "Partial backtracking (first solution)",
+      "solutions_found": 1,
+      "total_calls": 9,
+      "max_depth": 4,
+      "signature": {
+        "growth_rate": 1.8,
+        "curvature": -0.3333,
+        "total_work": 9,
+        "max_depth": 4
+      },
+      "curve_summary": [
+        {
+          "depth": 0,
+          "cumulative_states": 1,
+          "cumulative_calls": 1,
+          "states_at_depth": 1
+        },
+        {
+          "depth": 1,
+          "cumulative_states": 3,
+          "cumulative_calls": 3,
+          "states_at_depth": 2
+        },
+        {
+          "depth": 2,
+          "cumulative_states": 6,
+          "cumulative_calls": 6,
+          "states_at_depth": 3
+        },
+        {
+          "depth": 3,
+          "cumulative_states": 8,
+          "cumulative_calls": 8,
+          "states_at_depth": 2
+        },
+        {
+          "depth": 4,
+          "cumulative_states": 9,
+          "cumulative_calls": 9,
+          "states_at_depth": 1
+        }
+      ]
+    },
+    "bruteforce": {
+      "description": "Brute force (n^n enumeration)",
+      "solutions_found": 2,
+      "total_calls": 596,
+      "max_depth": 4,
+      "signature": {
+        "growth_rate": 119.2,
+        "curvature": 0.7181,
+        "total_work": 596,
+        "max_depth": 4
+      },
+      "curve_summary": [
+        {
+          "depth": 0,
+          "cumulative_states": 4,
+          "cumulative_calls": 4,
+          "states_at_depth": 4
+        },
+        {
+          "depth": 1,
+          "cumulative_states": 20,
+          "cumulative_calls": 20,
+          "states_at_depth": 16
+        },
+        {
+          "depth": 2,
+          "cumulative_states": 84,
+          "cumulative_calls": 84,
+          "states_at_depth": 64
+        },
+        {
+          "depth": 3,
+          "cumulative_states": 340,
+          "cumulative_calls": 340,
+          "states_at_depth": 256
+        },
+        {
+          "depth": 4,
+          "cumulative_states": 596,
+          "cumulative_calls": 596,
+          "states_at_depth": 256
+        }
+      ]
+    }
+  },
+  "n6": {
+    "backtracking_correct": {
+      "description": "Correct backtracking (all solutions)",
+      "solutions_found": 4,
+      "total_calls": 153,
+      "max_depth": 6,
+      "signature": {
+        "growth_rate": 21.86,
+        "curvature": 0.1765,
+        "total_work": 153,
+        "max_depth": 6
+      },
+      "curve_summary": [
+        {
+          "depth": 0,
+          "cumulative_states": 1,
+          "cumulative_calls": 1,
+          "states_at_depth": 1
+        },
+        {
+          "depth": 1,
+          "cumulative_states": 7,
+          "cumulative_calls": 7,
+          "states_at_depth": 6
+        },
+        {
+          "depth": 2,
+          "cumulative_states": 27,
+          "cumulative_calls": 27,
+          "states_at_depth": 20
+        },
+        {
+          "depth": 3,
+          "cumulative_states": 63,
+          "cumulative_calls": 63,
+          "states_at_depth": 36
+        },
+        {
+          "depth": 4,
+          "cumulative_states": 109,
+          "cumulative_calls": 109,
+          "states_at_depth": 46
+        },
+        {
+          "depth": 5,
+          "cumulative_states": 149,
+          "cumulative_calls": 149,
+          "states_at_depth": 40
+        },
+        {
+          "depth": 6,
+          "cumulative_states": 153,
+          "cumulative_calls": 153,
+          "states_at_depth": 4
+        }
+      ]
+    },
+    "partial": {
+      "description": "Partial backtracking (first solution)",
+      "solutions_found": 1,
+      "total_calls": 32,
+      "max_depth": 6,
+      "signature": {
+        "growth_rate": 4.57,
+        "curvature": -0.0625,
+        "total_work": 32,
+        "max_depth": 6
+      },
+      "curve_summary": [
+        {
+          "depth": 0,
+          "cumulative_states": 1,
+          "cumulative_calls": 1,
+          "states_at_depth": 1
+        },
+        {
+          "depth": 1,
+          "cumulative_states": 3,
+          "cumulative_calls": 3,
+          "states_at_depth": 2
+        },
+        {
+          "depth": 2,
+          "cumulative_states": 8,
+          "cumulative_calls": 8,
+          "states_at_depth": 5
+        },
+        {
+          "depth": 3,
+          "cumulative_states": 17,
+          "cumulative_calls": 17,
+          "states_at_depth": 9
+        },
+        {
+          "depth": 4,
+          "cumulative_states": 26,
+          "cumulative_calls": 26,
+          "states_at_depth": 9
+        },
+        {
+          "depth": 5,
+          "cumulative_states": 31,
+          "cumulative_calls": 31,
+          "states_at_depth": 5
+        },
+        {
+          "depth": 6,
+          "cumulative_states": 32,
+          "cumulative_calls": 32,
+          "states_at_depth": 1
+        }
+      ]
+    },
+    "bruteforce": {
+      "description": "Brute force (n^n enumeration)",
+      "solutions_found": 4,
+      "total_calls": 102642,
+      "max_depth": 6,
+      "signature": {
+        "growth_rate": 14663.14,
+        "curvature": 0.9697,
+        "total_work": 102642,
+        "max_depth": 6
+      },
+      "curve_summary": [
+        {
+          "depth": 0,
+          "cumulative_states": 6,
+          "cumulative_calls": 6,
+          "states_at_depth": 6
+        },
+        {
+          "depth": 1,
+          "cumulative_states": 42,
+          "cumulative_calls": 42,
+          "states_at_depth": 36
+        },
+        {
+          "depth": 2,
+          "cumulative_states": 258,
+          "cumulative_calls": 258,
+          "states_at_depth": 216
+        },
+        {
+          "depth": 3,
+          "cumulative_states": 1554,
+          "cumulative_calls": 1554,
+          "states_at_depth": 1296
+        },
+        {
+          "depth": 4,
+          "cumulative_states": 9330,
+          "cumulative_calls": 9330,
+          "states_at_depth": 7776
+        },
+        {
+          "depth": 5,
+          "cumulative_states": 55986,
+          "cumulative_calls": 55986,
+          "states_at_depth": 46656
+        },
+        {
+          "depth": 6,
+          "cumulative_states": 102642,
+          "cumulative_calls": 102642,
+          "states_at_depth": 46656
+        }
+      ]
+    }
+  },
+  "n8": {
+    "backtracking_correct": {
+      "description": "Correct backtracking (all solutions)",
+      "solutions_found": 92,
+      "total_calls": 2057,
+      "max_depth": 8,
+      "signature": {
+        "growth_rate": 228.56,
+        "curvature": 0.4798,
+        "total_work": 2057,
+        "max_depth": 8
+      },
+      "curve_summary": [
+        {
+          "depth": 0,
+          "cumulative_states": 1,
+          "cumulative_calls": 1,
+          "states_at_depth": 1
+        },
+        {
+          "depth": 1,
+          "cumulative_states": 9,
+          "cumulative_calls": 9,
+          "states_at_depth": 8
+        },
+        {
+          "depth": 2,
+          "cumulative_states": 51,
+          "cumulative_calls": 51,
+          "states_at_depth": 42
+        },
+        {
+          "depth": 3,
+          "cumulative_states": 191,
+          "cumulative_calls": 191,
+          "states_at_depth": 140
+        },
+        {
+          "depth": 4,
+          "cumulative_states": 535,
+          "cumulative_calls": 535,
+          "states_at_depth": 344
+        },
+        {
+          "depth": 5,
+          "cumulative_states": 1103,
+          "cumulative_calls": 1103,
+          "states_at_depth": 568
+        },
+        {
+          "depth": 6,
+          "cumulative_states": 1653,
+          "cumulative_calls": 1653,
+          "states_at_depth": 550
+        },
+        {
+          "depth": 7,
+          "cumulative_states": 1965,
+          "cumulative_calls": 1965,
+          "states_at_depth": 312
+        },
+        {
+          "depth": 8,
+          "cumulative_states": 2057,
+          "cumulative_calls": 2057,
+          "states_at_depth": 92
+        }
+      ]
+    },
+    "partial": {
+      "description": "Partial backtracking (first solution)",
+      "solutions_found": 1,
+      "total_calls": 114,
+      "max_depth": 8,
+      "signature": {
+        "growth_rate": 12.67,
+        "curvature": 0.3333,
+        "total_work": 114,
+        "max_depth": 8
+      },
+      "curve_summary": [
+        {
+          "depth": 0,
+          "cumulative_states": 1,
+          "cumulative_calls": 1,
+          "states_at_depth": 1
+        },
+        {
+          "depth": 1,
+          "cumulative_states": 2,
+          "cumulative_calls": 2,
+          "states_at_depth": 1
+        },
+        {
+          "depth": 2,
+          "cumulative_states": 5,
+          "cumulative_calls": 5,
+          "states_at_depth": 3
+        },
+        {
+          "depth": 3,
+          "cumulative_states": 16,
+          "cumulative_calls": 16,
+          "states_at_depth": 11
+        },
+        {
+          "depth": 4,
+          "cumulative_states": 38,
+          "cumulative_calls": 38,
+          "states_at_depth": 22
+        },
+        {
+          "depth": 5,
+          "cumulative_states": 74,
+          "cumulative_calls": 74,
+          "states_at_depth": 36
+        },
+        {
+          "depth": 6,
+          "cumulative_states": 101,
+          "cumulative_calls": 101,
+          "states_at_depth": 27
+        },
+        {
+          "depth": 7,
+          "cumulative_states": 113,
+          "cumulative_calls": 113,
+          "states_at_depth": 12
+        },
+        {
+          "depth": 8,
+          "cumulative_states": 114,
+          "cumulative_calls": 114,
+          "states_at_depth": 1
+        }
+      ]
+    },
+    "bruteforce": {
+      "description": "Brute force (n^n enumeration)",
+      "solutions_found": 92,
+      "total_calls": 35951176,
+      "max_depth": 8,
+      "signature": {
+        "growth_rate": 3994575.11,
+        "curvature": 0.9979,
+        "total_work": 35951176,
+        "max_depth": 8
+      },
+      "curve_summary": [
+        {
+          "depth": 0,
+          "cumulative_states": 8,
+          "cumulative_calls": 8,
+          "states_at_depth": 8
+        },
+        {
+          "depth": 1,
+          "cumulative_states": 72,
+          "cumulative_calls": 72,
+          "states_at_depth": 64
+        },
+        {
+          "depth": 2,
+          "cumulative_states": 584,
+          "cumulative_calls": 584,
+          "states_at_depth": 512
+        },
+        {
+          "depth": 3,
+          "cumulative_states": 4680,
+          "cumulative_calls": 4680,
+          "states_at_depth": 4096
+        },
+        {
+          "depth": 4,
+          "cumulative_states": 37448,
+          "cumulative_calls": 37448,
+          "states_at_depth": 32768
+        },
+        {
+          "depth": 5,
+          "cumulative_states": 299592,
+          "cumulative_calls": 299592,
+          "states_at_depth": 262144
+        },
+        {
+          "depth": 6,
+          "cumulative_states": 2396744,
+          "cumulative_calls": 2396744,
+          "states_at_depth": 2097152
+        },
+        {
+          "depth": 7,
+          "cumulative_states": 19173960,
+          "cumulative_calls": 19173960,
+          "states_at_depth": 16777216
+        },
+        {
+          "depth": 8,
+          "cumulative_states": 35951176,
+          "cumulative_calls": 35951176,
+          "states_at_depth": 16777216
+        }
+      ]
+    }
+  }
+}

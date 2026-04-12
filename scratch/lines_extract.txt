@@ -1,0 +1,158 @@
+TOTAL_LINES: 1353
+
+=== LINES 922-970 ===
+    def _check_algorithm_completeness(self, tree: Optional[ast.Module],
+                                       constraints: Dict[str, Any]) -> bool:
+        """Detect incomplete algorithm — missing critical steps.
+
+        Catches:
+        - Missing subtractive notation in Roman conversion (Integer to Roman)
+        - Missing diagonal check in N-Queens
+        - Missing close < open constraint in Generate Parentheses
+        - Wrong formula: max*length instead of min*width*height (Container)
+        - Wrong formula: adjacent diff sum instead of trapped water
+        - Missing replace operation in Edit Distance
+        """
+        if tree is None:
+            return False
+
+        src = ast.dump(tree)
+        problem_lower = constraints.get("_problem_lower", "")
+
+        # Integer to Roman: missing subtractive notation values (900, 400, 90, 40, 9, 4)
+        # Only flag if code uses simple division approach WITHOUT handling subtraction
+        if "roman" in problem_lower and "integer" in problem_lower:
+            # Check if code uses simple values without subtractive pairs
+            # The incorrect solution uses: values = [1000, 500, 100, 50, 10, 5, 1]
+            # The correct uses: (1000, 'M'), (900, 'CM'), (500, 'D'), (400, 'CD'), ...
+            has_subtractive = (
+                "900" in src or "CM" in src or
+                "400" in src or "CD" in src or
+                "90" in src or "XC" in src or
+                "40" in src or "XL" in src or
+                "9" in src and "IX" in src or
+                "4" in src and "IV" in src
+            )
+            # But also check for reversed iteration approach (another valid correct approach)
+            has_reversed_approach = "reversed(" in src or "s[::-1]" in src
+            if not has_subtractive and not has_reversed_approach:
+                return False
+
+        # N-Queens: missing diagonal check
+        if "queen" in problem_lower and "n-queen" in problem_lower.lower():
+            # Two valid approaches:
+            # 1. Set-based: d1=row-col, d2=row+col stored in sets (backtracking)
+            #    AST dump shows: Name(id='diag1'), Name(id='d1'), op=Sub(), op=Add()
+            # 2. Explicit: abs(c - col) == abs(r - row) (permutation validation)
+            # NOTE: Both approaches include abs+Sub+== so checker can't distinguish
+            # correct from incorrect permutation approach. L2 handles differentiation.
+            has_set_diagonal = (
+                ("diag" in src or "d1" in src or "d2" in src) and
+                ("row" in src and "col" in src) and
+                ("Sub" in src or "Add" in src)
+
+=== LINES 960-1000 ===
+        if "queen" in problem_lower and "n-queen" in problem_lower.lower():
+            # Two valid approaches:
+            # 1. Set-based: d1=row-col, d2=row+col stored in sets (backtracking)
+            #    AST dump shows: Name(id='diag1'), Name(id='d1'), op=Sub(), op=Add()
+            # 2. Explicit: abs(c - col) == abs(r - row) (permutation validation)
+            # NOTE: Both approaches include abs+Sub+== so checker can't distinguish
+            # correct from incorrect permutation approach. L2 handles differentiation.
+            has_set_diagonal = (
+                ("diag" in src or "d1" in src or "d2" in src) and
+                ("row" in src and "col" in src) and
+                ("Sub" in src or "Add" in src)
+            )
+            has_explicit_diagonal = (
+                "abs(" in src and ("Eq" in src or "==" in src)
+            )
+            if not has_set_diagonal and not has_explicit_diagonal:
+                return False
+
+        # Generate Parentheses: close_count should be < open_count, not < n
+        if "parenthes" in problem_lower and "generate" in problem_lower:
+            # Check for the wrong constraint: close_count < n instead of close_count < open_count
+            funcs = _find_all(tree, ast.FunctionDef)
+            for func in funcs:
+                for comp in _find_all(func, ast.Compare):
+                    # Check if comparing close_count with n (wrong) vs open_count (correct)
+                    for comparator in comp.comparators:
+                        if isinstance(comparator, ast.Name):
+                            if comparator.id == "n":
+                                # Check the variable being compared
+                                if isinstance(comp.left, ast.Name):
+                                    if "close" in comp.left.id.lower():
+                                        return False  # close_count < n is wrong
+
+        # Container With Most Water: wrong formula
+        # Only flag the truly wrong approach (max * len), NOT the correct two-pointer
+        if "container" in problem_lower or "most water" in problem_lower:
+            # Wrong: max(height) * len(height) or max(height) * (len-1)
+            # Check return statements for this pattern
+            funcs = _find_all(tree, ast.FunctionDef)
+            for func in funcs:
+                for ret in _get_return_statements(func):
+
+=== LINES 1040-1100 ===
+
+        Catches:
+        - Returning str(num) instead of Roman numeral
+        - Returning s == p instead of wildcard match
+        - Returning min(string) for longest common prefix
+        - Returning 0 for strStr (always returns first index)
+        - Returning abs(len1 - len2) for edit distance
+        - Returning t if t in s for minimum window substring
+        - Returning max(heights) * len(heights) for largest rectangle
+        - Returning [max(nums)] * k for sliding window maximum
+        - Returning (median1 + median2) / 2 for median of two arrays
+        """
+        if tree is None:
+            return False
+
+        src = ast.dump(tree)
+        problem_lower = constraints.get("_problem_lower", "")
+        funcs = _find_all(tree, ast.FunctionDef)
+
+        for func in funcs:
+            returns = _get_return_statements(func)
+            for ret in returns:
+                if ret.value is None:
+                    continue
+                ret_src = ast.dump(ret.value)
+
+                # Roman: returning str(num) — the "incorrect" solution
+                if "roman" in problem_lower and "integer" in problem_lower:
+                    if "str(" in ret_src and "num" in ret_src.lower():
+                        return False
+
+                # Wildcard: returning s == p
+                if "wildcard" in problem_lower:
+                    if "s" in ret_src and "==" in ret_src and "p" in ret_src:
+                        # Only flag if it's a direct equality check
+                        if "for" not in src and "while" not in src:
+                            return False
+
+                # Longest Common Prefix: returning min(strs)
+                if "common prefix" in problem_lower:
+                    if "min(" in ret_src:
+                        return False
+
+                # strStr: returning 0 or -1 without proper search
+                if "strstr" in problem_lower or "strStr" in problem_lower:
+                    # Returning 0 when needle is found (always returns 0)
+                    if "needle" in src.lower() or "needle" in problem_lower:
+                        if "0" in ret_src and "==" not in ret_src:
+                            # Check if there's actual search logic
+                            has_search = "range(" in src or "index(" in src
+                            if not has_search:
+                                return False
+
+                # Edit Distance: returning abs(len1 - len2)
+                if "edit distance" in problem_lower or "convert" in problem_lower:
+                    if "abs(" in ret_src and "len(" in ret_src:
+                        return False
+
+                # Minimum Window: returning t if t in s
+                if "window" in problem_lower and "substring" in problem_lower:
+                    if "in" in ret_src and "else" in ret_src:
