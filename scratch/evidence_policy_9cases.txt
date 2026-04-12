@@ -1,0 +1,11 @@
+=== EVIDENCE POLICY LAYER: rule-based classification ===
+
+{'problem': 'Two Sum', 'kind': 'correct', 'pass_ratio': 1.0, 'has_error': False, 'classification': 'fully_verified'}
+{'problem': 'Two Sum', 'kind': 'partial', 'pass_ratio': 0.6, 'has_error': False, 'classification': 'partially_verified'}
+{'problem': 'Two Sum', 'kind': 'error', 'pass_ratio': 0.0, 'has_error': True, 'classification': 'catastrophic_failure'}
+{'problem': 'Trapping Rain Water', 'kind': 'correct', 'pass_ratio': 1.0, 'has_error': False, 'classification': 'fully_verified'}
+{'problem': 'Trapping Rain Water', 'kind': 'partial', 'pass_ratio': 0.6, 'has_error': False, 'classification': 'partially_verified'}
+{'problem': 'Trapping Rain Water', 'kind': 'error', 'pass_ratio': 0.2, 'has_error': True, 'classification': 'partial_with_errors'}
+{'problem': 'Valid Parentheses', 'kind': 'correct', 'pass_ratio': 1.0, 'has_error': False, 'classification': 'fully_verified'}
+{'problem': 'Valid Parentheses', 'kind': 'partial', 'pass_ratio': 0.857, 'has_error': False, 'classification': 'partially_verified'}
+{'problem': 'Valid Parentheses', 'kind': 'error', 'pass_ratio': 0.0, 'has_error': True, 'classification': 'catastrophic_failure'}
