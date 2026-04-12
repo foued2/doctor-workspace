@@ -1,0 +1,59 @@
+=== EVIDENCE COMPARISON: old vs new ===
+
+Two Sum | correct
+  verdict=correct  pass_rate=1.0 (5/5)
+  old_evidence=0.7
+  new_evidence=1.0
+  traces=[{'passed': True, 'output': [0, 1], 'error': None, 'execution_time': 7e-06},
+          {'passed': True, 'output': [1, 2], 'error': None, 'execution_time': 4e-06},
+          {'passed': True, 'output': [0, 1], 'error': None, 'execution_time': 2e-06},
+          {'passed': True, 'output': [2, 4], 'error': None, 'execution_time': 4e-06},
+          {'passed': True, 'output': [2, 3], 'error': None, 'execution_time': 2e-06}]
+
+Two Sum | partial
+  verdict=partial  pass_rate=0.6 (3/5)
+  old_evidence=0.54
+  new_evidence=0.72
+  traces=[{'passed': True, 'output': [0, 1], 'error': None, 'execution_time': 1.3e-05},
+          {'passed': True, 'output': [1, 2], 'error': None, 'execution_time': 6e-06},
+          {'passed': True, 'output': [0, 1], 'error': None, 'execution_time': 2e-06},
+          {'passed': False, 'output': None, 'error': None, 'execution_time': 4e-06},
+          {'passed': False, 'output': None, 'error': None, 'execution_time': 2e-06}]
+
+Two Sum | error
+  verdict=incorrect  pass_rate=0.0 (0/5)
+  old_evidence=0.3
+  new_evidence=0.0
+  traces=[all 5 tests failed with ValueError, error traces present]
+
+Trapping Rain Water | correct
+  verdict=correct  pass_rate=1.0 (5/5)
+  old_evidence=0.7
+  new_evidence=1.0
+
+Trapping Rain Water | partial
+  verdict=incorrect  pass_rate=0.6 (3/5)
+  old_evidence=0.54
+  new_evidence=0.72
+
+Trapping Rain Water | error
+  verdict=incorrect  pass_rate=0.2 (1/5)
+  old_evidence=0.38
+  new_evidence=0.38
+  traces=[1 passed (empty input returned 0), 4 failed, 1 error (IndexError on empty list access)]
+
+Valid Parentheses | correct
+  verdict=correct  pass_rate=1.0 (7/7)
+  old_evidence=0.82
+  new_evidence=1.0
+
+Valid Parentheses | partial
+  verdict=incorrect  pass_rate=0.8571 (6/7)
+  old_evidence=0.763
+  new_evidence=0.9
+
+Valid Parentheses | error
+  verdict=incorrect  pass_rate=0.0 (0/7)
+  old_evidence=0.42
+  new_evidence=0.0
+  traces=[all 7 tests failed with ValueError from int() conversion, error traces present]
