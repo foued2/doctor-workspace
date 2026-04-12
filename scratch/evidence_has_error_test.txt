@@ -1,0 +1,12 @@
+=== EVIDENCE COMPARISON: has_error signal test ===
+Environment: Ollama / Mistral (local)
+
+{'problem': 'Two Sum', 'kind': 'correct', 'old_evidence': 0.7, 'pass_ratio': 1.0, 'has_error': False}
+{'problem': 'Two Sum', 'kind': 'partial', 'old_evidence': 0.54, 'pass_ratio': 0.6, 'has_error': False}
+{'problem': 'Two Sum', 'kind': 'error', 'old_evidence': 0.3, 'pass_ratio': 0.0, 'has_error': True}
+{'problem': 'Trapping Rain Water', 'kind': 'correct', 'old_evidence': 0.7, 'pass_ratio': 1.0, 'has_error': False}
+{'problem': 'Trapping Rain Water', 'kind': 'partial', 'old_evidence': 0.54, 'pass_ratio': 0.6, 'has_error': False}
+{'problem': 'Trapping Rain Water', 'kind': 'error', 'old_evidence': 0.38, 'pass_ratio': 0.2, 'has_error': True}
+{'problem': 'Valid Parentheses', 'kind': 'correct', 'old_evidence': 0.82, 'pass_ratio': 1.0, 'has_error': False}
+{'problem': 'Valid Parentheses', 'kind': 'partial', 'old_error': 0.763, 'pass_ratio': 0.8571, 'has_error': False}
+{'problem': 'Valid Parentheses', 'kind': 'error', 'old_evidence': 0.42, 'pass_ratio': 0.0, 'has_error': True}
