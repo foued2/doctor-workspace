@@ -1,0 +1,89 @@
+{
+  "N-Queens (n=6)": {
+    "correct": {
+      "peak_rate": 1,
+      "final_rate": 0.541,
+      "decay_ratio": 0.459,
+      "acceleration": -0.2071,
+      "total_steps": 305,
+      "total_unique": 187,
+      "regime": "partial"
+    },
+    "partial": {
+      "peak_rate": 1,
+      "final_rate": 0.7692,
+      "decay_ratio": 0.2308,
+      "acceleration": -0.1696,
+      "total_steps": 63,
+      "total_unique": 52,
+      "regime": "partial"
+    },
+    "bruteforce": {
+      "peak_rate": 1,
+      "final_rate": 0.4546,
+      "decay_ratio": 0.5454,
+      "acceleration": -0.0013,
+      "total_steps": 102642,
+      "total_unique": 46692,
+      "regime": "backtracking"
+    }
+  },
+  "Word Search": {
+    "correct": {
+      "peak_rate": 1,
+      "final_rate": 1.0,
+      "decay_ratio": 0.0,
+      "acceleration": 0.0,
+      "total_steps": 27,
+      "total_unique": 27,
+      "regime": "partial"
+    },
+    "partial": {
+      "peak_rate": 1,
+      "final_rate": 1.0,
+      "decay_ratio": 0.0,
+      "acceleration": 0.0,
+      "total_steps": 24,
+      "total_unique": 24,
+      "regime": "partial"
+    },
+    "bruteforce": {
+      "peak_rate": 1,
+      "final_rate": 0.0,
+      "decay_ratio": 1.0,
+      "acceleration": -0.9104,
+      "total_steps": 6243420,
+      "total_unique": 73,
+      "regime": "backtracking"
+    }
+  },
+  "Sudoku": {
+    "correct": {
+      "peak_rate": 1,
+      "final_rate": 0.0187,
+      "decay_ratio": 0.9813,
+      "acceleration": -0.7062,
+      "total_steps": 12574,
+      "total_unique": 229,
+      "regime": "backtracking"
+    },
+    "partial": {
+      "peak_rate": 1,
+      "final_rate": 0.0187,
+      "decay_ratio": 0.9813,
+      "acceleration": -0.7062,
+      "total_steps": 12574,
+      "total_unique": 229,
+      "regime": "backtracking"
+    },
+    "bruteforce": {
+      "peak_rate": 1,
+      "final_rate": 0.0,
+      "decay_ratio": 1.0,
+      "acceleration": -0.942,
+      "total_steps": 91474281,
+      "total_unique": 73,
+      "regime": "backtracking"
+    }
+  }
+}

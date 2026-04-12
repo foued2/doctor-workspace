@@ -1,0 +1,62 @@
+{
+  "N-Queens (n=6)": {
+    "correct": {
+      "steps": 305,
+      "unique": 187,
+      "ratio": 1.631,
+      "solutions": 4
+    },
+    "partial": {
+      "steps": 63,
+      "unique": 52,
+      "ratio": 1.2115,
+      "solutions": 1
+    },
+    "bruteforce": {
+      "steps": 102642,
+      "unique": 46692,
+      "ratio": 2.1983,
+      "solutions": 4
+    }
+  },
+  "Word Search": {
+    "correct": {
+      "steps": 26,
+      "unique": 26,
+      "ratio": 1.0,
+      "solutions": 1
+    },
+    "partial": {
+      "steps": 22,
+      "unique": 22,
+      "ratio": 1.0,
+      "solutions": 0
+    },
+    "bruteforce": {
+      "steps": 6243420,
+      "unique": 73,
+      "ratio": 85526.3014,
+      "solutions": 24
+    }
+  },
+  "Sudoku": {
+    "correct": {
+      "steps": 12574,
+      "unique": 229,
+      "ratio": 54.9083,
+      "solutions": 1
+    },
+    "partial": {
+      "steps": 277,
+      "unique": 33,
+      "ratio": 8.3939,
+      "solutions": 0
+    },
+    "bruteforce": {
+      "steps": 91474281,
+      "unique": 73,
+      "ratio": 1253072.3425,
+      "solutions": 0
+    }
+  }
+}
