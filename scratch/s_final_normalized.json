@@ -1,0 +1,74 @@
+{
+  "N-Queens (n=6)": {
+    "correct": {
+      "steps": 305,
+      "unique": 187,
+      "s_opt": 6,
+      "s_final": 50.83,
+      "predicted": "efficient",
+      "solutions": 4
+    },
+    "partial": {
+      "steps": 63,
+      "unique": 52,
+      "s_opt": 6,
+      "s_final": 10.5,
+      "predicted": "efficient",
+      "solutions": 1
+    },
+    "bruteforce": {
+      "steps": 102642,
+      "unique": 46692,
+      "s_opt": 6,
+      "s_final": 17107.0,
+      "predicted": "wasteful",
+      "solutions": 4
+    }
+  },
+  "Word Search": {
+    "correct": {
+      "steps": 26,
+      "unique": 26,
+      "s_opt": 6,
+      "s_final": 4.33,
+      "predicted": "efficient"
+    },
+    "partial": {
+      "steps": 22,
+      "unique": 22,
+      "s_opt": 6,
+      "s_final": 3.67,
+      "predicted": "efficient"
+    },
+    "bruteforce": {
+      "steps": 6243420,
+      "unique": 73,
+      "s_opt": 6,
+      "s_final": 1040570.0,
+      "predicted": "wasteful"
+    }
+  },
+  "Sudoku": {
+    "correct": {
+      "steps": 12574,
+      "unique": 229,
+      "s_opt": 51,
+      "s_final": 246.55,
+      "predicted": "efficient"
+    },
+    "partial": {
+      "steps": 277,
+      "unique": 33,
+      "s_opt": 51,
+      "s_final": 5.43,
+      "predicted": "efficient"
+    },
+    "bruteforce": {
+      "steps": 91474281,
+      "unique": 73,
+      "s_opt": 51,
+      "s_final": 1793613.35,
+      "predicted": "wasteful"
+    }
+  }
+}
