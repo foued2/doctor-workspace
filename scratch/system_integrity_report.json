@@ -1,6 +1,6 @@
 {
   "report_title": "DOCTOR SYSTEM INTEGRITY REPORT \u2014 Verification Run",
-  "timestamp": "2026-04-13T17:03:32.843154",
+  "timestamp": "2026-04-13T19:36:41.622634",
   "framework_version": "s_measurement.py v2",
   "summary": {
     "total_checks": 11,
@@ -17,8 +17,8 @@
     },
     "phase_1_1": {
       "status": "PASS",
-      "median_ms": 0.0225,
-      "cv": 0.2166,
+      "median_ms": 0.0237,
+      "cv": 0.0741,
       "n_runs": 10,
       "stable": true
     },

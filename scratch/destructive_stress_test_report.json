@@ -2,58 +2,24 @@
   "title": "Doctor System Destructive Validation Protocol",
   "summary": {
     "total": 30,
-    "failures": 3,
-    "passed": 27,
-    "critical_count": 3,
+    "failures": 0,
+    "passed": 30,
+    "critical_count": 0,
     "major_count": 0,
     "minor_count": 0
   },
-  "failures": [
-    {
-      "test_id": "1b E2E: Partial solution accepted as correct",
-      "severity": "CRITICAL",
-      "message": "Partial solution (skips negatives) got verdict=correct. Pass rate: 1.0. Expected: partial or incorrect.",
-      "layer": "Layer 2 (Test Executor)",
-      "repro": "Run twoSum that skips negative numbers",
-      "deterministic": true,
-      "data": {
-        "verdict": "correct",
-        "pass_rate": 1.0
-      }
-    },
-    {
-      "test_id": "3c Validator: Weak validator false-accepts incorrect output",
-      "severity": "CRITICAL",
-      "message": "Container solution returning always 0 got verdict=correct, pass_rate=1.0. Weak validator accepted it and tests also passed.",
-      "layer": "Layer 2 (Test Executor) + Validator",
-      "repro": "Run maxArea that always returns 0",
-      "deterministic": true,
-      "data": {
-        "verdict": "correct",
-        "pass_rate": 1.0
-      }
-    },
-    {
-      "test_id": "3d Validator: Weak validator + wrong answer accepted",
-      "severity": "CRITICAL",
-      "message": "Container solution returning 999 got verdict=correct. Pass rate: 1.0.",
-      "layer": "Layer 2 (Test Executor)",
-      "repro": "Run maxArea that always returns 999",
-      "deterministic": true,
-      "data": {
-        "verdict": "correct",
-        "pass_rate": 1.0
-      }
-    }
-  ],
+  "failures": [],
   "passed": [
     "1a E2E: Incorrect solution correctly rejected",
+    "1b E2E: Partial solution correctly not accepted as correct",
     "1c E2E: Correct N-Queens solution accepted by validator",
     "2a Measurement: No material drift in 30 runs",
     "2b Measurement: No call order bias",
     "2c Measurement: Noop overhead is positive (no impossible values)",
     "3a Validator: Strong validator accepts valid N-Queens n=1",
     "3b Validator: Strong validator accepts N-Queens n=0",
+    "3c Validator: Weak validator + tests catch always-0 solution",
+    "3d Validator: Wrong answer (999) correctly rejected",
     "4a Reference: N-Queens external reference correctly marked absolute+stable",
     "4a Reference: Two Sum external reference correctly marked absolute+stable",
     "4b Reference: Two Sum s_ref_ms=0.021 is reasonable",

@@ -2,41 +2,41 @@
   "title": "Doctor Measurement Validity Verification",
   "summary": {
     "total": 13,
-    "passed": 13,
-    "failed": 0,
-    "pass_rate": 100.0
+    "passed": 12,
+    "failed": 1,
+    "pass_rate": 92.3
   },
   "results": [
     {
       "name": "1.1 Median Stability",
       "passed": true,
-      "detail": "CV of medians across 20 runs: 0.1670 (threshold: 0.20). Median range: [2.2535, 3.7706]ms",
+      "detail": "CV of medians across 20 runs: 0.0633 (threshold: 0.20). Median range: [2.1172, 2.5660]ms",
       "data": {
-        "median_of_medians_ms": 3.034,
-        "median_std_ms": 0.5068,
-        "median_cv": 0.167,
-        "min_median_ms": 2.2535,
-        "max_median_ms": 3.7706
+        "median_of_medians_ms": 2.133,
+        "median_std_ms": 0.1351,
+        "median_cv": 0.0633,
+        "min_median_ms": 2.1172,
+        "max_median_ms": 2.566
       }
     },
     {
       "name": "1.2 CV Consistency",
-      "passed": true,
-      "detail": "CV of CVs across 20 runs: 0.1415 (threshold: 0.50). Individual CVs: [0.2467, 0.3902]",
+      "passed": false,
+      "detail": "CV of CVs across 20 runs: 0.8243 (threshold: 0.50). Individual CVs: [0.007, 0.1016]",
       "data": {
-        "cv_of_cvs": 0.1415,
-        "min_cv": 0.2467,
-        "max_cv": 0.3902
+        "cv_of_cvs": 0.8243,
+        "min_cv": 0.007,
+        "max_cv": 0.1016
       }
     },
     {
       "name": "1.3 Absence of Drift",
       "passed": true,
-      "detail": "Drift ratio (first half vs second half): 0.0280 (threshold: 0.15). First half mean: 3.0473ms, Second half mean: 2.9619ms",
+      "detail": "Drift ratio (first half vs second half): 0.0534 (threshold: 0.15). First half mean: 2.1314ms, Second half mean: 2.2452ms",
       "data": {
-        "drift_ratio": 0.028,
-        "first_half_mean_ms": 3.0473,
-        "second_half_mean_ms": 2.9619
+        "drift_ratio": 0.0534,
+        "first_half_mean_ms": 2.1314,
+        "second_half_mean_ms": 2.2452
       }
     },
     {
