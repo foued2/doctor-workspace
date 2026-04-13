@@ -1,0 +1,78 @@
+{
+  "title": "Doctor System Destructive Validation Protocol",
+  "summary": {
+    "total": 30,
+    "failures": 3,
+    "passed": 27,
+    "critical_count": 3,
+    "major_count": 0,
+    "minor_count": 0
+  },
+  "failures": [
+    {
+      "test_id": "1b E2E: Partial solution accepted as correct",
+      "severity": "CRITICAL",
+      "message": "Partial solution (skips negatives) got verdict=correct. Pass rate: 1.0. Expected: partial or incorrect.",
+      "layer": "Layer 2 (Test Executor)",
+      "repro": "Run twoSum that skips negative numbers",
+      "deterministic": true,
+      "data": {
+        "verdict": "correct",
+        "pass_rate": 1.0
+      }
+    },
+    {
+      "test_id": "3c Validator: Weak validator false-accepts incorrect output",
+      "severity": "CRITICAL",
+      "message": "Container solution returning always 0 got verdict=correct, pass_rate=1.0. Weak validator accepted it and tests also passed.",
+      "layer": "Layer 2 (Test Executor) + Validator",
+      "repro": "Run maxArea that always returns 0",
+      "deterministic": true,
+      "data": {
+        "verdict": "correct",
+        "pass_rate": 1.0
+      }
+    },
+    {
+      "test_id": "3d Validator: Weak validator + wrong answer accepted",
+      "severity": "CRITICAL",
+      "message": "Container solution returning 999 got verdict=correct. Pass rate: 1.0.",
+      "layer": "Layer 2 (Test Executor)",
+      "repro": "Run maxArea that always returns 999",
+      "deterministic": true,
+      "data": {
+        "verdict": "correct",
+        "pass_rate": 1.0
+      }
+    }
+  ],
+  "passed": [
+    "1a E2E: Incorrect solution correctly rejected",
+    "1c E2E: Correct N-Queens solution accepted by validator",
+    "2a Measurement: No material drift in 30 runs",
+    "2b Measurement: No call order bias",
+    "2c Measurement: Noop overhead is positive (no impossible values)",
+    "3a Validator: Strong validator accepts valid N-Queens n=1",
+    "3b Validator: Strong validator accepts N-Queens n=0",
+    "4a Reference: N-Queens external reference correctly marked absolute+stable",
+    "4a Reference: Two Sum external reference correctly marked absolute+stable",
+    "4b Reference: Two Sum s_ref_ms=0.021 is reasonable",
+    "4b Reference: Palindrome Number s_ref_ms=0.015 is reasonable",
+    "4b Reference: Roman to Integer s_ref_ms=0.02 is reasonable",
+    "4b Reference: Valid Parentheses s_ref_ms=0.015 is reasonable",
+    "4b Reference: Merge Two Sorted Lists s_ref_ms=0.025 is reasonable",
+    "4b Reference: Longest Palindromic Substring s_ref_ms=0.03 is reasonable",
+    "4b Reference: Container With Most Water s_ref_ms=0.013 is reasonable",
+    "4b Reference: Trapping Rain Water s_ref_ms=0.023 is reasonable",
+    "4b Reference: N-Queens s_ref_ms=0.053 is reasonable",
+    "4b Reference: Median of Two Sorted Arrays s_ref_ms=0.015 is reasonable",
+    "4c Reference: Deterministic classification",
+    "5a Scaling: Reversed size sequence correctly rejected",
+    "5b Scaling: Constant S correctly produces slope\u22480",
+    "5c Scaling: Identical sizes correctly returns None",
+    "5d Scaling: Zero/negative inputs correctly return None",
+    "6a Cross-Layer: Correct slow solution has correct efficiency label",
+    "6b Cross-Layer: Container efficiency independent of weak validator",
+    "6c Cross-Layer: Unknown problem handled gracefully"
+  ]
+}
