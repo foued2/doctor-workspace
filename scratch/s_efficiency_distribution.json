@@ -5,141 +5,141 @@
       "solution_type": "correct",
       "label": "correct",
       "efficiency": "not_applicable",
-      "s_final": 1.19,
+      "s_final": 0.9,
       "s_kind": "linear",
-      "s_observed_ms": 0.025
+      "s_observed_ms": 0.019
     },
     {
       "problem": "Two Sum",
       "solution_type": "partial",
       "label": "partial",
       "efficiency": "not_applicable",
-      "s_final": 1.19,
+      "s_final": 0.9,
       "s_kind": "linear",
-      "s_observed_ms": 0.025
+      "s_observed_ms": 0.019
     },
     {
       "problem": "Two Sum",
       "solution_type": "incorrect",
       "label": "incorrect",
       "efficiency": "not_applicable",
-      "s_final": 0.57,
+      "s_final": 0.76,
       "s_kind": "linear",
-      "s_observed_ms": 0.012
+      "s_observed_ms": 0.016
     },
     {
       "problem": "Valid Parentheses",
       "solution_type": "correct",
       "label": "correct",
       "efficiency": "not_applicable",
-      "s_final": 1.2,
+      "s_final": 1.33,
       "s_kind": "linear",
-      "s_observed_ms": 0.018
+      "s_observed_ms": 0.02
     },
     {
       "problem": "Valid Parentheses",
       "solution_type": "partial",
       "label": "incorrect",
       "efficiency": "not_applicable",
-      "s_final": 1.2,
+      "s_final": 1.6,
       "s_kind": "linear",
-      "s_observed_ms": 0.018
+      "s_observed_ms": 0.024
     },
     {
       "problem": "Valid Parentheses",
       "solution_type": "incorrect",
       "label": "incorrect",
       "efficiency": "not_applicable",
-      "s_final": 0.4,
+      "s_final": 0.6,
       "s_kind": "linear",
-      "s_observed_ms": 0.006
+      "s_observed_ms": 0.009
     },
     {
       "problem": "Container With Most Water",
       "solution_type": "correct",
       "label": "correct",
       "efficiency": "not_applicable",
-      "s_final": 1.15,
+      "s_final": 4.31,
       "s_kind": "linear",
-      "s_observed_ms": 0.015
+      "s_observed_ms": 0.056
     },
     {
       "problem": "Container With Most Water",
-      "solution_type": "partial",
-      "label": "partial",
-      "efficiency": "efficient",
-      "s_final": 7.08,
-      "s_kind": "linear",
-      "s_observed_ms": 0.092
-    },
-    {
-      "problem": "Container With Most Water",
-      "solution_type": "incorrect",
-      "label": "incorrect",
-      "efficiency": "not_applicable",
-      "s_final": 0.54,
-      "s_kind": "linear",
-      "s_observed_ms": 0.007
-    },
-    {
-      "problem": "N-Queens",
-      "solution_type": "correct",
-      "label": "correct",
-      "efficiency": "efficient",
-      "s_final": 1.02,
-      "s_kind": "search",
-      "s_observed_ms": 0.054
-    },
-    {
-      "problem": "N-Queens",
       "solution_type": "partial",
       "label": "partial",
-      "efficiency": "efficient",
-      "s_final": 0.92,
-      "s_kind": "search",
-      "s_observed_ms": 0.049
-    },
-    {
-      "problem": "N-Queens",
-      "solution_type": "incorrect",
-      "label": "correct",
-      "efficiency": "efficient",
-      "s_final": 2.94,
-      "s_kind": "search",
-      "s_observed_ms": 0.156
-    },
-    {
-      "problem": "Trapping Rain Water",
-      "solution_type": "correct",
-      "label": "correct",
       "efficiency": "not_applicable",
-      "s_final": 1.43,
+      "s_final": 2.54,
       "s_kind": "linear",
       "s_observed_ms": 0.033
     },
     {
+      "problem": "Container With Most Water",
+      "solution_type": "incorrect",
+      "label": "incorrect",
+      "efficiency": "not_applicable",
+      "s_final": 1.46,
+      "s_kind": "linear",
+      "s_observed_ms": 0.019
+    },
+    {
+      "problem": "N-Queens",
+      "solution_type": "correct",
+      "label": "correct",
+      "efficiency": "efficient",
+      "s_final": 1.06,
+      "s_kind": "search",
+      "s_observed_ms": 0.056
+    },
+    {
+      "problem": "N-Queens",
+      "solution_type": "partial",
+      "label": "partial",
+      "efficiency": "efficient",
+      "s_final": 0.64,
+      "s_kind": "search",
+      "s_observed_ms": 0.034
+    },
+    {
+      "problem": "N-Queens",
+      "solution_type": "incorrect",
+      "label": "correct",
+      "efficiency": "efficient",
+      "s_final": 0.98,
+      "s_kind": "search",
+      "s_observed_ms": 0.052
+    },
+    {
+      "problem": "Trapping Rain Water",
+      "solution_type": "correct",
+      "label": "correct",
+      "efficiency": "not_applicable",
+      "s_final": 1.26,
+      "s_kind": "linear",
+      "s_observed_ms": 0.029
+    },
+    {
       "problem": "Trapping Rain Water",
       "solution_type": "partial",
       "label": "incorrect",
       "efficiency": "not_applicable",
-      "s_final": 2.0,
+      "s_final": 0.52,
       "s_kind": "linear",
-      "s_observed_ms": 0.046
+      "s_observed_ms": 0.012
     },
     {
       "problem": "Trapping Rain Water",
       "solution_type": "incorrect",
       "label": "incorrect",
       "efficiency": "not_applicable",
-      "s_final": 1.65,
+      "s_final": 0.43,
       "s_kind": "linear",
-      "s_observed_ms": 0.038
+      "s_observed_ms": 0.01
     }
   ],
   "efficiency_distribution": {
-    "efficient": 4,
+    "efficient": 3,
     "inefficient": 0,
-    "not_applicable": 11
+    "not_applicable": 12
   },
   "total": 15
 }

@@ -1,0 +1,109 @@
+{
+  "report_title": "DOCTOR SYSTEM INTEGRITY REPORT \u2014 Verification Run",
+  "timestamp": "2026-04-13T17:03:32.843154",
+  "framework_version": "s_measurement.py v2",
+  "summary": {
+    "total_checks": 11,
+    "passed": 11,
+    "failed": 0,
+    "pass_rate": 100.0
+  },
+  "phases": {
+    "phase_0": {
+      "status": "PASS",
+      "research_only": true,
+      "efficiency": "not_applicable",
+      "s_final": 476.19
+    },
+    "phase_1_1": {
+      "status": "PASS",
+      "median_ms": 0.0225,
+      "cv": 0.2166,
+      "n_runs": 10,
+      "stable": true
+    },
+    "phase_1_2": {
+      "status": "PASS",
+      "log_ratio": 3.322,
+      "expected_log_ratio": 3.322,
+      "valid_4_sizes": true,
+      "invalid_2_sizes": false,
+      "reject_reason": "Need >= 4 input sizes, got 2"
+    },
+    "phase_1_3": {
+      "status": "PASS",
+      "cap_detected": true,
+      "cap_reason": "detected_max_iterations",
+      "sudoku_capped": true,
+      "sudoku_reason": "cap_saturation"
+    },
+    "phase_2_4": {
+      "status": "PASS",
+      "strong_problems": [
+        "N-Queens",
+        "Two Sum",
+        "Valid Parentheses"
+      ],
+      "partial_problems": [
+        "Longest Palindromic Substring",
+        "Merge Two Sorted Lists",
+        "Median of Two Sorted Arrays"
+      ],
+      "weak_problems": [
+        "Container With Most Water",
+        "Trapping Rain Water",
+        "Palindrome Number",
+        "Roman to Integer"
+      ]
+    },
+    "phase_2_5": {
+      "status": "PASS",
+      "two_sum_verdict": "correct",
+      "two_sum_pass_rate": 1.0,
+      "nqueens_verdict": "correct",
+      "nqueens_pass_rate": 1.0
+    },
+    "phase_3_6": {
+      "status": "PASS",
+      "n_queens_type": "external",
+      "n_queens_source": "backtracking_with_pruning",
+      "two_sum_type": "external",
+      "two_sum_source": "hash_map_O(n)",
+      "total_external_refs": 2,
+      "total_empirical_refs": 0
+    },
+    "phase_4_7": {
+      "status": "PASS",
+      "absolute_growth": "exponential",
+      "relative_optimality": "optimal",
+      "validation_strength": "strong"
+    },
+    "phase_5_8": {
+      "status": "PASS",
+      "is_sudoku_invalid": true,
+      "reason": "cap_saturation"
+    },
+    "phase_6_9": {
+      "status": "PASS",
+      "total_problems": 3,
+      "strong_correctness_pct": 66.7,
+      "valid_measurement_pct": 66.7,
+      "invalid_unstable_pct": 33.3,
+      "no_reference_baseline_pct": 100.0,
+      "classification_blocked": true
+    },
+    "invariant_test": {
+      "status": "PASS",
+      "linear_low_s_final": 0.95,
+      "linear_low_efficiency": "not_applicable",
+      "linear_high_s_final": 476.19,
+      "linear_high_efficiency": "not_applicable",
+      "search_efficient": "efficient",
+      "search_inefficient": "inefficient"
+    }
+  },
+  "integrity_gate": {
+    "all_phases_pass": true,
+    "measurement_validity": "structurally_valid"
+  }
+}
