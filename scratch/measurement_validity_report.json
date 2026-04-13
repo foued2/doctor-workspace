@@ -1,0 +1,146 @@
+{
+  "title": "Doctor Measurement Validity Verification",
+  "summary": {
+    "total": 13,
+    "passed": 13,
+    "failed": 0,
+    "pass_rate": 100.0
+  },
+  "results": [
+    {
+      "name": "1.1 Median Stability",
+      "passed": true,
+      "detail": "CV of medians across 20 runs: 0.1670 (threshold: 0.20). Median range: [2.2535, 3.7706]ms",
+      "data": {
+        "median_of_medians_ms": 3.034,
+        "median_std_ms": 0.5068,
+        "median_cv": 0.167,
+        "min_median_ms": 2.2535,
+        "max_median_ms": 3.7706
+      }
+    },
+    {
+      "name": "1.2 CV Consistency",
+      "passed": true,
+      "detail": "CV of CVs across 20 runs: 0.1415 (threshold: 0.50). Individual CVs: [0.2467, 0.3902]",
+      "data": {
+        "cv_of_cvs": 0.1415,
+        "min_cv": 0.2467,
+        "max_cv": 0.3902
+      }
+    },
+    {
+      "name": "1.3 Absence of Drift",
+      "passed": true,
+      "detail": "Drift ratio (first half vs second half): 0.0280 (threshold: 0.15). First half mean: 3.0473ms, Second half mean: 2.9619ms",
+      "data": {
+        "drift_ratio": 0.028,
+        "first_half_mean_ms": 3.0473,
+        "second_half_mean_ms": 2.9619
+      }
+    },
+    {
+      "name": "1.4 Cap Isolation",
+      "passed": true,
+      "detail": "Capped code detected: True (reason: detected_max_iterations). Uncapped code false positive: False",
+      "data": {
+        "capped_detected": true,
+        "capped_reason": "detected_max_iterations",
+        "uncapped_false_positive": false
+      }
+    },
+    {
+      "name": "2.1 Slope Ordering (linear < quadratic < exponential)",
+      "passed": true,
+      "detail": "Linear slope: 1.0000 (expected: 1.0, accurate: True). Quadratic slope: 2.0000 (expected: 2.0, accurate: True). Exponential slope: 10.5494. Ordering correct: True",
+      "data": {
+        "slope_linear": 1.0,
+        "slope_quadratic": 2.0,
+        "slope_exponential": 10.5494,
+        "expected_linear": 1.0,
+        "expected_quadratic": 2.0
+      }
+    },
+    {
+      "name": "2.2 No log(2) Hardcoded Bias",
+      "passed": true,
+      "detail": "Slope for n=[7,23], S=[7,23]: 1.000000 (expected: 1.0). Deviation from 1.0: 0.000000",
+      "data": {
+        "slope_non_pow2": 1.0,
+        "expected": 1.0
+      }
+    },
+    {
+      "name": "2.3 Geometric Progression Validation",
+      "passed": true,
+      "detail": "[4,8,16,32] valid: True. [4,6,9,13] valid: True. [4,6] rejected: True (reason: Need >= 4 input sizes, got 2). [10,5,20,40] rejected: True (reason: Size ratios too inconsistent: [0.5, 4.0, 2.0])",
+      "data": {
+        "geo_valid": true,
+        "non_geo_valid": true,
+        "too_few_rejected": false,
+        "decrease_rejected": false
+      }
+    },
+    {
+      "name": "2.4 Monotonic Ratios Across Complexity Classes",
+      "passed": true,
+      "detail": "slope_quad/slope_linear: 2.0000 (expected: ~2.0). slope_exp/slope_linear: 10.5494 (expected: >>2.0). Monotonic: True",
+      "data": {
+        "ratio_quad_to_linear": 2.0,
+        "ratio_exp_to_linear": 10.5494
+      }
+    },
+    {
+      "name": "3.1 Validator Overrides Expected Output",
+      "passed": true,
+      "detail": "Two Sum correct solution: verdict=correct, pass_rate=1.0, total=5. Validator confirmed correctness: True",
+      "data": {
+        "verdict": "correct",
+        "pass_rate": 1.0,
+        "total_tests": 5
+      }
+    },
+    {
+      "name": "3.2 Validator Rejects Wrong Solutions",
+      "passed": true,
+      "detail": "Two Sum incorrect solution: verdict=incorrect, pass_rate=0.0, passed=0/5",
+      "data": {
+        "verdict": "incorrect",
+        "pass_rate": 0.0,
+        "passed": 0,
+        "total": 5
+      }
+    },
+    {
+      "name": "3.3 Strong/Partial/Weak Distinction Is Real",
+      "passed": true,
+      "detail": "N-Queens (strong): can_detect_wrong=True, has_strong=True. Container (weak): can_detect_wrong=False, has_strong=False. LPS (partial): has_strong=False",
+      "data": {
+        "nqueens_can_detect_wrong": true,
+        "nqueens_has_strong": true,
+        "container_can_detect_wrong": false,
+        "container_has_strong": false,
+        "lps_has_strong": false
+      }
+    },
+    {
+      "name": "3.4 Strong Validator Confirms Correct Solutions",
+      "passed": true,
+      "detail": "N-Queens correct: verdict=correct, pass_rate=1.0, validator_strength=strong",
+      "data": {
+        "verdict": "correct",
+        "pass_rate": 1.0,
+        "validator_strength": "strong"
+      }
+    },
+    {
+      "name": "3.5 Weak Validator Does Not False-Confirm Wrong Solutions",
+      "passed": true,
+      "detail": "Container incorrect (returns -1): verdict=incorrect, pass_rate=0.0",
+      "data": {
+        "verdict": "incorrect",
+        "pass_rate": 0.0
+      }
+    }
+  ]
+}
