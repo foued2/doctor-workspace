@@ -1,0 +1,416 @@
+{
+  "results": {
+    "Two Sum": {
+      "correct": {
+        "s_obs": 3000,
+        "s_ref": 1000,
+        "s_final": 3.0,
+        "predicted": "efficient",
+        "unique": 3000
+      },
+      "partial": {
+        "s_obs": 2000,
+        "s_ref": 1000,
+        "s_final": 2.0,
+        "predicted": "efficient",
+        "unique": 2000
+      },
+      "brute": {
+        "s_obs": 499501,
+        "s_ref": 1000,
+        "s_final": 499.5,
+        "predicted": "efficient",
+        "unique": 499501
+      }
+    },
+    "Valid Parentheses": {
+      "correct": {
+        "s_obs": 1000,
+        "s_ref": 500,
+        "s_final": 2.0,
+        "predicted": "efficient",
+        "unique": 502
+      },
+      "partial": {
+        "s_obs": 500,
+        "s_ref": 500,
+        "s_final": 1.0,
+        "predicted": "efficient",
+        "unique": 500
+      },
+      "brute": {
+        "s_obs": 3,
+        "s_ref": 500,
+        "s_final": 0.01,
+        "predicted": "efficient",
+        "unique": 3
+      }
+    },
+    "Container": {
+      "correct": {
+        "s_obs": 1248,
+        "s_ref": 500,
+        "s_final": 2.5,
+        "predicted": "efficient",
+        "unique": 750
+      },
+      "partial": {
+        "s_obs": 125250,
+        "s_ref": 500,
+        "s_final": 250.5,
+        "predicted": "efficient",
+        "unique": 125250
+      },
+      "brute": {
+        "s_obs": 249500,
+        "s_ref": 500,
+        "s_final": 499.0,
+        "predicted": "efficient",
+        "unique": 249500
+      }
+    },
+    "N-Queens (n=8)": {
+      "correct": {
+        "s_obs": 4113,
+        "s_ref": 8,
+        "s_final": 514.12,
+        "predicted": "efficient",
+        "unique": 2121,
+        "solutions": 92
+      },
+      "partial": {
+        "s_obs": 227,
+        "s_ref": 8,
+        "s_final": 28.38,
+        "predicted": "efficient",
+        "unique": 147,
+        "solutions": 1
+      },
+      "brute": {
+        "s_obs": 35951176,
+        "s_ref": 8,
+        "s_final": 4493897.0,
+        "predicted": "wasteful",
+        "unique": 16777280,
+        "solutions": 92
+      }
+    },
+    "Word Search": {
+      "correct": {
+        "s_obs": 26,
+        "s_ref": 6,
+        "s_final": 4.33,
+        "predicted": "efficient",
+        "unique": 26
+      },
+      "partial": {
+        "s_obs": 24,
+        "s_ref": 6,
+        "s_final": 4.0,
+        "predicted": "efficient",
+        "unique": 24
+      },
+      "brute": {
+        "s_obs": 6243420,
+        "s_ref": 6,
+        "s_final": 1040570.0,
+        "predicted": "wasteful",
+        "unique": 73
+      }
+    },
+    "Sudoku": {
+      "correct": {
+        "s_obs": 12574,
+        "s_ref": 51,
+        "s_final": 246.55,
+        "predicted": "efficient",
+        "unique": 229
+      },
+      "partial": {
+        "s_obs": 277,
+        "s_ref": 51,
+        "s_final": 5.43,
+        "predicted": "efficient",
+        "unique": 33
+      },
+      "brute": {
+        "s_obs": 125478,
+        "s_ref": 51,
+        "s_final": 2460.35,
+        "predicted": "wasteful",
+        "unique": 46
+      }
+    },
+    "LCS (50x50)": {
+      "correct": {
+        "s_obs": 450,
+        "s_ref": 225,
+        "s_final": 2.0,
+        "predicted": "efficient",
+        "unique": 450
+      },
+      "partial": {
+        "s_obs": 30,
+        "s_ref": 225,
+        "s_final": 0.13,
+        "predicted": "efficient",
+        "unique": 30
+      },
+      "brute": {
+        "s_obs": 28825765,
+        "s_ref": 225,
+        "s_final": 128114.51,
+        "predicted": "wasteful",
+        "unique": 401
+      }
+    },
+    "Trap Water (n=200)": {
+      "correct": {
+        "s_obs": 598,
+        "s_ref": 200,
+        "s_final": 2.99,
+        "predicted": "efficient",
+        "unique": 598
+      },
+      "partial": {
+        "s_obs": 396,
+        "s_ref": 200,
+        "s_final": 1.98,
+        "predicted": "efficient",
+        "unique": 396
+      },
+      "brute": {
+        "s_obs": 40171,
+        "s_ref": 200,
+        "s_final": 200.85,
+        "predicted": "efficient",
+        "unique": 40171
+      }
+    },
+    "Climbing Stairs (n=20)": {
+      "correct": {
+        "s_obs": 20,
+        "s_ref": 20,
+        "s_final": 1.0,
+        "predicted": "efficient",
+        "unique": 20
+      },
+      "partial": {
+        "s_obs": 19998,
+        "s_ref": 20,
+        "s_final": 999.9,
+        "predicted": "efficient",
+        "unique": 106
+      },
+      "brute": {
+        "s_obs": 20294,
+        "s_ref": 20,
+        "s_final": 1014.7,
+        "predicted": "wasteful",
+        "unique": 22
+      }
+    },
+    "Islands (20x20)": {
+      "correct": {
+        "s_obs": 1223,
+        "s_ref": 400,
+        "s_final": 3.06,
+        "predicted": "efficient",
+        "unique": 1037
+      },
+      "partial": {
+        "s_obs": 440,
+        "s_ref": 400,
+        "s_final": 1.1,
+        "predicted": "efficient",
+        "unique": 440
+      },
+      "brute": {
+        "s_obs": 12287,
+        "s_ref": 400,
+        "s_final": 30.72,
+        "predicted": "efficient",
+        "unique": 38
+      }
+    }
+  },
+  "separation_table": [
+    {
+      "problem": "Two Sum",
+      "category": "non-search",
+      "partial": 2.0,
+      "correct": 3.0,
+      "brute": 499.5
+    },
+    {
+      "problem": "Valid Parentheses",
+      "category": "non-search",
+      "partial": 1.0,
+      "correct": 2.0,
+      "brute": 0.01
+    },
+    {
+      "problem": "Container",
+      "category": "non-search",
+      "partial": 250.5,
+      "correct": 2.5,
+      "brute": 499.0
+    },
+    {
+      "problem": "N-Queens (n=8)",
+      "category": "search",
+      "partial": 28.38,
+      "correct": 514.12,
+      "brute": 4493897.0
+    },
+    {
+      "problem": "Word Search",
+      "category": "search",
+      "partial": 4.0,
+      "correct": 4.33,
+      "brute": 1040570.0
+    },
+    {
+      "problem": "Sudoku",
+      "category": "search",
+      "partial": 5.43,
+      "correct": 246.55,
+      "brute": 2460.35
+    },
+    {
+      "problem": "LCS (50x50)",
+      "category": "dp",
+      "partial": 0.13,
+      "correct": 2.0,
+      "brute": 128114.51
+    },
+    {
+      "problem": "Trap Water (n=200)",
+      "category": "dp",
+      "partial": 1.98,
+      "correct": 2.99,
+      "brute": 200.85
+    },
+    {
+      "problem": "Climbing Stairs (n=20)",
+      "category": "dp",
+      "partial": 999.9,
+      "correct": 1.0,
+      "brute": 1014.7
+    },
+    {
+      "problem": "Islands (20x20)",
+      "category": "graph",
+      "partial": 1.1,
+      "correct": 3.06,
+      "brute": 30.72
+    }
+  ],
+  "failure_modes": [
+    {
+      "problem": "Two Sum",
+      "category": "non-search",
+      "modes": [
+        "brute NOT classified as wasteful (threshold too high)"
+      ]
+    },
+    {
+      "problem": "Valid Parentheses",
+      "category": "non-search",
+      "modes": [
+        "correct ≈ brute (insufficient separation)",
+        "brute NOT classified as wasteful (threshold too high)"
+      ]
+    },
+    {
+      "problem": "Container",
+      "category": "non-search",
+      "modes": [
+        "brute NOT classified as wasteful (threshold too high)"
+      ]
+    },
+    {
+      "problem": "Word Search",
+      "category": "search",
+      "modes": [
+        "partial ≈ correct (can't distinguish)"
+      ]
+    },
+    {
+      "problem": "Trap Water (n=200)",
+      "category": "dp",
+      "modes": [
+        "brute NOT classified as wasteful (threshold too high)"
+      ]
+    },
+    {
+      "problem": "Islands (20x20)",
+      "category": "graph",
+      "modes": [
+        "brute NOT classified as wasteful (threshold too high)"
+      ]
+    }
+  ],
+  "variance_analysis": {
+    "correct_s_final": [
+      3.0,
+      2.0,
+      2.5,
+      514.12,
+      4.33,
+      246.55,
+      2.0,
+      2.99,
+      1.0,
+      3.06
+    ],
+    "partial_s_final": [
+      2.0,
+      1.0,
+      250.5,
+      28.38,
+      4.0,
+      5.43,
+      0.13,
+      1.98,
+      999.9,
+      1.1
+    ],
+    "brute_s_final": [
+      499.5,
+      0.01,
+      499.0,
+      4493897.0,
+      1040570.0,
+      2460.35,
+      128114.51,
+      200.85,
+      1014.7,
+      30.72
+    ]
+  },
+  "decision": {
+    "category_results": {
+      "non-search": {
+        "total": 3,
+        "pass": 1
+      },
+      "search": {
+        "total": 3,
+        "pass": 3
+      },
+      "dp": {
+        "total": 3,
+        "pass": 2
+      },
+      "graph": {
+        "total": 1,
+        "pass": 1
+      }
+    },
+    "total_pass": 7,
+    "total_problems": 10,
+    "overall_rate": 0.7,
+    "verdict": "CASE B — S partially works. Strong in some domains, weak in others. S becomes conditional dimension."
+  }
+}
