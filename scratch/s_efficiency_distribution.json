@@ -1,0 +1,145 @@
+{
+  "results": [
+    {
+      "problem": "Two Sum",
+      "solution_type": "correct",
+      "label": "correct",
+      "efficiency": "not_applicable",
+      "s_final": 1.19,
+      "s_kind": "linear",
+      "s_observed_ms": 0.025
+    },
+    {
+      "problem": "Two Sum",
+      "solution_type": "partial",
+      "label": "partial",
+      "efficiency": "not_applicable",
+      "s_final": 1.19,
+      "s_kind": "linear",
+      "s_observed_ms": 0.025
+    },
+    {
+      "problem": "Two Sum",
+      "solution_type": "incorrect",
+      "label": "incorrect",
+      "efficiency": "not_applicable",
+      "s_final": 0.57,
+      "s_kind": "linear",
+      "s_observed_ms": 0.012
+    },
+    {
+      "problem": "Valid Parentheses",
+      "solution_type": "correct",
+      "label": "correct",
+      "efficiency": "not_applicable",
+      "s_final": 1.2,
+      "s_kind": "linear",
+      "s_observed_ms": 0.018
+    },
+    {
+      "problem": "Valid Parentheses",
+      "solution_type": "partial",
+      "label": "incorrect",
+      "efficiency": "not_applicable",
+      "s_final": 1.2,
+      "s_kind": "linear",
+      "s_observed_ms": 0.018
+    },
+    {
+      "problem": "Valid Parentheses",
+      "solution_type": "incorrect",
+      "label": "incorrect",
+      "efficiency": "not_applicable",
+      "s_final": 0.4,
+      "s_kind": "linear",
+      "s_observed_ms": 0.006
+    },
+    {
+      "problem": "Container With Most Water",
+      "solution_type": "correct",
+      "label": "correct",
+      "efficiency": "not_applicable",
+      "s_final": 1.15,
+      "s_kind": "linear",
+      "s_observed_ms": 0.015
+    },
+    {
+      "problem": "Container With Most Water",
+      "solution_type": "partial",
+      "label": "partial",
+      "efficiency": "efficient",
+      "s_final": 7.08,
+      "s_kind": "linear",
+      "s_observed_ms": 0.092
+    },
+    {
+      "problem": "Container With Most Water",
+      "solution_type": "incorrect",
+      "label": "incorrect",
+      "efficiency": "not_applicable",
+      "s_final": 0.54,
+      "s_kind": "linear",
+      "s_observed_ms": 0.007
+    },
+    {
+      "problem": "N-Queens",
+      "solution_type": "correct",
+      "label": "correct",
+      "efficiency": "efficient",
+      "s_final": 1.02,
+      "s_kind": "search",
+      "s_observed_ms": 0.054
+    },
+    {
+      "problem": "N-Queens",
+      "solution_type": "partial",
+      "label": "partial",
+      "efficiency": "efficient",
+      "s_final": 0.92,
+      "s_kind": "search",
+      "s_observed_ms": 0.049
+    },
+    {
+      "problem": "N-Queens",
+      "solution_type": "incorrect",
+      "label": "correct",
+      "efficiency": "efficient",
+      "s_final": 2.94,
+      "s_kind": "search",
+      "s_observed_ms": 0.156
+    },
+    {
+      "problem": "Trapping Rain Water",
+      "solution_type": "correct",
+      "label": "correct",
+      "efficiency": "not_applicable",
+      "s_final": 1.43,
+      "s_kind": "linear",
+      "s_observed_ms": 0.033
+    },
+    {
+      "problem": "Trapping Rain Water",
+      "solution_type": "partial",
+      "label": "incorrect",
+      "efficiency": "not_applicable",
+      "s_final": 2.0,
+      "s_kind": "linear",
+      "s_observed_ms": 0.046
+    },
+    {
+      "problem": "Trapping Rain Water",
+      "solution_type": "incorrect",
+      "label": "incorrect",
+      "efficiency": "not_applicable",
+      "s_final": 1.65,
+      "s_kind": "linear",
+      "s_observed_ms": 0.038
+    }
+  ],
+  "efficiency_distribution": {
+    "efficient": 4,
+    "inefficient": 0,
+    "not_applicable": 11
+  },
+  "total": 15
+}
