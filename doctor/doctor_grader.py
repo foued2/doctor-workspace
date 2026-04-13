@@ -45,6 +45,12 @@ STANDARD_CASE_LABELS = frozenset({
     "wrong_type", "wrong_order", "wrong_type_check", "wrong_char",
     "subtractive_iv", "subtractive_ix", "subtractive",
     "complex", "complex_case",
+    "n4_solutions",
+    "basic_even", "basic_odd",
+    "mixed",
+    "interleaved",
+    "one_larger",
+    "no_repeat_trap",
 })
 
 CONSTRAINT_VIOLATION_LABELS = frozenset({
@@ -53,13 +59,47 @@ CONSTRAINT_VIOLATION_LABELS = frozenset({
 })
 
 
+EDGE_KEYWORDS = frozenset({
+    "edge", "empty", "single", "large", "boundary",
+})
+
+
+def is_edge_test(name: str) -> bool:
+    """Check if a test name refers to an edge-case test."""
+    name_lower = name.lower()
+    return any(kw in name_lower for kw in EDGE_KEYWORDS)
+
+
+def classify_failure_severity(failure_ratio: float, failed_test_names: list[str]) -> tuple:
+    """Classify failure severity based on ratio and distribution.
+
+    Returns:
+        (severity, core_failures, edge_failures)
+        severity: "none" | "minor" | "moderate" | "severe"
+    """
+    if failure_ratio == 0:
+        return ("none", 0, 0)
+
+    edge_failures = sum(1 for n in failed_test_names if is_edge_test(n))
+    core_failures = len(failed_test_names) - edge_failures
+
+    if failure_ratio <= 0.3:
+        return ("minor", core_failures, edge_failures)
+    if failure_ratio <= 0.7:
+        return ("moderate", core_failures, edge_failures)
+    return ("severe", core_failures, edge_failures)
+
+
 def classify_failure_type(failed_labels: list[str]) -> str | None:
     """Classify the nature of L2 test failures.
 
     Returns:
-        "standard"  — at least one standard (non-edge) case failed
-        "edge_only" — only edge-case or constraint labels failed
+        "standard"  — at least one standard (non-edge, non-partial) case failed
+        "edge_only" — only edge-case, constraint, or partial-coverage labels failed
         None        — no failures
+
+    DEPRECATED: Use classify_failure_severity() instead.
+    Kept for backward compatibility.
     """
     if not failed_labels:
         return None
@@ -78,13 +118,20 @@ def classify_partial_vs_incorrect(failure_reasons: list[str]) -> str:
 
     Input: list of failed test labels from Layer 2 execution.
 
-    **partial** = passes all standard cases, fails only edge/constraint labels.
+    **partial** = passes all standard cases, fails only edge/constraint labels,
+                  or fails only a completeness test (n4_solutions) — meaning
+                  some valid solutions were found but not all.
     **incorrect** = fails at least one standard (non-edge) case.
     """
     if not failure_reasons:
         return "correct"
 
     failures_lower = [f.lower() for f in failure_reasons]
+
+    # Completeness-only failure: n4_solutions means "found some but not all"
+    # This is partial — the algorithm works but doesn't enumerate fully.
+    if len(failures_lower) == 1 and "n4_solutions" in failures_lower:
+        return "partial"
 
     # Check if any standard case failed → incorrect
     for label in failures_lower:

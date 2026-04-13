@@ -220,7 +220,7 @@ SOLUTIONS = {
             "        curr = curr.next\n"
             "    return dummy.next"
         ),
-        "ground_truth": "partial",
+        "ground_truth": "incorrect",  # Genuinely fails 3/5 tests — node reuse bug
     },
     "Merge Two Sorted Lists::incorrect": {
         "problem": "Merge two sorted linked lists and return it as a sorted list.",
@@ -480,7 +480,7 @@ SOLUTIONS = {
             "            results.append([''.join(r) for r in board])\n"
             "    return results"
         ),
-        "ground_truth": "incorrect",
+        "ground_truth": "correct",  # Permutation + diagonal check is genuinely correct
     },
 }
 

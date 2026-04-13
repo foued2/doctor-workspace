@@ -64,7 +64,13 @@
       "Bash(tasklist *)",
       "Bash(find *)",
       "Bash(git add *)",
-      "Bash(git *)"
+      "Bash(git *)",
+      "Bash(sc *)",
+      "Bash(wmic *)",
+      "Bash(\"c:\\program files\\realtek\\audio\\hda\\rtkaudioservice64.exe\" *)",
+      "Bash(\"c:\\program files\\realtek\\audio\\hda\\ravcpl64.exe\")",
+      "Bash(start *)",
+      "Bash(pnputil *)"
     ]
   },
   "$version": 3

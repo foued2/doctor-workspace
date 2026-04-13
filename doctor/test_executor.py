@@ -13,6 +13,8 @@ import traceback
 from dataclasses import dataclass, field
 from typing import Any, Dict, List, Optional, Tuple
 
+from doctor.execution_trace import run_test_with_trace
+
 
 @dataclass
 class TestCase:
@@ -30,6 +32,8 @@ class TestResult:
     got: Any = None
     expected: Any = None
     error: str = ""
+    validator_passed: bool = None      # diagnostic only — not used for pass/fail
+    validator_kind: str = None          # "validator_passed", "validator_failed", "no_validator"
 
 
 @dataclass
@@ -42,7 +46,12 @@ class ExecutionReport:
     results: List[TestResult] = field(default_factory=list)
     error: str = ""             # execution error (can't run code)
     confidence: float = None    # evidence-based confidence (from calibrator)
-    failure_type: str = None    # "standard", "edge_only", or None
+    failure_type: str = None    # "standard", "edge_only", or None (DEPRECATED)
+    failure_ratio: float = None # failed_tests / total_tests
+    severity: str = None        # "none" | "minor" | "moderate" | "severe"
+    core_failures: int = 0      # count of core (non-edge) test failures
+    edge_failures: int = 0      # count of edge test failures
+    traces: List[dict] = field(default_factory=list)  # raw execution traces
 
 
 # ===========================================================================
@@ -124,7 +133,7 @@ TEST_SUITES: Dict[str, List[TestCase]] = {
             (make_list([1, 2, 4]), make_list([1, 3, 4])),
             [1, 1, 2, 3, 4, 4], "basic",
         ),
-        TestCase((None, None), [], "both_empty"),
+        TestCase((make_list([]), make_list([])), [], "both_empty"),
         TestCase((make_list([]), make_list([0])), [0], "one_empty"),
         TestCase((make_list([1, 3, 5]), make_list([2, 4, 6])), [1, 2, 3, 4, 5, 6], "interleaved"),
         TestCase((make_list([5]), make_list([1, 2, 3])), [1, 2, 3, 5], "one_larger"),
@@ -255,8 +264,8 @@ TEST_SUITES: Dict[str, List[TestCase]] = {
     ],
     "solve_n_queens": [
         TestCase((1,), [["Q"]], "single"),
-        TestCase((4,), 2, "n4_count"),  # 2 solutions
-        TestCase((0,), [], "zero"),
+        TestCase((4,), [[".Q..", "...Q", "Q...", "..Q."], ["..Q.", "Q...", "...Q", ".Q.."]], "n4_solutions"),  # 2 solutions
+        TestCase((0,), [[]], "zero"),  # n=0 → 1 solution: the empty board [[]]
     ],
     "wildcard_matching": [
         TestCase(("aa", "a"), False, "too_short"),
@@ -335,6 +344,66 @@ PROBLEM_KEY_MAP = {
 # Comparison helpers
 # ===========================================================================
 
+# OPTION A: Spec-oracle system. E (_results_equal) is the sole correctness
+# oracle. Validators run for diagnostics only — they never affect pass/fail.
+
+def _verify_with_validator(problem_key: str, got, test_input) -> tuple:
+    """Verify output using a problem-specific validator.
+    
+    Returns (is_valid, kind) where kind is:
+      - "validator_passed" — strong/partial validator confirmed correctness
+      - "validator_failed" — validator detected incorrect output
+      - "no_validator" — no validator exists for this problem
+    """
+    try:
+        from doctor.output_validators import validate_output
+        # Build params dict from test_input for validators that need it
+        params = _build_validator_params(test_input)
+        result = validate_output(problem_key, got, params)
+        if result[0]:  # valid
+            return True, "validator_passed"
+        else:
+            return False, "validator_failed"
+    except ImportError:
+        # Validator module doesn't exist
+        return None, "no_validator"
+    except Exception:
+        # Validator doesn't exist for this problem or failed to run
+        return None, "no_validator"
+
+
+def _build_validator_params(test_input: tuple) -> dict:
+    """Build validator params dict from test input tuple.
+    
+    Different problems need different params. This maps common patterns.
+    """
+    if not test_input:
+        return {}
+    
+    # N-Queens: (n,)
+    if len(test_input) == 1 and isinstance(test_input[0], int):
+        return {"n": test_input[0]}
+    
+    # Two Sum: (nums, target)
+    if len(test_input) == 2 and isinstance(test_input[0], list):
+        return {"nums": test_input[0], "target": test_input[1]}
+    
+    # Valid Parentheses: (string,)
+    if len(test_input) == 1 and isinstance(test_input[0], str):
+        return {"s": test_input[0]}
+    
+    # Container: (heights,)
+    if len(test_input) == 1 and isinstance(test_input[0], list):
+        return {"height": test_input[0]}
+    
+    # Trap Water: (heights,)
+    if len(test_input) == 1 and isinstance(test_input[0], list):
+        return {"height": test_input[0]}
+    
+    # Generic: pass as tuple
+    return {"input": test_input}
+
+
 def _results_equal(got, expected) -> bool:
     """Compare got vs expected, handling lists, floats, linked lists."""
     # Handle None linked list as empty list
@@ -345,6 +414,11 @@ def _results_equal(got, expected) -> bool:
     if isinstance(expected, list) and isinstance(got, list):
         if len(got) != len(expected):
             return False
+        # For N-Queens results: compare as sets of boards (order-independent)
+        if expected and isinstance(expected[0], list) and expected[0] and isinstance(expected[0][0], str):
+            got_set = set(tuple(board) for board in got if isinstance(board, list))
+            exp_set = set(tuple(board) for board in expected if isinstance(board, list))
+            return got_set == exp_set
         # For 3Sum/4Sum results: compare as sets of sorted tuples
         if expected and isinstance(expected[0], list):
             got_set = set(tuple(sorted(t)) for t in got if isinstance(t, list))
@@ -413,19 +487,32 @@ class TestExecutor:
                 error="Failed to parse/execute solution code",
             )
 
-        # Run test cases
+        # Run test cases using execution tracing
         results: List[TestResult] = []
+        traces: List[dict] = []
         for tc in test_cases:
-            try:
-                got = func(*tc.input)
-                passed = _results_equal(got, tc.expected)
-                results.append(TestResult(
-                    label=tc.label, passed=passed, got=got, expected=tc.expected,
-                ))
-            except Exception as e:
-                results.append(TestResult(
-                    label=tc.label, passed=False, error=traceback.format_exc().split("\n")[-2],
-                ))
+            trace = run_test_with_trace(func, tc.input, tc.expected)
+            traces.append(trace)
+            # OPTION A: Spec-oracle system. E is the sole correctness oracle.
+            # Validator runs for diagnostics only — never affects pass/fail.
+            validator_result, validator_kind = _verify_with_validator(
+                problem_name, trace.get("output"), tc.input
+            )
+
+            # E = _results_equal is the ONLY correctness criterion
+            if trace["error"] is not None:
+                passed = False
+            else:
+                passed = _results_equal(trace["output"], tc.expected)
+
+            results.append(TestResult(
+                label=tc.label, passed=passed,
+                got=trace["output"], expected=tc.expected,
+                error=trace["error"].split("\n")[-2] if trace["error"] else "",
+            ))
+            # Store validator result for diagnostics (not used in pass/fail)
+            results[-1].validator_passed = validator_result
+            results[-1].validator_kind = validator_kind
 
         passed = sum(1 for r in results if r.passed)
         total = len(results)
@@ -445,7 +532,7 @@ class TestExecutor:
                        "odd_total", "even_total", "first_empty", "all_zero",
                        "first_empty_even", "too_short", "star_repeat",
                        "star_all", "star_empty", "both_empty",
-                       "all_same", "n4_count", "wrong_char",
+                       "all_same", "n4_solutions", "wrong_char",
                        "delete_all", "insert_all",
                        "all_negative", "basic_odd", "basic_even",
                        "two_no_palindrome", "full_string",
@@ -462,15 +549,28 @@ class TestExecutor:
         # ── FIX 3: Partial redefinition by failure pattern ───────────
         # Build failure reasons from failed test labels
         failed_labels = [r.label for r in results if not r.passed]
+        failed_test_names = failed_labels  # same list, used for severity
 
         if pass_rate == 1.0:
             verdict = "correct"
             failure_type = None
+            failure_ratio = 0.0
+            severity = "none"
+            core_failures = 0
+            edge_failures = 0
         else:
-            # Use pattern-based classification instead of raw pass rate
-            from doctor.doctor_grader import classify_partial_vs_incorrect, classify_failure_type
-            verdict = classify_partial_vs_incorrect(failed_labels)
+            # Compute failure ratio and severity
+            failure_ratio = len(failed_labels) / total if total > 0 else 1.0
+            from doctor.doctor_grader import classify_failure_severity
+            severity, core_failures, edge_failures = classify_failure_severity(
+                failure_ratio, failed_test_names,
+            )
+            # Legacy classification (kept for backward compatibility)
+            from doctor.doctor_grader import classify_failure_type
             failure_type = classify_failure_type(failed_labels)
+            # Verdict uses pattern-based classification (partial vs incorrect by label semantics)
+            from doctor.doctor_grader import classify_partial_vs_incorrect
+            verdict = classify_partial_vs_incorrect(failed_labels)
 
         return ExecutionReport(
             verdict=verdict,
@@ -480,4 +580,9 @@ class TestExecutor:
             results=results,
             confidence=calibrated_confidence,
             failure_type=failure_type,
+            failure_ratio=round(failure_ratio, 4),
+            severity=severity,
+            core_failures=core_failures,
+            edge_failures=edge_failures,
+            traces=traces,
         )

@@ -454,6 +454,7 @@ def predict(prompt: str) -> Dict[str, object]:
         final_confidence = l1_result.confidence
         decision_path = [f"L1:{l1_verdict}"]
         reasoning = l1_result.reasoning
+        s_eff_dict = None  # S-efficiency not available when Layer 2 is skipped
     else:
         from doctor.test_executor import TestExecutor
         executor = TestExecutor()
@@ -467,6 +468,12 @@ def predict(prompt: str) -> Dict[str, object]:
             for r in l2_report.results if not r.passed
         ]
         l2_activated = True
+
+        # ── S-Efficiency: binary regime classifier ─────────────────────
+        from doctor.s_efficiency import compute_efficiency, efficiency_to_dict
+        s_eff = compute_efficiency(l2_report.traces, problem_name)
+        s_eff_dict = efficiency_to_dict(s_eff)
+
         decision_path = [f"L1:{l1_verdict}"]
 
         if l2_verdict != l1_verdict:
@@ -477,9 +484,13 @@ def predict(prompt: str) -> Dict[str, object]:
         else:
             reasoning = l1_result.reasoning
 
-        # ── L1/L2 PRECEDENCE FIX: fuse verdicts with constraint priority ──
+        # ── L1/L2 PRECEDENCE FIX: fuse verdicts with severity-based logic ──
         l1_fatal = l1_result.fatal_flags if hasattr(l1_result, 'fatal_flags') else []
-        l2_ftype = getattr(l2_report, 'failure_type', None)
+        l2_ftype = getattr(l2_report, 'failure_type', None)  # deprecated, kept for logging
+        l2_severity = getattr(l2_report, 'severity', None)
+        l2_failure_ratio = getattr(l2_report, 'failure_ratio', None)
+        l2_core_failures = getattr(l2_report, 'core_failures', 0)
+        l2_edge_failures = getattr(l2_report, 'edge_failures', 0)
 
         ALGORITHM_FATAL_CHECKS = {"uses_correct_algorithm"}
 
@@ -495,23 +506,34 @@ def predict(prompt: str) -> Dict[str, object]:
             final_confidence = 0.72
             reasoning += "; L1 constraint violation overrides L2 pass"
             decision_path.append(f"L1_CONSTRAINT_OVERRIDE:partial ({', '.join(l1_fatal)})")
-        # Rule 2: L2 standard case failure → incorrect
-        elif l2_ftype == "standard":
-            final_verdict = "incorrect"
-            base_conf = l2_report.confidence if l2_report.confidence is not None else 0.75
-            final_confidence = min(base_conf, 0.69) if l1_verdict != "incorrect" else base_conf
-        # Rule 3: L2 edge-only failure → partial
-        elif l2_ftype == "edge_only":
-            final_verdict = "partial"
-            final_confidence = l2_report.confidence if l2_report.confidence is not None else 0.65
+        # Rule 2 (REPLACED): severity-based confidence adjustment
+        # The old Rule 2 ("standard" → incorrect) incorrectly overrode L2's
+        # verdict based on failure_type alone. Now we respect L2's verdict
+        # (from classify_partial_vs_incorrect label semantics) and use
+        # severity only to adjust confidence.
+        # Fall through to Rules 4/5 for verdict; severity data is logged below.
+
+        # Rule 3 (REMOVED): was edge_only→partial, now handled by severity data
+
         # Rule 4: both pass → correct
         elif l2_verdict == "correct" and l1_verdict == "correct":
             final_verdict = "correct"
             final_confidence = l2_report.confidence if l2_report.confidence is not None else 0.85
-        # Rule 5: fallback to L2
+        # Rule 5: fallback to L2 verdict, severity-adjusted confidence
         else:
             final_verdict = l2_verdict
-            if l2_report.confidence is not None:
+            # Severity-based confidence calibration
+            if l2_severity == "severe":
+                base_conf = l2_report.confidence if l2_report.confidence is not None else 0.75
+                final_confidence = min(base_conf, 0.7)
+            elif l2_severity == "moderate":
+                if l2_core_failures > 0:
+                    final_confidence = 0.6
+                else:
+                    final_confidence = 0.7
+            elif l2_severity == "minor":
+                final_confidence = 0.75
+            elif l2_report.confidence is not None:
                 final_confidence = l2_report.confidence
             else:
                 if l2_verdict == "correct":
@@ -557,6 +579,7 @@ def predict(prompt: str) -> Dict[str, object]:
 
     return {
         "label": final_verdict,
+        "efficiency": s_eff_dict.get("efficiency", "not_applicable") if l2_activated else "not_applicable",
         "confidence": final_confidence,
         "confidence_kind": "dual_layer_static_analysis+execution",
         "conflict_detected": l2_verdict != l1_verdict if l2_verdict else False,
@@ -577,7 +600,12 @@ def predict(prompt: str) -> Dict[str, object]:
             "layer2_verdict": l2_verdict,
             "layer2_pass_rate": l2_pass_rate,
             "layer2_failure_type": l2_ftype if l2_activated else None,
+            "layer2_failure_ratio": l2_failure_ratio if l2_activated else None,
+            "layer2_severity": l2_severity if l2_activated else None,
+            "layer2_core_failures": l2_core_failures if l2_activated else None,
+            "layer2_edge_failures": l2_edge_failures if l2_activated else None,
             "layer2_failures": l2_failures,
+            "s_efficiency": s_eff_dict if l2_activated else None,
             "layer1_ai_verdict": ai_result.get("verdict") if ai_result else None,
             "layer1_ai_confidence": ai_result.get("confidence") if ai_result else None,
             "layer1_ai_reasoning": ai_result.get("reasoning") if ai_result else None,

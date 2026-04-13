@@ -58,3 +58,50 @@ def get_final_label(ai_verdict: str, execution_pass_rate: float,
         label = "suspicious_correct" if ai_verdict == "correct" else "weak_rejection"
 
     return label, flag
+
+
+def compute_evidence_strength_from_traces(traces):
+    """
+    Experimental trace-based evidence.
+
+    Uses only execution artifacts:
+    - pass ratio
+    - error presence
+
+    No timing, no semantics.
+    """
+
+    if not traces:
+        return 0.0
+
+    total = len(traces)
+    passed = sum(1 for t in traces if t["passed"])
+    errors = sum(1 for t in traces if t["error"] is not None)
+
+    pass_ratio = passed / total
+    error_penalty = errors / total
+
+    return round(
+        pass_ratio * 0.7 +
+        (1 - error_penalty) * 0.3,
+        3
+    )
+
+
+def compute_evidence_components(traces, tests_total, tests_passed):
+    """
+    Returns independent evidence dimensions.
+
+    - pass_ratio: proportion of tests passed
+    - has_error: whether any runtime error occurred
+
+    No combination. No scoring.
+    """
+
+    pass_ratio = tests_passed / tests_total if tests_total > 0 else 0.0
+    has_error = any(t["error"] is not None for t in traces)
+
+    return {
+        "pass_ratio": round(pass_ratio, 3),
+        "has_error": has_error
+    }

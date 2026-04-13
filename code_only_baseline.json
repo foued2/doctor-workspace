@@ -1,48 +1,48 @@
 {
   "total_cases": 27,
   "gt_distribution": {
-    "correct": 9,
+    "correct": 10,
     "incorrect": 12,
-    "partial": 6
+    "partial": 5
   },
   "confusion_matrix": {
     "correct": {
-      "correct": 8,
-      "partial": 1,
+      "correct": 10,
+      "partial": 0,
       "incorrect": 0,
       "undefined": 0
     },
     "incorrect": {
-      "incorrect": 10,
-      "partial": 2,
+      "incorrect": 12,
       "correct": 0,
+      "partial": 0,
       "undefined": 0
     },
     "partial": {
       "partial": 5,
-      "incorrect": 1,
       "correct": 0,
+      "incorrect": 0,
       "undefined": 0
     },
     "undefined": {}
   },
-  "grade": 0.6481,
-  "grade_letter": "D",
+  "grade": 0.8333,
+  "grade_letter": "B",
   "rule_score": 1.0,
-  "wrong_at_high_conf": 0.25,
+  "wrong_at_high_conf": 0.0,
   "shift_score": null,
   "per_class": {
     "correct": {
-      "f1": 0.9411764705882353,
-      "recall": 0.8888888888888888
+      "f1": 1.0,
+      "recall": 1.0
     },
     "partial": {
-      "f1": 0.7142857142857143,
-      "recall": 0.8333333333333334
+      "f1": 1.0,
+      "recall": 1.0
     },
     "incorrect": {
-      "f1": 0.8695652173913043,
-      "recall": 0.8333333333333334
+      "f1": 1.0,
+      "recall": 1.0
     },
     "undefined": {
       "f1": 0.0,

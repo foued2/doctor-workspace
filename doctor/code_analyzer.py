@@ -591,6 +591,30 @@ def _extract_constraints(problem: str) -> Dict[str, Any]:
 # MAIN ANALYZER
 # ===========================================================================
 
+
+def _has_comparison_check(node: ast.AST) -> bool:
+    """Detect if the AST contains any comparison operator (==, !=, <, >, etc.).
+
+    Uses proper AST node traversal instead of string matching on ast.dump().
+    """
+    for child in ast.walk(node):
+        if isinstance(child, ast.Compare):
+            return True
+    return False
+
+
+def _has_abs_call(node: ast.AST) -> bool:
+    """Detect if the AST contains any call to abs().
+
+    Uses proper AST node traversal instead of string matching on ast.dump().
+    """
+    for child in ast.walk(node):
+        if isinstance(child, ast.Call):
+            if isinstance(child.func, ast.Name) and child.func.id == 'abs':
+                return True
+    return False
+
+
 class CodeAnalyzer:
 
     def analyze(self, problem_statement: str, solution_code: str, problem_name: str = "") -> AnalysisResult:
@@ -970,7 +994,7 @@ class CodeAnalyzer:
                 ("Sub" in src or "Add" in src)
             )
             has_explicit_diagonal = (
-                "abs(" in src and ("Eq" in src or "==" in src)
+                _has_abs_call(tree) and _has_comparison_check(tree)
             )
             if not has_set_diagonal and not has_explicit_diagonal:
                 return False
