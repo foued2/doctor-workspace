@@ -1,0 +1,35 @@
+======================================================================
+RESIDUAL ORTHOGONALIZATION
+======================================================================
+
+Hypothesis: trust_pre contains independent signal beyond complexity/length
+
+Method:
+  1. Fit baseline: E ~ complexity + token_count
+  2. Compute residuals: r = E - E_hat
+  3. Test: corr(trust_pre, r)
+
+Results:
+  Baseline: E_hat = -0.2363*complexity + -0.0017*token_count + 1.7463
+  Residuals: mean=0.0000, std=0.3554
+
+  corr(trust_pre, E) = -0.6864
+  corr(trust_pre, residuals) = -0.0396
+
+  Variance reduction: 0.686 -> 0.040 (94% reduction)
+
+VERDICT: FULLY REDUNDANT
+
+Conclusion:
+  After removing linear effects of complexity and token_count,
+  trust_pre has essentially zero correlation with correctness.
+  
+  trust.py is a syntactic difficulty proxy, not a confidence model.
+  It adds no predictive signal beyond trivial structural heuristics.
+
+Evidence exhausted:
+  [x] Pre-oracle correlation test: FAIL (-0.430)
+  [x] Baseline comparison: FAIL (complexity 9x better)
+  [x] Residual orthogonalization: FAIL (94% explained)
+  
+  System characterized. Hypothesis class exhausted.
