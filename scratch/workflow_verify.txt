@@ -1,0 +1,2 @@
+STEP 0 VERIFICATION - {timestamp}
+Dummy file for workflow verification
