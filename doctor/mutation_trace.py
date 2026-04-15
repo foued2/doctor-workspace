@@ -239,8 +239,10 @@ def create_seed(
     variant_label: str,
     code: str
 ) -> MutationCase:
-    """Create initial seed case."""
-    seed_id = str(uuid.uuid4())
+    """Create initial seed case with deterministic identity based on content."""
+    # Deterministic seed_id based on problem content
+    content_hash = hashlib.sha256(f"{problem_name}|{variant_label}|{code}".encode()).hexdigest()
+    seed_id = content_hash[:36]  # Use content hash as seed_id
     
     # Create a special "seed" mutation type for roots
     case = MutationCase(
