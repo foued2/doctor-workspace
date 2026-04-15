@@ -1,0 +1,24 @@
+{
+  "artifact_id": "trace_first_1776194419",
+  "timestamp": "2026-04-14T20:23:58.973893",
+  "adversarial_stats": {
+    "n_valid": 7,
+    "n_failures": 3,
+    "failure_rate": 0.42857142857142855,
+    "trust_distribution": {
+      "aligned_confident_correct": 3,
+      "belief_exceeds_evidence": 1,
+      "underconfident_correct": 1,
+      "uncertain_wrong": 2
+    }
+  },
+  "delta_stats": {
+    "status": "skipped",
+    "reason": "Ollama not available: No module named 'requests'"
+  },
+  "maturity": {
+    "L2_observable": true,
+    "L3_stable": "unknown",
+    "L4_robust": false
+  }
+}

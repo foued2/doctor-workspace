@@ -1,0 +1,18 @@
+{
+  "median_confidence": 0.75,
+  "high_conf_count": 14,
+  "low_conf_count": 13,
+  "p_correct_given_high": 0.7143,
+  "p_correct_given_low": 0.0,
+  "delta_median_split": 0.7143,
+  "p_error_given_high": 0.0,
+  "p_error_given_low": 0.0,
+  "mean_conf_correct_verdict": 0.87,
+  "mean_conf_incorrect_verdict": 0.5929,
+  "mean_conf_gt_match": 0.6956,
+  "mean_conf_gt_mismatch": 0.0,
+  "high_confidence_misclassifications": [],
+  "partial_misclassified_as_correct": 0,
+  "partial_total": 5,
+  "assessment": "STRONG SEPARATION \u2014 confidence correlates with correctness"
+}

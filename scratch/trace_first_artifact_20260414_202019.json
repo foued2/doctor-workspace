@@ -1,0 +1,118 @@
+{
+  "artifact_id": "trace_first_1776194419",
+  "timestamp": "2026-04-14T20:20:19.397064",
+  "version": "1.0",
+  "metadata": {
+    "python_version": "3.14.3",
+    "cwd": "F:\\pythonProject"
+  },
+  "adversarial_suite": {
+    "name": "adversarial_suite",
+    "n_total": 7,
+    "n_failures": 3,
+    "failure_rate": 0.42857142857142855,
+    "traces": [
+      {
+        "input_id": "adv_1776194419_1",
+        "case_name": "Two Sum_correct",
+        "problem": "Two Sum",
+        "code": "def twoSum(nums, target):\n    seen = {}\n    for i, n in enumerate(nums):\n        if target - n in seen:\n            return [seen[target-n], i]\n        seen[n] = i",
+        "E": 1,
+        "evidence_score": 0.85,
+        "pass_rate": 1.0,
+        "total": 5,
+        "passed": 5,
+        "timestamp": "2026-04-14T20:20:19.390060",
+        "error": null
+      },
+      {
+        "input_id": "adv_1776194419_2",
+        "case_name": "Two Sum_partial",
+        "problem": "Two Sum",
+        "code": "def twoSum(nums, target):\n    for i in range(len(nums)):\n        for j in range(i+1, len(nums)):\n            if nums[i] + nums[j] == target:\n                return [i, j]\n    return []",
+        "E": 1,
+        "evidence_score": 0.85,
+        "pass_rate": 1.0,
+        "total": 5,
+        "passed": 5,
+        "timestamp": "2026-04-14T20:20:19.390662",
+        "error": null
+      },
+      {
+        "input_id": "adv_1776194419_3",
+        "case_name": "Two Sum_incorrect",
+        "problem": "Two Sum",
+        "code": "def twoSum(nums, target):\n    for i in range(len(nums)):\n        if nums[i] + nums[i] == target:\n            return [i, i]\n    return []",
+        "E": 0,
+        "evidence_score": 0.0,
+        "pass_rate": 0.0,
+        "total": 5,
+        "passed": 0,
+        "timestamp": "2026-04-14T20:20:19.392748",
+        "error": null
+      },
+      {
+        "input_id": "adv_1776194419_4",
+        "case_name": "Valid Parentheses_correct",
+        "problem": "Valid Parentheses",
+        "code": "def isValid(s):\n    stack = []\n    mapping = {')': '(', '}': '{', ']': '['}\n    for c in s:\n        if c in mapping:\n            if not stack or stack[-1] != mapping[c]:\n                return False\n            stack.pop()\n        else:\n            stack.append(c)\n    return not stack",
+        "E": 1,
+        "evidence_score": 0.95,
+        "pass_rate": 1.0,
+        "total": 7,
+        "passed": 7,
+        "timestamp": "2026-04-14T20:20:19.393718",
+        "error": null
+      },
+      {
+        "input_id": "adv_1776194419_5",
+        "case_name": "Valid Parentheses_incorrect",
+        "problem": "Valid Parentheses",
+        "code": "def isValid(s):\n    return len(s) % 2 == 0",
+        "E": 0,
+        "evidence_score": 0.68,
+        "pass_rate": 0.7143,
+        "total": 7,
+        "passed": 5,
+        "timestamp": "2026-04-14T20:20:19.394542",
+        "error": null
+      },
+      {
+        "input_id": "adv_1776194419_6",
+        "case_name": "Roman to Integer_correct",
+        "problem": "Roman to Integer",
+        "code": "def romanToInt(s):\n    d = {'I':1,'V':5,'X':10,'L':50,'C':100,'D':500,'M':1000}\n    total = 0\n    for i in range(len(s)):\n        if i+1 < len(s) and d[s[i]] < d[s[i+1]]:\n            total -= d[s[i]]\n        else:\n            total += d[s[i]]\n    return total",
+        "E": 1,
+        "evidence_score": 0.85,
+        "pass_rate": 1.0,
+        "total": 5,
+        "passed": 5,
+        "timestamp": "2026-04-14T20:20:19.395639",
+        "error": null
+      },
+      {
+        "input_id": "adv_1776194419_7",
+        "case_name": "Roman to Integer_incorrect",
+        "problem": "Roman to Integer",
+        "code": "def romanToInt(s):\n    d = {'I':1,'V':5,'X':10,'L':50,'C':100,'D':500,'M':1000}\n    return sum(d.get(c, 0) for c in s)",
+        "E": 0,
+        "evidence_score": 0.34,
+        "pass_rate": 0.4,
+        "total": 5,
+        "passed": 2,
+        "timestamp": "2026-04-14T20:20:19.395971",
+        "error": null
+      }
+    ]
+  },
+  "delta_experiment": {
+    "name": "delta_experiment",
+    "model": null,
+    "n_cases": 7,
+    "n_valid": 0,
+    "error": "Ollama not available: No module named 'requests'",
+    "delta": null,
+    "traces": []
+  },
+  "status": "COMPLETE"
+}

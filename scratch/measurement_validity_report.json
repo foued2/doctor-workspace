@@ -10,33 +10,33 @@
     {
       "name": "1.1 Median Stability",
       "passed": true,
-      "detail": "CV of medians across 20 runs: 0.0633 (threshold: 0.20). Median range: [2.1172, 2.5660]ms",
+      "detail": "CV of medians across 20 runs: 0.1918 (threshold: 0.20). Median range: [2.1117, 4.3321]ms",
       "data": {
-        "median_of_medians_ms": 2.133,
-        "median_std_ms": 0.1351,
-        "median_cv": 0.0633,
-        "min_median_ms": 2.1172,
-        "max_median_ms": 2.566
+        "median_of_medians_ms": 2.9818,
+        "median_std_ms": 0.5718,
+        "median_cv": 0.1918,
+        "min_median_ms": 2.1117,
+        "max_median_ms": 4.3321
       }
     },
     {
       "name": "1.2 CV Consistency",
-      "passed": false,
-      "detail": "CV of CVs across 20 runs: 0.8243 (threshold: 0.50). Individual CVs: [0.007, 0.1016]",
+      "passed": true,
+      "detail": "CV of CVs across 20 runs: 0.1120 (threshold: 0.50). Individual CVs: [0.266, 0.4257]",
       "data": {
-        "cv_of_cvs": 0.8243,
-        "min_cv": 0.007,
-        "max_cv": 0.1016
+        "cv_of_cvs": 0.112,
+        "min_cv": 0.266,
+        "max_cv": 0.4257
       }
     },
     {
       "name": "1.3 Absence of Drift",
-      "passed": true,
-      "detail": "Drift ratio (first half vs second half): 0.0534 (threshold: 0.15). First half mean: 2.1314ms, Second half mean: 2.2452ms",
+      "passed": false,
+      "detail": "Drift ratio (first half vs second half): 0.1905 (threshold: 0.15). First half mean: 3.2898ms, Second half mean: 2.6632ms",
       "data": {
-        "drift_ratio": 0.0534,
-        "first_half_mean_ms": 2.1314,
-        "second_half_mean_ms": 2.2452
+        "drift_ratio": 0.1905,
+        "first_half_mean_ms": 3.2898,
+        "second_half_mean_ms": 2.6632
       }
     },
     {

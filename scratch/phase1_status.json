@@ -1,0 +1,92 @@
+{
+  "phase": 1,
+  "status": "PARTIALLY_INSTANTIATED_NOT_EPISTEMICALLY_STABILIZED",
+  "maturity_model": {
+    "L1_exists": "component runs without error",
+    "L2_observable": "outputs are inspectable and logged",
+    "L3_stable": "behaves consistently across controlled runs",
+    "L4_robust": "survives adversarial perturbation"
+  },
+  "components": {
+    "oracle": {
+      "description": "E-only correctness oracle",
+      "L1_exists": true,
+      "L2_observable": true,
+      "L3_stable": "unknown",
+      "L4_robust": "unmeasured",
+      "evidence": "test_executor.py executes cases, produces E values"
+    },
+    "adversarial_suite": {
+      "description": "External stress layer with attack vectors",
+      "L1_exists": true,
+      "L2_observable": "partial",
+      "L3_stable": "unknown",
+      "L4_robust": "unmeasured",
+      "evidence": "external_stress_layer/ exists with 5 stressor types"
+    },
+    "trust_layer": {
+      "description": "trust.py v1.3 hierarchical classifier",
+      "L1_exists": true,
+      "L2_observable": true,
+      "L3_stable": "logic validated on synthetic cases",
+      "L4_robust": "unmeasured on real data",
+      "evidence": "stress_test_trust.py shows correct logic"
+    },
+    "trace_integrity": {
+      "description": "Per-case execution logging",
+      "L1_exists": "partial",
+      "L2_observable": "partial",
+      "L3_stable": "no_replay",
+      "L4_robust": "N/A",
+      "evidence": "run_delta_with_trace.py exists but not executed with real data"
+    },
+    "confidence_signal": {
+      "description": "Mistral confidence via logprob",
+      "L1_exists": true,
+      "L2_observable": true,
+      "L3_stable": "single_run_only",
+      "L4_robust": "unmeasured",
+      "evidence": "n=27 run produced delta=0.714, no repeat runs"
+    },
+    "phase_gate": {
+      "description": "Code-enforced phase progression gate",
+      "L1_exists": "partial",
+      "L2_observable": false,
+      "L3_stable": false,
+      "L4_robust": false,
+      "evidence": "Heuristic thresholds defined, no enforcement code"
+    },
+    "antigravity_audit": {
+      "description": "Formal adversarial failure rate measurement",
+      "L1_exists": true,
+      "L2_observable": "claimed_not_verified",
+      "L3_stable": "unknown",
+      "L4_robust": "unmeasured",
+      "evidence": "QWEN.md claims approved, no trace-logged evidence"
+    }
+  },
+  "what_this_means": [
+    "System components exist and can execute",
+    "System produces observable outputs (partial)",
+    "System has NOT been validated under stress",
+    "System has NOT been run reproducibly",
+    "System has NOT been measured statistically"
+  ],
+  "what_this_does_not_mean": [
+    "System is broken (things exist)",
+    "System is validated (things are not measured)",
+    "Phase 2 can proceed (criteria not met)"
+  ],
+  "phase_gate_criteria": {
+    "L1_complete": "All components run without error",
+    "L2_complete": "All outputs trace-logged with required schema",
+    "L3_complete": "At least one full experiment reproduced identically",
+    "L4_complete": "Adversarial failure rate measured and < threshold"
+  },
+  "L1_status": "MOSTLY_COMPLETE",
+  "L2_status": "PARTIAL",
+  "L3_status": "NOT_STARTED",
+  "L4_status": "NOT_STARTED",
+  "phase2_blocked": true,
+  "next_step": "Execute trace-first evaluation loop: run adversarial suite with full logging, then delta experiment, then verify reproducibility"
+}

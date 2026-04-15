@@ -1,0 +1,65 @@
+======================================================================
+DELTA EXPERIMENT WITH PHI3
+======================================================================
+
+[1/27] Two Sum_correct... ERROR: HTTPConnectionPool(host='localhost', port=11434): 
+
+[2/27] Two Sum_partial... ERROR: HTTPConnectionPool(host='localhost', port=11434): 
+
+[3/27] Two Sum_incorrect... ERROR: HTTPConnectionPool(host='localhost', port=11434): 
+
+[4/27] Palindrome Number_correct... ERROR: HTTPConnectionPool(host='localhost', port=11434): 
+
+[5/27] Palindrome Number_partial... ERROR: HTTPConnectionPool(host='localhost', port=11434): 
+
+[6/27] Palindrome Number_incorrect... ERROR: HTTPConnectionPool(host='localhost', port=11434): 
+
+[7/27] Valid Parentheses_correct... ERROR: HTTPConnectionPool(host='localhost', port=11434): 
+
+[8/27] Valid Parentheses_partial... ERROR: HTTPConnectionPool(host='localhost', port=11434): 
+
+[9/27] Valid Parentheses_incorrect... ERROR: HTTPConnectionPool(host='localhost', port=11434): 
+
+[10/27] Roman to Integer_correct... ERROR: HTTPConnectionPool(host='localhost', port=11434): 
+
+[11/27] Roman to Integer_partial... ERROR: HTTPConnectionPool(host='localhost', port=11434): 
+
+[12/27] Roman to Integer_incorrect... ERROR: HTTPConnectionPool(host='localhost', port=11434): 
+
+[13/27] Merge Two Sorted Lists_correct... ERROR: HTTPConnectionPool(host='localhost', port=11434): 
+
+[14/27] Merge Two Sorted Lists_partial... ERROR: HTTPConnectionPool(host='localhost', port=11434): 
+
+[15/27] Merge Two Sorted Lists_incorrect... ERROR: HTTPConnectionPool(host='localhost', port=11434): 
+
+[16/27] Longest Palindromic Substring_correct... ERROR: HTTPConnectionPool(host='localhost', port=11434): 
+
+[17/27] Longest Palindromic Substring_partial... ERROR: HTTPConnectionPool(host='localhost', port=11434): 
+
+[18/27] Longest Palindromic Substring_incorrect... ERROR: HTTPConnectionPool(host='localhost', port=11434): 
+
+[19/27] Container With Most Water_correct... ERROR: HTTPConnectionPool(host='localhost', port=11434): 
+
+[20/27] Container With Most Water_partial... ERROR: HTTPConnectionPool(host='localhost', port=11434): 
+
+[21/27] Container With Most Water_incorrect... ERROR: HTTPConnectionPool(host='localhost', port=11434): 
+
+[22/27] Trapping Rain Water_correct... ERROR: HTTPConnectionPool(host='localhost', port=11434): 
+
+[23/27] Trapping Rain Water_partial... ERROR: HTTPConnectionPool(host='localhost', port=11434): 
+
+[24/27] Trapping Rain Water_incorrect... ERROR: HTTPConnectionPool(host='localhost', port=11434): 
+
+[25/27] N-Queens_correct... ERROR: HTTPConnectionPool(host='localhost', port=11434): 
+
+[26/27] N-Queens_partial... ERROR: HTTPConnectionPool(host='localhost', port=11434): 
+
+[27/27] N-Queens_incorrect... ERROR: HTTPConnectionPool(host='localhost', port=11434): 
+Traceback (most recent call last):
+  File "F:\pythonProject\tests\run_phi3_delta.py", line 256, in <module>
+    run_delta()
+    ~~~~~~~~~^^
+  File "F:\pythonProject\tests\run_phi3_delta.py", line 196, in run_delta
+    with open(trace_path, "w") as f:
+         ~~~~^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'F:\\pythonProject\\tests\\scratch\\phi3_delta_traces.json'

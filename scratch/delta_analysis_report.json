@@ -1,0 +1,42 @@
+{
+  "source": "confidence_correlation_results.json",
+  "delta": 0.7143,
+  "P_high": 0.7143,
+  "P_low": 0.0,
+  "n": 27,
+  "n_high": 14,
+  "n_low": 13,
+  "interpretation": "PLAUSIBLE BUT NON_IDENTIFIABLE",
+  "phase_gate": {
+    "delta_significant": true,
+    "sample_size_minimum": true,
+    "calibration_measured": false,
+    "raw_data_available": false,
+    "bootstrap_stability": false,
+    "ready": false
+  },
+  "what_is_established": [
+    "In one dataset of 27 cases, monotonic relationship between confidence and correctness observed under one thresholding scheme"
+  ],
+  "what_is_NOT_established": [
+    "Signal consistency across subsets",
+    "Signal driven by few dominant cases vs distributed",
+    "Signal stability under resampling",
+    "Signal not artifact of class imbalance",
+    "Signal calibration quality",
+    "Signal generalization beyond this dataset"
+  ],
+  "risk_flags": [
+    "P(correct|low)=0.0% in n=27 is statistically suspicious (sparse/low bucket)",
+    "Aggregate-only data prevents bootstrap/calibration analysis",
+    "Single run prevents stability assessment"
+  ],
+  "recommendation": "DO NOT_PROCEED_TO_PHASE_2",
+  "next_steps": [
+    "Re-run delta experiment with full trace capture (per-case logging)",
+    "Measure calibration error as mandatory post-processing",
+    "Add bootstrap stability assessment",
+    "Only proceed to Phase 2 after all three metrics pass"
+  ],
+  "philosophical_correction": "We have a promising but non-identifiable correlation artifact with missing observational structure. Not a validated signal."
+}
