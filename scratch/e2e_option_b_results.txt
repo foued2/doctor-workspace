@@ -1,0 +1,20 @@
+================================================================================
+END-TO-END CHAIN VALIDATION — Step 4 (Option B)
+================================================================================
+
+Total cases: 27
+Correct: 13
+Incorrect: 14
+
+Trust Type Distribution:
+  uncertain_wrong: 14 (51.9%)
+  aligned_confident_correct: 9 (33.3%)
+  weakly_supported_correct: 2 (7.4%)
+  false_justified_confidence: 2 (7.4%)
+
+Risk Distribution:
+  HIGH: 16 (59.3%)
+  LOW: 9 (33.3%)
+  MEDIUM: 2 (7.4%)
+
+Overall: PASS
