@@ -1,0 +1,87 @@
+======================================================================
+CONFIDENCE SIGNAL VALIDATION ΓÇö Three Checks
+Signal: execution-based calibrated confidence (confidence_calibrator.py)
+======================================================================
+
+Collected 27 cases.
+
+Raw data:
+  Case                                            Conf     Ev     PR  Corr
+  ---------------------------------------------   ----   ----   ----  ----
+  Two Sum_correct                                 0.85  0.700   1.00     1
+  Two Sum_partial                                 0.85  0.700   1.00     1
+  Two Sum_incorrect                               0.00  0.300   0.00     0
+  Palindrome Number_correct                       0.85  0.700   1.00     1
+  Palindrome Number_partial                       0.85  0.700   1.00     1
+  Palindrome Number_incorrect                     0.68  0.620   0.80     0
+  Valid Parentheses_correct                       0.95  0.820   1.00     1
+  Valid Parentheses_partial                       0.81  0.763   0.86     0
+  Valid Parentheses_incorrect                     0.68  0.706   0.71     0
+  Roman to Integer_correct                        0.85  0.700   1.00     1
+  Roman to Integer_partial                        0.34  0.460   0.40     0
+  Roman to Integer_incorrect                      0.68  0.620   0.80     0
+  Merge Two Sorted Lists_correct                  0.85  0.700   1.00     1
+  Merge Two Sorted Lists_partial                  0.34  0.460   0.40     0
+  Merge Two Sorted Lists_incorrect                0.34  0.460   0.40     0
+  Longest Palindromic Substring_correct           0.95  0.880   1.00     1
+  Longest Palindromic Substring_partial           0.59  0.730   0.62     0
+  Longest Palindromic Substring_incorrect         0.83  0.830   0.88     0
+  Container With Most Water_correct               0.85  0.640   1.00     1
+  Container With Most Water_partial               0.85  0.640   1.00     1
+  Container With Most Water_incorrect             0.00  0.240   0.00     0
+  Trapping Rain Water_correct                     0.85  0.700   1.00     1
+  Trapping Rain Water_partial                     0.34  0.460   0.40     0
+  Trapping Rain Water_incorrect                   0.34  0.460   0.40     0
+  N-Queens_correct                                0.85  0.580   1.00     1
+  N-Queens_partial                                0.57  0.447   0.67     0
+  N-Queens_incorrect                              0.85  0.580   1.00     1
+
+======================================================================
+CHECK A: Spearman Rank Correlation (confidence vs correctness)
+======================================================================
+
+  Spearman ╧ü = 0.9125
+
+  Interpretation:
+  Γ£ôΓ£ô Strong correlation (|╧ü| ΓëÑ 0.6). Clear signal.
+
+======================================================================
+CHECK B: Calibration Bins (5 bins, check monotonic increase)
+======================================================================
+
+  Bin        N Conf Range             Avg Conf   Accuracy
+  -------- --- -------------------- ---------- ----------
+  Bin 1      6 [0.00, 0.34]              0.227       0.0%
+  Bin 2      6 [0.34, 0.68]              0.590       0.0%
+  Bin 3      5 [0.81, 0.85]              0.838      60.0%
+  Bin 4      5 [0.85, 0.85]              0.850     100.0%
+  Bin 5      5 [0.85, 0.95]              0.890     100.0%
+
+  Monotonicity violations: 0/4
+  Γ£ôΓ£ô Perfectly monotonic. Higher confidence ΓåÆ higher accuracy.
+
+======================================================================
+CHECK C: Shuffle Test (permute confidence 1000├ù, compare ╬ö)
+======================================================================
+
+  Real median split:
+    Median confidence: 0.830
+    High group: 14 cases, accuracy=92.9%
+    Low  group: 13 cases, accuracy=0.0%
+    ╬ö = +0.9286
+
+  Permutation test (1000 shuffles, seed=42):
+    Real |╬ö|:    0.9286
+    Mean |╬ö| (shuffled): 0.1563
+    p-value:     0.0000  (0/1000 shuffles had |╬ö| ΓëÑ real)
+  Γ£ôΓ£ô p < 0.05. Signal survives shuffle test. Not an artifact.
+
+======================================================================
+VERDICT
+======================================================================
+
+  Check A (Spearman):    STRONG
+  Check B (Bins):        STRONG
+  Check C (Shuffle):     STRONG
+
+  ΓåÆ All three checks pass. Trust pipeline integration is justified.
