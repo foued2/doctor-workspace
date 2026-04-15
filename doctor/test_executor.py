@@ -45,7 +45,7 @@ class ExecutionReport:
     passed: int
     results: List[TestResult] = field(default_factory=list)
     error: str = ""             # execution error (can't run code)
-    confidence: float = None    # evidence-based confidence (from calibrator)
+    evidence_score: float = None    # test coverage strength (from evidence score calibrator)
     failure_type: str = None    # "standard", "edge_only", or None (DEPRECATED)
     failure_ratio: float = None # failed_tests / total_tests
     severity: str = None        # "none" | "minor" | "moderate" | "severe"
@@ -264,8 +264,14 @@ TEST_SUITES: Dict[str, List[TestCase]] = {
     ],
     "solve_n_queens": [
         TestCase((1,), [["Q"]], "single"),
-        TestCase((4,), [[".Q..", "...Q", "Q...", "..Q."], ["..Q.", "Q...", "...Q", ".Q.."]], "n4_solutions"),  # 2 solutions
-        TestCase((0,), [[]], "zero"),  # n=0 → 1 solution: the empty board [[]]
+        TestCase((0,), [[]], "zero"),
+        TestCase((2,), [], "n2_no_solutions"),
+        TestCase((3,), [], "n3_no_solutions"),
+        TestCase((4,), [[".Q..", "...Q", "Q...", "..Q."], ["..Q.", "Q...", "...Q", ".Q.."]], "n4_solutions"),
+        TestCase((5,), [["Q....", "..Q..", "....Q", ".Q...", "...Q."]], "n5_board1"),
+        TestCase((5,), [["Q....", "...Q.", ".Q...", "....Q", "..Q.."]], "n5_board2"),
+        TestCase((6,), [[".Q....", "...Q..", ".....Q", "Q.....", "..Q...", "....Q."]], "n6_board1"),
+        TestCase((6,), [["..Q...", ".....Q", ".Q....", "....Q.", "Q.....", "...Q.."]], "n6_board2"),
     ],
     "wildcard_matching": [
         TestCase(("aa", "a"), False, "too_short"),
@@ -412,11 +418,14 @@ def _results_equal(got, expected) -> bool:
     if expected is None and got == []:
         return True
     if isinstance(expected, list) and isinstance(got, list):
-        if len(got) != len(expected):
-            return False
-        # For N-Queens results: compare as sets of boards (order-independent)
+        # For N-Queens results: check if expected boards are valid solutions
+        # Expected can be a single board that should be in got, or full set
         if expected and isinstance(expected[0], list) and expected[0] and isinstance(expected[0][0], str):
             got_set = set(tuple(board) for board in got if isinstance(board, list))
+            # If expected has 1 board, check if it's in got (partial validation)
+            if len(expected) == 1:
+                return tuple(expected[0]) in got_set
+            # If expected has multiple boards, check set equality
             exp_set = set(tuple(board) for board in expected if isinstance(board, list))
             return got_set == exp_set
         # For 3Sum/4Sum results: compare as sets of sorted tuples
@@ -434,18 +443,12 @@ def _results_equal(got, expected) -> bool:
 
 def _safe_exec(code: str) -> Optional[callable]:
     """Execute solution code and return the function, or None on error."""
-    namespace: Dict[str, Any] = {}
-    try:
-        # Inject ListNode for linked list problems
-        namespace["ListNode"] = ListNode
-        exec(code, namespace)
-        # Find the first callable (the solution function)
-        for name, val in namespace.items():
-            if callable(val) and not name.startswith("_") and name not in ("ListNode",):
-                return val
-    except Exception:
-        return None
-    return None
+    from doctor.solution_normalizer import normalize_solution, extract_function
+    
+    # Normalize GPT-generated solutions through the normalizer
+    code = normalize_solution(code)
+    
+    return extract_function(code)
 
 
 # ===========================================================================
@@ -539,8 +542,8 @@ class TestExecutor:
                        "nested", "all_types"}
         has_edge_cases = any(tc.label.lower() in edge_labels for tc in test_cases)
 
-        from doctor.confidence_calibrator import compute_confidence
-        calibrated_confidence = compute_confidence(
+        from doctor.confidence_calibrator import compute_evidence_score
+        calibrated_evidence = compute_evidence_score(
             tests_passed=passed,
             tests_total=total,
             has_edge_cases=has_edge_cases,
@@ -578,7 +581,7 @@ class TestExecutor:
             total=total,
             passed=passed,
             results=results,
-            confidence=calibrated_confidence,
+            evidence_score=calibrated_evidence,
             failure_type=failure_type,
             failure_ratio=round(failure_ratio, 4),
             severity=severity,
