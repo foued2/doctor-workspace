@@ -384,9 +384,12 @@ class TestExecutor:
             core_failures = 0
             edge_failures = 0
         else:
-            # Compute failure ratio and severity
             failure_ratio = len(failed_labels) / total if total > 0 else 1.0
             verdict = classify_partial_vs_incorrect(failed_labels)
+            failure_type = classify_failure_type(failed_labels)
+            severity, core_failures, edge_failures = classify_failure_severity(
+                failure_ratio, failed_test_names
+            )
 
         return ExecutionReport(
             verdict=verdict,
