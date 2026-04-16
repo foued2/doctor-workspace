@@ -1,0 +1,40 @@
+======================================================================
+STEP 1: TRUST.PY AUDIT
+======================================================================
+
+CURRENT STATE:
+  - Primary entry: compute_trust_v1(E, e, c)
+  - Inputs: E (oracle), e (evidence), c (model_confidence)
+  - c is currently a PLACEHOLDER (1.0) since phi3 returns confidence=1.00
+  - No pre-oracle features present
+  - No complexity metrics, no token counts, no AST analysis
+
+VALIDATION:
+  trust.py is CLEAN. No pre-oracle features found.
+
+TRUST_TYPES (failure modes detected):
+  aligned_confident_correct    → LOW
+  aligned_but_weak_evidence    → MEDIUM
+  underconfident_correct       → MEDIUM
+  strong_underconfidence       → MEDIUM
+  weakly_supported_correct     → MEDIUM
+  false_justified_confidence   → HIGH
+  uncertain_wrong             → HIGH
+  expected_failure             → LOW
+  overconfident_wrong          → CRITICAL
+  belief_exceeds_evidence      → CRITICAL
+
+GAP IDENTIFIED:
+  c (model_confidence) has no reliable source.
+  phi3: returns 1.00 always (no logprobs)
+  Ollama: unstable on port 11434
+
+THRESHOLDS:
+  HIGH = 0.75
+  LOW = 0.4
+  DELTA_CRITICAL = 0.4
+  EVIDENCE_FLOOR = 0.6
+  EVIDENCE_STRONG = 0.7
+  CONFIDENCE_HIGH = 0.8
+
+CONCLUSION: trust.py is execution-only. Only dependency is evidence.py.

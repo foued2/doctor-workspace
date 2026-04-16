@@ -1,0 +1,36 @@
+======================================================================
+STEP 2: EVIDENCE.PY AUDIT
+======================================================================
+
+CURRENT STATE:
+  Single entry point: compute_evidence_strength(tests_total, tests_passed, branches_covered=0)
+
+FORMULA:
+  execution_signal = min(tests_total / 10, 1.0)
+  pass_signal = tests_passed / tests_total
+  return execution_signal * 0.6 + pass_signal * 0.4
+
+NO PROXIES. Pure execution metrics only.
+
+THREE TEST CASES:
+
+1. No tests (tests_total=0):
+   e = 0.0 ✓ (correctly returns 0.0)
+
+2. Partial pass (tests_total=10, tests_passed=7):
+   execution_signal = min(10/10, 1.0) = 1.0
+   pass_signal = 7/10 = 0.7
+   e = 1.0 * 0.6 + 0.7 * 0.4 = 0.6 + 0.28 = 0.88
+
+3. Full pass (tests_total=5, tests_passed=5):
+   execution_signal = min(5/10, 1.0) = 0.5
+   pass_signal = 5/5 = 1.0
+   e = 0.5 * 0.6 + 1.0 * 0.4 = 0.3 + 0.4 = 0.7
+
+DOCUMENTED BEHAVIOR:
+  - Returns 0.0 when tests_total=0 (correct - no evidence)
+  - Heavily weights test coverage (60% weight on execution_signal)
+  - Correctness matters (40% weight on pass_signal)
+  - Caps at 1.0 when tests_total >= 10
+
+CONCLUSION: evidence.py is CLEAN. Only dependency is test execution output.

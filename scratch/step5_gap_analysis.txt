@@ -1,0 +1,49 @@
+======================================================================
+STEP 5: WHAT'S MISSING - ADDING A NEW PROBLEM
+======================================================================
+
+CURRENT STATE:
+  Doctor has 29 problems in TEST_SUITES (test_executor.py)
+  To add a NEW problem, a user must:
+
+REQUIRED FILES/STEPS:
+
+1. test_executor.py (line 92+)
+   - Add TestCase entries to TEST_SUITES dict
+   - Format: TestCase((input), expected, "label")
+   - Must add PROBLEM_KEY_MAP entry (line 316+)
+   
+   Example gap: "Merge Two Sorted Lists" is in PROBLEM_KEY_MAP but 
+   may not have a corresponding suite in TEST_SUITES
+
+2. solution_normalizer.py (line 246+)
+   - Add entry to PROBLEM_FUNCTION_MAP
+   - Maps problem name → expected function name
+   - Required for extract_function_for_problem()
+
+3. output_validators.py (optional but recommended)
+   - Add validator function for custom comparison
+   - Needed for problems with non-deterministic output
+   - e.g., N-Queens has multiple valid solutions
+
+4. confidence_calibrator.py (optional)
+   - May need has_edge_cases logic update
+   - Edge labels defined at line 526-542 in test_executor.py
+
+GAP: NO AUTOMATED WAY TO ADD PROBLEMS
+  - Must edit multiple files manually
+  - No ingestion pipeline
+  - No schema validation for test cases
+  - No boundary case generation
+  - No validator framework documentation
+
+MINIMAL STEPS TO ADD "New Problem":
+  1. Edit test_executor.py:
+     - Add to TEST_SUITES: "new_problem": [TestCase(...), ...]
+     - Add to PROBLEM_KEY_MAP: "New Problem": "new_problem"
+  2. Edit solution_normalizer.py:
+     - Add to PROBLEM_FUNCTION_MAP: "New Problem": "functionName"
+
+DOCUMENTED GAP:
+  Doctor cannot self-extend. A human must edit source files.
+  This is the "Euler problem" - the system cannot add problems without human intervention.

@@ -1,0 +1,57 @@
+======================================================================
+STEP 6: DEAD CODE - FILES TO DELETE
+======================================================================
+
+CONFIRMED DEAD (Option B / pre-oracle / validation):
+
+tests/pre_oracle_validation.py         - FAILED, residual orthogonalization done
+tests/statistical_evaluation.py       - Used for failed statistical validation
+tests/phase2_validation.py             - Pre-oracle validation suite
+tests/phase2_validation_fast.py       - Pre-oracle validation suite
+tests/phase2_validation_v2.py         - Pre-oracle validation suite
+tests/confidence_validation.py         - Used for L3 stability (deprecated)
+tests/L3_stability_minimal.py          - Duplicated functionality
+tests/L3_stability_option_b.py         - Option B only
+tests/mismatch_experiment.py           - Pre-oracle analysis
+tests/run_delta_experiment.py          - Ollama delta (phi3 no logprobs)
+tests/run_delta_with_trace.py          - Ollama delta (phi3 no logprobs)
+tests/run_phi3_delta.py               - phi3: confidence=1.00, no logprobs
+tests/run_e2e_option_b.py             - Option B only
+tests/run_e2e_validation.py           - Option B only
+tests/run_trace_first.py              - Option B only
+tests/analyze_delta_results.py         - Delta analysis (failed experiment)
+tests/run_offline_analysis.py          - Pre-oracle analysis
+tests/stress_test_trust.py            - Pre-oracle analysis
+tests/verify_measurement_validity.py   - Pre-oracle analysis
+tests/confidence_calibration_experiment.py - Pre-oracle analysis
+tests/verify_code_only_baseline.py     - Pre-oracle analysis
+tests/test_reproducibility.py          - Completed, archived
+
+doctor/mutation_trace.py              - Option B only (mutation system)
+doctor/llm_doctor.py                  - Option B only (AI layer)
+doctor/code_analyzer.py               - Option B only (pre-oracle metrics)
+doctor/layer1_ai.py                  - Option B only (AI layer)
+doctor/s_measurement.py               - Option B only (scaling measurement)
+doctor/s_efficiency.py               - Option B only (efficiency)
+doctor/ingestion.py                   - Option B only (problem ingestion)
+doctor/output_validators.py           - IN USE (test_executor imports)
+doctor/doctor_grader.py              - IN USE (test_executor imports)
+doctor/execution_trace.py            - IN USE (test_executor imports)
+doctor/confidence_calibrator.py      - IN USE (test_executor imports)
+
+documentation files:
+mutation_grammar_spec.md             - Mutation system (Option B)
+mutation_trace_schema.md             - Mutation system (Option B)
+statistical_interpretation.md        - Statistical validation (FAILED)
+discussion_feedback_loop.md          - Option B discussion
+session_state_202604*.md             - Session history (archival)
+
+======================================================================
+DO NOT DELETE (Option A - IN USE):
+  doctor/test_executor.py
+  doctor/evidence.py
+  doctor/trust.py
+  doctor/solution_normalizer.py
+  tests/step4_pipeline_test.py       (current)
+  tests/test_normalizer.py           (current)
+======================================================================
