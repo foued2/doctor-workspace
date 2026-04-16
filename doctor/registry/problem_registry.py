@@ -267,3 +267,11 @@ def get_all_display_names() -> Dict[str, str]:
         for k, v in problems.items()
         if v.get("spec", {}).get("display_name")
     }
+
+
+def is_order_sensitive(key: str) -> bool:
+    """Return True if problem arguments must not be reordered in perturbation check."""
+    entry = get_problem(key)
+    if entry is None:
+        return True
+    return entry.get("spec", {}).get("order_sensitive", True)

@@ -443,7 +443,8 @@
       "difficulty": "easy",
       "tags": [],
       "problem_id": "merge_two_sorted_lists",
-      "reference_solution": "\nclass ListNode:\n    def __init__(self, val=0, next=None):\n        self.val = val\n        self.next = next\n\ndef mergeTwoLists(l1, l2):\n    dummy = ListNode()\n    curr = dummy\n    while l1 and l2:\n        if l1.val <= l2.val:\n            curr.next = l1\n            l1 = l1.next\n        else:\n            curr.next = l2\n            l2 = l2.next\n        curr = curr.next\n    curr.next = l1 or l2\n    return dummy.next\n"
+      "reference_solution": "\nclass ListNode:\n    def __init__(self, val=0, next=None):\n        self.val = val\n        self.next = next\n\ndef mergeTwoLists(l1, l2):\n    dummy = ListNode()\n    curr = dummy\n    while l1 and l2:\n        if l1.val <= l2.val:\n            curr.next = l1\n            l1 = l1.next\n        else:\n            curr.next = l2\n            l2 = l2.next\n        curr = curr.next\n    curr.next = l1 or l2\n    return dummy.next\n",
+      "order_sensitive": true
     },
     "execution": {
       "test_cases": [
@@ -630,7 +631,8 @@
       "constraints": {},
       "difficulty": "easy",
       "tags": [],
-      "problem_id": "strStr"
+      "problem_id": "strStr",
+      "order_sensitive": true
     },
     "execution": {
       "test_cases": [
@@ -1509,7 +1511,8 @@
       "constraints": {},
       "difficulty": "hard",
       "tags": [],
-      "problem_id": "find_median_sorted_arrays"
+      "problem_id": "find_median_sorted_arrays",
+      "order_sensitive": true
     },
     "execution": {
       "test_cases": [
@@ -1594,7 +1597,8 @@
       "constraints": {},
       "difficulty": "hard",
       "tags": [],
-      "problem_id": "regular_expression_matching"
+      "problem_id": "regular_expression_matching",
+      "order_sensitive": true
     },
     "execution": {
       "test_cases": [
@@ -2038,7 +2042,8 @@
       "constraints": {},
       "difficulty": "hard",
       "tags": [],
-      "problem_id": "wildcard_matching"
+      "problem_id": "wildcard_matching",
+      "order_sensitive": true
     },
     "execution": {
       "test_cases": [
@@ -2110,7 +2115,8 @@
       "constraints": {},
       "difficulty": "hard",
       "tags": [],
-      "problem_id": "min_distance"
+      "problem_id": "min_distance",
+      "order_sensitive": true
     },
     "execution": {
       "test_cases": [
@@ -2173,7 +2179,8 @@
       "constraints": {},
       "difficulty": "hard",
       "tags": [],
-      "problem_id": "min_window"
+      "problem_id": "min_window",
+      "order_sensitive": true
     },
     "execution": {
       "test_cases": [

@@ -20,6 +20,7 @@ from doctor.registry.problem_registry import (
     add_problem,
     get_all_keys,
     get_problem,
+    is_order_sensitive,
     reload,
     validate_determinism,
     validate_entry,
@@ -129,9 +130,8 @@ def _apply_perturbation_check(entry: dict) -> tuple[bool, str]:
     Two checks:
     1. Output diversity: if all test cases produce identical outputs, solution is
        likely a constant-returning stub.
-    2. Order perturbation: for order-insensitive problems (all args same type),
-       reorder first two args and verify output stays the same.
-       If it changes → REJECT: solution is order-sensitive when it shouldn't be.
+    2. Order perturbation: if order_sensitive=False in spec, reorder first two args
+       and verify output stays the same. If it changes → REJECT.
 
     Returns (pass, message). A False return means REJECT ingestion.
     """
@@ -168,31 +168,23 @@ def _apply_perturbation_check(entry: dict) -> tuple[bool, str]:
         ]
 
         if order_insensitive_tcs:
-            tc = order_insensitive_tcs[0]
-            inp = tc["input"]
-            reordered = list(inp)
-            reordered[0], reordered[1] = reordered[1], reordered[0]
-            t_orig = run_test_with_trace(func, tuple(inp), tc["expected"])
-            t_pert = run_test_with_trace(func, tuple(reordered), tc["expected"])
-            if t_orig.get("error") is None and t_pert.get("error") is None:
-                if not _results_equal(t_orig.get("output"), t_pert.get("output")):
-                    return False, "REJECT: order perturbation changes output — solution is order-sensitive but inputs suggest order independence"
+            suite_key = entry.get("spec", {}).get("problem_id", "")
+            sensitive = is_order_sensitive(suite_key)
+            if not sensitive:
+                tc = order_insensitive_tcs[0]
+                inp = tc["input"]
+                reordered = list(inp)
+                reordered[0], reordered[1] = reordered[1], reordered[0]
+                t_orig = run_test_with_trace(func, tuple(inp), tc["expected"])
+                t_pert = run_test_with_trace(func, tuple(reordered), tc["expected"])
+                if t_orig.get("error") is None and t_pert.get("error") is None:
+                    if not _results_equal(t_orig.get("output"), t_pert.get("output")):
+                        return False, "REJECT: order perturbation changes output — solution is order-sensitive but spec says order_insensitive=False"
 
         return True, "passed"
 
     except Exception:
         return True, f"perturbation check inconclusive: {traceback.format_exc(limit=2)}"
-
-
-def _is_order_insensitive(test_cases: List[dict]) -> bool:
-    """Heuristic: if all inputs are the same type, problem may be order-insensitive."""
-    for tc in test_cases:
-        inp = tc.get("input", [])
-        if isinstance(inp, list) and len(inp) >= 2:
-            types = {type(x).__name__ for x in inp}
-            if len(types) == 1:
-                return True
-    return False
 
 
 def ingest(entry: dict, dry_run_only: bool = False) -> tuple[bool, List[str], List[str], str]:
@@ -397,16 +389,72 @@ def ingest_interactive(dry_run_only: bool = False) -> int:
     return 0 if ok else 1
 
 
+def _cmd_list():
+    reload()
+    problems = get_all_keys()
+    print(f"Registered problems ({len(problems)}):")
+    for k in sorted(problems):
+        p = get_problem(k)
+        spec = p.get("spec", {})
+        ref = bool(spec.get("reference_solution"))
+        order = spec.get("order_sensitive", True)
+        diff = spec.get("difficulty", "?")
+        print(f"  [{diff:6}] {k}{' (ref)' if ref else ''}{' [order_sensitive]' if order else ' [order_insensitive]'}")
+    return 0
+
+
+def _cmd_check(problem_id: str):
+    reload()
+    entry = get_problem(problem_id)
+    if not entry:
+        print(f"Problem '{problem_id}' not found in registry.")
+        return 1
+    spec = entry.get("spec", {})
+    exec_ = entry.get("execution", {})
+    norm = entry.get("normalization", {})
+    print(f"=== {spec.get('display_name', problem_id)} ({problem_id}) ===")
+    print(f"difficulty: {spec.get('difficulty', '?')}")
+    print(f"reference_solution: {'yes' if spec.get('reference_solution') else 'NO'}")
+    print(f"order_sensitive: {spec.get('order_sensitive', True)}")
+    print(f"test_cases: {len(exec_.get('test_cases', []))}")
+    print(f"function_names: {norm.get('function_names', [])}")
+    print()
+    schema_errors = validate_entry(entry)
+    if schema_errors:
+        print("SCHEMA ERRORS:")
+        for e in schema_errors:
+            print(f"  {e}")
+    else:
+        print("schema: OK")
+    div_errors = validate_structural_diversity(exec_)
+    if div_errors:
+        print("STRUCTURAL DIVERSITY ERRORS:")
+        for e in div_errors:
+            print(f"  {e}")
+    else:
+        print("structural diversity: OK")
+    if spec.get("reference_solution"):
+        ok, rate, msg = _run_dry_run(entry)
+        print(f"dry-run: {msg}")
+    return 0
+
+
 def main():
     parser = argparse.ArgumentParser(description="Doctor problem ingestion CLI")
     group = parser.add_mutually_exclusive_group(required=True)
     group.add_argument("--file", type=str, help="Path to problem JSON file")
     group.add_argument("--interactive", action="store_true", help="Interactive mode")
+    group.add_argument("--list", action="store_true", help="List all registered problems")
+    group.add_argument("--check", type=str, metavar="PROBLEM_ID", help="Check an existing problem (read-only validation)")
     parser.add_argument("--dry-run", action="store_true", help="Validate without writing to registry")
 
     args = parser.parse_args()
 
-    if args.file:
+    if args.list:
+        return _cmd_list()
+    elif args.check:
+        return _cmd_check(args.check)
+    elif args.file:
         return ingest_file(args.file, dry_run_only=args.dry_run)
     elif args.interactive:
         return ingest_interactive(dry_run_only=args.dry_run)
