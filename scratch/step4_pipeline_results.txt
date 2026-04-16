@@ -1,8 +1,0 @@
-STEP 4: FULL PIPELINE RESULTS
-======================================================================
-
-{'problem': 'Two Sum', 'E': 1, 'e': 1.0, 'tests_total': 10, 'tests_passed': 10, 'trust_type': 'aligned_confident_correct', 'risk': 'LOW', 'verdict': 'correct'}
-{'problem': 'Valid Parentheses', 'E': 1, 'e': 0.82, 'tests_total': 7, 'tests_passed': 7, 'trust_type': 'aligned_confident_correct', 'risk': 'LOW', 'verdict': 'correct'}
-{'problem': 'Longest Palindromic Substring', 'E': 1, 'e': 0.88, 'tests_total': 8, 'tests_passed': 8, 'trust_type': 'aligned_confident_correct', 'risk': 'LOW', 'verdict': 'correct'}
-{'problem': 'Trapping Rain Water', 'E': 1, 'e': 1.0, 'tests_total': 10, 'tests_passed': 10, 'trust_type': 'aligned_confident_correct', 'risk': 'LOW', 'verdict': 'correct'}
-{'problem': 'N-Queens', 'E': 1, 'e': 0.94, 'tests_total': 9, 'tests_passed': 9, 'trust_type': 'aligned_confident_correct', 'risk': 'LOW', 'verdict': 'correct'}

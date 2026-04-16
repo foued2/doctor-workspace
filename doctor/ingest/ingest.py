@@ -416,6 +416,9 @@ def _cmd_check(problem_id: str):
     print(f"difficulty: {spec.get('difficulty', '?')}")
     print(f"reference_solution: {'yes' if spec.get('reference_solution') else 'NO'}")
     print(f"order_sensitive: {spec.get('order_sensitive', True)}")
+    known_issue = spec.get("known_issue")
+    if known_issue:
+        print(f"KNOWN ISSUE: {known_issue}")
     print(f"test_cases: {len(exec_.get('test_cases', []))}")
     print(f"function_names: {norm.get('function_names', [])}")
     print()

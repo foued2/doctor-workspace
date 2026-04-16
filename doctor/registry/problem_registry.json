@@ -444,7 +444,8 @@
       "tags": [],
       "problem_id": "merge_two_sorted_lists",
       "reference_solution": "\nclass ListNode:\n    def __init__(self, val=0, next=None):\n        self.val = val\n        self.next = next\n\ndef mergeTwoLists(l1, l2):\n    dummy = ListNode()\n    curr = dummy\n    while l1 and l2:\n        if l1.val <= l2.val:\n            curr.next = l1\n            l1 = l1.next\n        else:\n            curr.next = l2\n            l2 = l2.next\n        curr = curr.next\n    curr.next = l1 or l2\n    return dummy.next\n",
-      "order_sensitive": true
+      "order_sensitive": true,
+      "known_issue": "reference_solution uses ListNode with default-arg constructor (dummy=ListNode()). solution_normalizer strips default values, turning dummy=ListNode() into ListNode(val, next) which requires 2 positional args. dry-run fails until normalizer handles ListNode defaults or reference is rewritten to build nodes explicitly."
     },
     "execution": {
       "test_cases": [
