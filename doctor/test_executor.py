@@ -97,6 +97,11 @@ TEST_SUITES: Dict[str, List[TestCase]] = {
         TestCase(([3, 3], 6), [0, 1], "self_element_reuse"),
         TestCase(([-1, -2, -3, -4, -5], -8), [2, 4], "negative_numbers"),
         TestCase(([1, 5, 3, 7], 10), [2, 3], "unsorted"),
+        TestCase(([], 0), [], "empty"),
+        TestCase(([1], 1), [], "single_no_match"),
+        TestCase(([0, 4, 3, 0], 0), [0, 3], "zero_target"),
+        TestCase(([1, 2, 3, 4, 5], 9), [3, 4], "last_pair"),
+        TestCase(([1000000, 2000000], 3000000), [0, 1], "large_numbers"),
     ],
     "palindrome_number": [
         TestCase((121,), True, "basic_positive"),
@@ -254,6 +259,11 @@ TEST_SUITES: Dict[str, List[TestCase]] = {
         TestCase(([],), 0, "empty"),
         TestCase(([1],), 0, "single"),
         TestCase(([1, 2, 3],), 0, "ascending"),
+        TestCase(([3, 0, 0, 2, 0, 4],), 10, "valley_pattern"),
+        TestCase(([0, 2, 0],), 0, "two_bars_no_water"),
+        TestCase(([5, 4, 1, 2],), 1, "decreasing"),
+        TestCase(([2, 0, 2],), 2, "simple"),
+        TestCase(([5, 0, 3, 0, 2, 0, 4],), 15, "complex_valleys"),
     ],
     "first_missing_positive": [
         TestCase(([1, 2, 0],), 3, "basic"),
