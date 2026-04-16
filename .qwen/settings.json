@@ -70,7 +70,9 @@
       "Bash(\"c:\\program files\\realtek\\audio\\hda\\rtkaudioservice64.exe\" *)",
       "Bash(\"c:\\program files\\realtek\\audio\\hda\\ravcpl64.exe\")",
       "Bash(start *)",
-      "Bash(pnputil *)"
+      "Bash(pnputil *)",
+      "Bash(\"c:\\users\\foued\\appdata\\local\\programs\\antigravity\\antigravity.exe\")",
+      "Bash(\"c:\\users\\foued\\appdata\\local\\programs\\antigravity\\antigravity.exe\" *)"
     ]
   },
   "$version": 3

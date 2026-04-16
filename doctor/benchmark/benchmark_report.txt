@@ -1,0 +1,49 @@
+================================================================================
+DOCTOR BENCHMARK — Test Suite Robustness Under Mutation Analysis
+================================================================================
+
+Problem                             Diff     Tests  Mutagen Killed  Kill%   Ref   Notes
+--------------------------------------------------------------------------------
+Median of Two Sorted Arrays         hard     5      n/a    0       n/a     FAIL  no reference solution available
+First Missing Positive              hard     5      n/a    0       n/a     FAIL  no reference solution available
+4Sum                                medium   4      n/a    0       n/a     FAIL  no reference solution available
+Integer to Roman                    medium   5      n/a    0       n/a     PASS  
+Largest Rectangle in Histogram      hard     5      n/a    0       n/a     FAIL  no reference solution available
+Letter Combinations of a Phone Number medium   4      n/a    0       n/a     FAIL  no reference solution available
+Longest Common Prefix               easy     5      n/a    0       n/a     FAIL  no reference solution available
+Longest Palindromic Substring       medium   8      n/a    0       n/a     FAIL  no reference solution available
+Container With Most Water           medium   4      n/a    0       n/a     FAIL  no reference solution available
+Sliding Window Maximum              hard     4      n/a    0       n/a     FAIL  no reference solution available
+Merge Two Sorted Lists              easy     5      n/a    0       n/a     FAIL  
+Edit Distance                       hard     5      n/a    0       n/a     FAIL  no reference solution available
+Minimum Window Substring            hard     4      n/a    0       n/a     FAIL  no reference solution available
+Palindrome Number                   easy     5      n/a    0       n/a     FAIL  no reference solution available
+Regular Expression Matching         hard     6      n/a    0       n/a     FAIL  no reference solution available
+Remove Duplicates from Sorted Array easy     5      n/a    0       n/a     FAIL  no reference solution available
+Reverse Integer                     medium   5      n/a    0       n/a     PASS  
+Roman to Integer                    easy     5      n/a    0       n/a     FAIL  no reference solution available
+Search Insert Position              easy     5      n/a    0       n/a     FAIL  no reference solution available
+Implement strStr()                  easy     6      n/a    0       n/a     FAIL  no reference solution available
+String to Integer (atoi)            medium   6      n/a    0       n/a     FAIL  no reference solution available
+Wildcard Matching                   hard     6      n/a    0       n/a     FAIL  no reference solution available
+Zigzag Conversion                   medium   5      n/a    0       n/a     FAIL  no reference solution available
+Trapping Rain Water                 hard     10     1/2    1       50%     PASS  
+Generate Parentheses                medium   4      5/8    5       62%     PASS  
+N-Queens                            hard     9      5/8    5       62%     PASS  
+3Sum                                medium   5      10/10  10      100%    PASS  
+Two Sum                             easy     10     3/3    3       100%    PASS  
+Valid Parentheses                   easy     7      3/3    3       100%    PASS  
+--------------------------------------------------------------------------------
+
+AGGREGATE — Kill Rate by Mutation Class:
+  boundary_weakness                     6/7     85.7%
+  control_compression                   3/3    100.0%
+  precision_degradation                 3/9     33.3%
+  state_corruption                     15/15   100.0%
+
+================================================================================
+Problems benchmarked:  29
+Reference solutions:  8/29 pass
+Mutation variants:     34 total
+Average kill rate:    79.2%
+================================================================================

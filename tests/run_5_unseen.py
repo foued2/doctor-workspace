@@ -212,7 +212,7 @@ def main():
             ))
             unique_patterns = len(set(str(r.label) for r in l2.results))
 
-            ev = compute_evidence_strength(l2.total, edge_types, unique_patterns)
+            ev = compute_evidence_strength(l2.total, l2.passed)
             label, flag = get_final_label(
                 ai['verdict'], l2.pass_rate or 0, ev, ai['confidence']
             )

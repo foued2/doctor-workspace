@@ -26,8 +26,8 @@
     },
     "undefined": {}
   },
-  "grade": 0.8333,
-  "grade_letter": "B",
+  "grade": 0.5,
+  "grade_letter": "F",
   "rule_score": 1.0,
   "wrong_at_high_conf": 0.0,
   "shift_score": null,

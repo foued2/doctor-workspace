@@ -1,0 +1,16 @@
+STATISTICAL EVALUATION RESULTS
+==================================================
+
+Cases: 54
+Baseline: 83.3%
+Delta: 73.33% (p=0.520)
+ECE: 0.2206
+Delta 95% CI: [50.91%, 94.00%]
+
+Checks:
+  Delta > 15%: PASS
+  Delta significant (p<0.05): FAIL
+  Delta CI excludes 0: PASS
+  ECE < 0.20: FAIL
+
+Overall: FAIL

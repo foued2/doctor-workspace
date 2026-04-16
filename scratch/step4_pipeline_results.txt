@@ -1,15 +1,8 @@
-======================================================================
-STEP 4: FULL PIPELINE TEST - 5 PROBLEMS
+STEP 4: FULL PIPELINE RESULTS
 ======================================================================
 
-Problem                        |  E |      e |    tests | trust_type                     | risk      
-----------------------------------------------------------------------------------------------------
-Two Sum                        |  1 |  0.700 |      5/5 | weakly_supported_correct       | MEDIUM    
-Valid Parentheses              |  1 |  0.820 |      7/7 | aligned_confident_correct      | LOW       
-Longest Palindromic Substring  |  1 |  0.880 |      8/8 | aligned_confident_correct      | LOW       
-Trapping Rain Water            |  1 |  0.700 |      5/5 | weakly_supported_correct       | MEDIUM    
-N-Queens                       |  1 |  0.940 |      9/9 | aligned_confident_correct      | LOW       
-
-======================================================================
-PIPELINE STATUS: ALL 5 PROBLEMS PROCESSED SUCCESSFULLY
-======================================================================
+{'problem': 'Two Sum', 'E': 1, 'e': 1.0, 'tests_total': 10, 'tests_passed': 10, 'trust_type': 'aligned_confident_correct', 'risk': 'LOW', 'verdict': 'correct'}
+{'problem': 'Valid Parentheses', 'E': 1, 'e': 0.82, 'tests_total': 7, 'tests_passed': 7, 'trust_type': 'aligned_confident_correct', 'risk': 'LOW', 'verdict': 'correct'}
+{'problem': 'Longest Palindromic Substring', 'E': 1, 'e': 0.88, 'tests_total': 8, 'tests_passed': 8, 'trust_type': 'aligned_confident_correct', 'risk': 'LOW', 'verdict': 'correct'}
+{'problem': 'Trapping Rain Water', 'E': 1, 'e': 1.0, 'tests_total': 10, 'tests_passed': 10, 'trust_type': 'aligned_confident_correct', 'risk': 'LOW', 'verdict': 'correct'}
+{'problem': 'N-Queens', 'E': 1, 'e': 0.94, 'tests_total': 9, 'tests_passed': 9, 'trust_type': 'aligned_confident_correct', 'risk': 'LOW', 'verdict': 'correct'}
