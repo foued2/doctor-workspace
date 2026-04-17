@@ -115,14 +115,30 @@ def _build_test_suites() -> Dict[str, List[TestCase]]:
 def _to_test_input(raw_input, problem_key: str):
     """Convert a JSON-serialized test input to executable form.
 
-    - For merge_two_sorted_lists: each list element becomes a ListNode.
-      Result is a list (not tuple) since ListNodes are iterable.
-    - For all other problems: recursively convert lists, wrap outer in tuple.
+    run_test_with_trace calls func(*input_data), so input_data must be
+    an iterable where each element is one function argument.
+
+    Registry format: inputs are always wrapped in a JSON list, e.g.
+      two_sum:      [[2,7,11,15], 9]     → ((2,7,11,15), 9)
+      three_sum:    [[-1,0,1,2,-1,-4]]   → ((-1,0,1,2,-1,-4),)
+      merge:        [[[1,2],[3,4]]]       → ([ListNode, ListNode],) [special]
+      gen_parens:   [[3]]                 → ((3,),)
+
+    Special case: merge_two_sorted_lists converts list elements to ListNodes
+    and returns a plain list (not tuple) so the two ListNodes are unpacked
+    as separate arguments.
     """
     if problem_key == "merge_two_sorted_lists" and isinstance(raw_input, list):
         return [_maybe_list_to_listnode(x) if isinstance(x, list) else x for x in raw_input]
+
     if isinstance(raw_input, list):
-        return tuple(_to_test_input(x, problem_key) for x in raw_input)
+        processed = tuple(_to_test_input(x, problem_key) for x in raw_input)
+        if len(processed) == 1:
+            first = processed[0]
+            if isinstance(first, (tuple, list)):
+                return (first,)
+            return (first,)
+        return processed
     return raw_input
 
 
@@ -132,40 +148,24 @@ def _maybe_list_to_listnode(obj):
     return obj
 
 
-def _maybe_to_listnode(obj, problem_key: str):
-    if problem_key == "merge_two_sorted_lists" and isinstance(obj, list):
-        return make_list(obj)
-    if isinstance(obj, list):
-        return [_maybe_to_listnode(x, problem_key) for x in obj]
-    return obj
-
-
-def _maybe_list_to_listnode(obj):
-    if isinstance(obj, list):
-        return make_list(obj)
-    return obj
-
-
-def _maybe_to_listnode(obj, problem_key: str):
-    if problem_key == "merge_two_sorted_lists" and isinstance(obj, list) and not any(isinstance(x, list) for x in obj):
-        return make_list(obj)
-    if isinstance(obj, list):
-        return [_maybe_to_listnode(x, problem_key) for x in obj]
-    return obj
-
-
-def _build_problem_key_map() -> Dict[str, str]:
-    """Build PROBLEM_KEY_MAP from registry: display_name -> suite_key."""
-    from ..registry.problem_registry import get_problems
-    return {
-        v.get("spec", {}).get("display_name", ""): k
-        for k, v in get_problems().items()
-        if v.get("spec", {}).get("display_name")
-    }
-
-
 TEST_SUITES: Dict[str, List[TestCase]] = _build_test_suites()
-PROBLEM_KEY_MAP: Dict[str, str] = _build_problem_key_map()
+
+
+def _resolve_suite_key(identifier: str) -> str | None:
+    """Resolve a problem_id or display_name to a suite key.
+    
+    1. If identifier is a registered problem_id, return it directly.
+    2. If identifier is a display_name, look up the corresponding key.
+    3. Otherwise return None.
+    """
+    from ..registry.problem_registry import get_problems, get_all_display_names
+    
+    problems = get_problems()
+    if identifier in problems:
+        return identifier
+    
+    display_map = get_all_display_names()
+    return display_map.get(identifier)
 
 
 # ===========================================================================
@@ -279,22 +279,23 @@ def _safe_exec(code: str) -> Optional[callable]:
 
 class TestExecutor:
 
-    def verify(self, problem_name: str, solution_code: str) -> ExecutionReport:
+    def verify(self, problem_identifier: str, solution_code: str) -> ExecutionReport:
         """Execute solution against test cases and return verdict.
 
         Args:
-            problem_name: LeetCode problem name (e.g., "Two Sum")
+            problem_identifier: Problem ID (e.g. "euler_1") or display name
+                (e.g. "Two Sum"). Resolved dynamically from registry — no
+                hardcoded map required.
             solution_code: Python source code of the solution
 
         Returns:
             ExecutionReport with verdict, pass_rate, and per-test results.
         """
-        # Map problem name to test suite key
-        suite_key = PROBLEM_KEY_MAP.get(problem_name)
+        suite_key = _resolve_suite_key(problem_identifier)
         if suite_key is None:
             return ExecutionReport(
                 verdict="incorrect", pass_rate=0.0, total=0, passed=0,
-                error=f"No test suite for problem: {problem_name}",
+                error=f"No problem found for: {problem_identifier}",
             )
 
         test_cases = TEST_SUITES.get(suite_key)
@@ -321,7 +322,7 @@ class TestExecutor:
             # OPTION A: Spec-oracle system. E is the sole correctness oracle.
             # Validator runs for diagnostics only — never affects pass/fail.
             validator_result, validator_kind = _verify_with_validator(
-                problem_name, trace.get("output"), tc.input
+                suite_key, trace.get("output"), tc.input
             )
 
             # E = _results_equal is the ONLY correctness criterion
