@@ -163,12 +163,21 @@ class _StateCorruption:
 class _PrecisionDegradation:
     """Weaken exact comparisons."""
     def apply(self, code: str, rng: random.Random) -> Tuple[str, str]:
-        if ' == ' in code:
-            mutated = code.replace(' == ', ' >= ', 1)
-            return mutated, "weakened_eq_to_ge"
         if '.round(' in code:
             mutated = code.replace('.round(', 'int(', 1)
             return mutated, "replaced_round_with_int"
+
+        while_pattern = re.compile(r'\bwhile\s+[^:]*\s*==\s*')
+        while_matches = list(while_pattern.finditer(code))
+
+        eq_matches = list(re.finditer(r' == ', code))
+        for m in eq_matches:
+            pos = m.start()
+            in_while_test = any(wm.start() <= pos < wm.end() for wm in while_matches)
+            if not in_while_test:
+                mutated = code[:pos] + ' >= ' + code[pos + 4:]
+                return mutated, "weakened_eq_to_ge"
+
         return code, "no_precision_target_found"
 
 

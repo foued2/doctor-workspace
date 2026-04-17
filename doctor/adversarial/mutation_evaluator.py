@@ -104,8 +104,12 @@ def evaluate_suite_strength(
     )
 
 
-def _run_solution(code: str, test_cases: List[dict]) -> float:
-    """Run a solution against test cases. Returns pass rate."""
+def _run_solution(code: str, test_cases: List[dict], timeout_per_test: float = 2.0) -> float:
+    """Run a solution against test cases. Returns pass rate.
+
+    Each test case is run with a timeout. If it times out (e.g., infinite loop),
+    the test case is treated as a failure.
+    """
     try:
         from doctor.normalize.solution_normalizer import extract_function, normalize_solution
         from doctor.core.test_executor import run_test_with_trace, _results_equal
@@ -117,13 +121,41 @@ def _run_solution(code: str, test_cases: List[dict]) -> float:
 
         passed = 0
         for tc in test_cases:
-            trace = run_test_with_trace(func, tuple(tc["input"]), tc["expected"])
-            if trace.get("error") is None and _results_equal(trace.get("output"), tc["expected"]):
+            trace = _run_with_timeout(
+                run_test_with_trace,
+                (func, tuple(tc["input"]), tc["expected"]),
+                timeout_per_test,
+            )
+            if trace is None:
+                pass
+            elif trace.get("error") is None and _results_equal(trace.get("output"), tc["expected"]):
                 passed += 1
 
         return passed / len(test_cases) if test_cases else 0.0
     except Exception:
         return 0.0
+
+
+def _run_with_timeout(func: callable, args: tuple, timeout: float = 2.0) -> Any:
+    """Run a callable with args under a timeout. Returns result or None on timeout."""
+    result = [None]
+    exc = [None]
+
+    def target():
+        try:
+            result[0] = func(*args)
+        except Exception as e:
+            exc[0] = e
+
+    t = __import__("threading").Thread(target=target)
+    t.daemon = True
+    t.start()
+    t.join(timeout)
+    if t.is_alive():
+        return None
+    if exc[0] is not None:
+        raise exc[0]
+    return result[0]
 
 
 def _breakdown_by_class(mutations: List[MutationResult], test_cases: List[dict]) -> Dict[str, dict]:
