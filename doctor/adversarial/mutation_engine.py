@@ -38,6 +38,11 @@ MUTATION_CLASSES = [
     "state_corruption",
     "precision_degradation",
     "input_interpretation_drift",
+    "arithmetic_perturbation",
+    "sign_flip",
+    "coefficient_scaling",
+    "range_boundary_shift",
+    "operator_substitution",
 ]
 
 
@@ -191,4 +196,136 @@ def _build_mutators() -> Dict[str, Any]:
         "state_corruption": _StateCorruption(),
         "precision_degradation": _PrecisionDegradation(),
         "input_interpretation_drift": _InputInterpretationDrift(),
+        "arithmetic_perturbation": _ArithmeticPerturbation(),
+        "sign_flip": _SignFlip(),
+        "coefficient_scaling": _CoefficientScaling(),
+        "range_boundary_shift": _RangeBoundaryShift(),
+        "operator_substitution": _OperatorSubstitution(),
     }
+
+
+class _ArithmeticPerturbation:
+    """Modify numeric constants in arithmetic expressions by small amounts."""
+
+    def apply(self, code: str, rng: random.Random) -> Tuple[str, str]:
+        mutations = [
+            (r'\b(\d+)\s*\*\s*(\d+)', r'\1 * \2 + 1', 'mult_term_plus1'),
+            (r'\b(\d+)\s*\*\s*(\d+)', r'\1 * \2 - 1', 'mult_term_minus1'),
+            (r'\b(\d+)\s*\+\s*1\b', r'\1 + 2', 'add1_to_add2'),
+            (r'\b(\d+)\s*-\s*1\b', r'\1 - 2', 'sub1_to_sub2'),
+            (r'\b(\d+)\s*//\s*(\d+)', r'(\1 * 2) // \2', 'div_coefficient_double'),
+            (r'\b(\d+)\s*//\s*(\d+)', r'(\1 // 2) // \2', 'div_coefficient_half'),
+        ]
+        valid = []
+        for pattern, replacement, name in mutations:
+            if re.search(pattern, code):
+                valid.append((pattern, replacement, name))
+        if not valid:
+            return code, "no_numeric_constant_found"
+        pattern, replacement, name = rng.choice(valid)
+        mutated = re.sub(pattern, replacement, code, count=1)
+        if mutated != code:
+            return mutated, f"perturbed_{name}"
+        return code, "no_numeric_constant_found"
+
+
+class _SignFlip:
+    """Negate return values or intermediate arithmetic terms."""
+
+    def apply(self, code: str, rng: random.Random) -> Tuple[str, str]:
+        mutations = [
+            (r'return\s+(-?\d+)', lambda m: 'return ' + str(-int(m.group(1))), 'negate_literal_return'),
+            (r'return\s+(\w+)', lambda m: f'return -{m.group(1)}', 'negate_var_return'),
+            (r'rev\s*=\s*rev\s*\*\s*10', 'rev = rev * 10', 'drop_sign_flip'),
+        ]
+        for pattern, replacement, name in mutations:
+            if callable(replacement):
+                if re.search(pattern, code):
+                    mutated = re.sub(pattern, replacement, code, count=1)
+                    if mutated != code:
+                        return mutated, f"sign_flip_{name}"
+            else:
+                if re.search(pattern, code):
+                    mutated = re.sub(pattern, replacement, code, count=1)
+                    if mutated != code:
+                        return mutated, f"sign_flip_{name}"
+        return code, "no_sign_target_found"
+
+
+class _CoefficientScaling:
+    """Alter multiplicative coefficients in formulas."""
+
+    def apply(self, code: str, rng: random.Random) -> Tuple[str, str]:
+        mutations = [
+            (r'\b15\b', '30', 'LCM_15_to_30'),
+            (r'\b3\b(?!\s*[\*/])', '6', 'coeff_3_to_6'),
+            (r'\b5\b(?!\s*[\*/])', '10', 'coeff_5_to_10'),
+            (r'\b2\b(?!\s*[\*/])', '4', 'coeff_2_to_4'),
+        ]
+        valid = []
+        for pattern, replacement, name in mutations:
+            if re.search(pattern, code):
+                valid.append((pattern, replacement, name))
+        if not valid:
+            return code, "no_coefficient_found"
+        pattern, replacement, name = rng.choice(valid)
+        mutated = re.sub(pattern, replacement, code, count=1)
+        if mutated != code:
+            return mutated, f"scaled_{name}"
+        return code, "no_coefficient_found"
+
+
+class _RangeBoundaryShift:
+    """Change boundary terms in range expressions: n-1 -> n, n -> n-1, etc."""
+
+    def apply(self, code: str, rng: random.Random) -> Tuple[str, str]:
+        mutations = [
+            (r'\((\s*n\s*-\s*1\s*)\s*//', r'(n //', 'remove_minus1_in_divisor'),
+            (r'\(\s*n\s*-\s*1\s*\)', '(n)', 'remove_minus1_parens'),
+            (r'\(\s*n\s*-\s*1\s*/', r'(n /', 'change_minus1_to_n'),
+            (r'\brange\(\s*1\s*,\s*n\)', 'range(0, n)', 'shift_range_start'),
+            (r'\bfor\s+\w+\s+in\s+range\([^)]*n[^)]*\):', lambda m: m.group(0).replace('n - 1', 'n'), 'extend_range_to_n'),
+        ]
+        valid = []
+        for pattern, replacement, name in mutations:
+            if callable(replacement):
+                if re.search(pattern, code):
+                    valid.append((pattern, replacement, name))
+            else:
+                if re.search(pattern, code):
+                    valid.append((pattern, replacement, name))
+        if not valid:
+            return code, "no_boundary_term_found"
+        pattern, replacement, name = rng.choice(valid)
+        if callable(replacement):
+            mutated = re.sub(pattern, replacement, code, count=1)
+        else:
+            mutated = re.sub(pattern, replacement, code, count=1)
+        if mutated != code:
+            return mutated, f"boundary_shift_{name}"
+        return code, "no_boundary_term_found"
+
+
+class _OperatorSubstitution:
+    """Swap arithmetic operators: + for -, * for //, % with different mod."""
+
+    def apply(self, code: str, rng: random.Random) -> Tuple[str, str]:
+        mutations = [
+            (r'rev\s*=\s*rev\s*\*\s*10\s*\+\s*', 'rev = rev * 10 - ', 'drop_carry_digit'),
+            (r'\+\s*1\b', ' - 1', 'flip_add1_to_sub1'),
+            (r'\*\s*2\b', ' * 2 + 1', 'add_1_to_double'),
+            (r'\s*-\s*1\s*//', ' // ', 'drop_minus1_before_div'),
+            (r'\bif\s+\w+\s*%\s*\d+\s*==', 'if False:', 'disable_mod_check'),
+            (r'\bif\s+\w+\s*//\s*\d+\s*==', 'if False:', 'disable_div_check'),
+        ]
+        valid = []
+        for pattern, replacement, name in mutations:
+            if re.search(pattern, code):
+                valid.append((pattern, replacement, name))
+        if not valid:
+            return code, "no_operator_target_found"
+        pattern, replacement, name = rng.choice(valid)
+        mutated = re.sub(pattern, replacement, code, count=1)
+        if mutated != code:
+            return mutated, f"operator_swap_{name}"
+        return code, "no_operator_target_found"
