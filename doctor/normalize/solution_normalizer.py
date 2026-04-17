@@ -21,34 +21,89 @@ import re
 from typing import Optional, Callable, Dict, Any
 
 
+class NormalizationError(ValueError):
+    """Raised when solution code contains unsupported constructs."""
+    pass
+
+
+SUPPORTED_TYPES = frozenset({
+    'int', 'float', 'str', 'bool', 'list', 'dict', 'set', 'tuple',
+    'ListNode',
+})
+
+
 class SolutionNormalizer:
     """
     Normalizes arbitrary GPT-generated Python code into a clean,
     executable standalone function.
+
+    Supported subset:
+    - Assignments, loops, conditionals, returns
+    - List comprehensions (simple)
+    - Basic arithmetic and comparison operators
+    - Named functions with positional args
+
+    Rejected constructs (hard fail):
+    - Walrus operator (:=)
+    - Complex default arguments (function calls, arithmetic in defaults)
+    - Type stubs, protocol classes
+    - Async functions, await expressions
     """
-    
+
+    UNSUPPORTED_PATTERNS = [
+        (re.compile(r':='), "walrus operator (:=)"),
+        (re.compile(r'async\s+def\b'), "async function"),
+        (re.compile(r'\bawait\s+'), "await expression"),
+        (re.compile(r'@overload\b'), "type overload decorator"),
+        (re.compile(r'@abstractmethod\b'), "abstract method"),
+        (re.compile(r'Protocol\b'), "Protocol class"),
+    ]
+
     def __init__(self):
         self.typing_imports = [
             'List', 'Dict', 'Tuple', 'Set', 'Optional', 'Any',
             'Union', 'Callable', 'Iterable', 'Iterator', 'Sequence',
             'Mapping', 'TypeVar', 'Generic', 'FrozenSet', 'Type'
         ]
-    
-    def normalize(self, code: str) -> str:
-        """
-        Main entry point. Transforms raw code into executable form.
-        
-        Pipeline:
-        1. Strip typing imports
-        2. Remove docstrings
-        3. Unwrap class Solution methods
-        4. Clean type hints from signatures
-        """
+
+    def normalize(self, code: str) -> Optional[str]:
+        """Main entry point. Returns normalized code or None if validation fails."""
+        self._validate_subset(code)
         code = self._strip_typing_imports(code)
         code = self._remove_docstrings(code)
         code = self._unwrap_solution_classes(code)
         code = self._clean_type_hints(code)
         return code
+
+    def _validate_subset(self, code: str) -> None:
+        """Check for unsupported constructs. Raises NormalizationError on first match."""
+        for pattern, description in self.UNSUPPORTED_PATTERNS:
+            if pattern.search(code):
+                raise NormalizationError(
+                    f"Unsupported construct: {description}. "
+                    f"Pattern: {pattern.pattern}"
+                )
+
+        try:
+            tree = ast.parse(code)
+        except SyntaxError as e:
+            raise NormalizationError(f"Syntax error: {e}")
+
+        for node in ast.walk(tree):
+            if isinstance(node, ast.FunctionDef):
+                for default in node.args.defaults:
+                    if self._is_complex_default(default):
+                        raise NormalizationError(
+                            f"Unsupported default argument: complex expression in function "
+                            f"'{node.name}' parameter default"
+                        )
+
+    def _is_complex_default(self, node: ast.AST) -> bool:
+        """True if default arg involves function calls or arithmetic."""
+        for child in ast.walk(node):
+            if isinstance(child, ast.Call):
+                return True
+        return False
     
     def _strip_typing_imports(self, code: str) -> str:
         """Remove 'from typing import' statements."""
@@ -170,16 +225,23 @@ class SolutionNormalizer:
             return code
 
 
-def normalize_solution(code: str) -> str:
+def normalize_solution(code: str) -> Optional[str]:
     """
     Standalone function for normalizing solution code.
-    
+
+    Returns normalized code, or None if validation fails.
+
     Usage:
         normalized = normalize_solution(raw_gpt_code)
+        if normalized is None:
+            return None
         func = extract_function(normalized)
     """
-    normalizer = SolutionNormalizer()
-    return normalizer.normalize(code)
+    try:
+        normalizer = SolutionNormalizer()
+        return normalizer.normalize(code)
+    except NormalizationError:
+        return None
 
 
 def extract_function(code: str, problem_name: str = None) -> Optional[Callable]:

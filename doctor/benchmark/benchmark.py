@@ -18,7 +18,9 @@ from typing import Any, Dict, List, Optional
 
 from doctor.adversarial.mutation_engine import MutationEngine
 from doctor.adversarial.adversarial_generator import AdversarialGenerator
-from doctor.adversarial.mutation_evaluator import _run_solution, _filter_effective_mutations
+from doctor.adversarial.mutation_evaluator import (
+    _run_solution, _filter_effective_mutations, ExecutionState,
+)
 from doctor.registry.problem_registry import get_problems, get_test_cases
 
 
@@ -91,23 +93,25 @@ def run_benchmark() -> List[ProblemBenchmark]:
         engine = MutationEngine(key, num_variants_per_class=3)
         raw_mutations = engine.generate_all(ref_code)
         canonical = [tuple(tc["input"]) for tc in tcs]
-        mutations = _filter_effective_mutations(ref_code, raw_mutations, canonical)
+        mutations, _ = _filter_effective_mutations(ref_code, raw_mutations, canonical)
 
-        ref_rate = _run_solution(ref_code, tcs)
+        ref_result = _run_solution(ref_code, tcs)
 
         mutations_killed = 0
         breakdown = {}
         for m in mutations:
-            m_rate = _run_solution(m.mutated_code, tcs)
-            killed = m_rate < 1.0
+            m_result = _run_solution(m.mutated_code, tcs)
+            killed = m_result.state != ExecutionState.OK
             if killed:
                 mutations_killed += 1
             cls = m.mutation_class
             if cls not in breakdown:
-                breakdown[cls] = {"total": 0, "killed": 0}
+                breakdown[cls] = {"total": 0, "killed": 0, "by_state": {}}
             breakdown[cls]["total"] += 1
             if killed:
                 breakdown[cls]["killed"] += 1
+            breakdown[cls]["by_state"][m_result.state.value] = \
+                breakdown[cls]["by_state"].get(m_result.state.value, 0) + 1
 
         kill_rate = mutations_killed / len(mutations) if mutations else 0.0
 
@@ -123,7 +127,7 @@ def run_benchmark() -> List[ProblemBenchmark]:
             display_name=display_name,
             difficulty=difficulty,
             test_count=len(tcs),
-            ref_passes=ref_rate == 1.0,
+            ref_passes=ref_result.state == ExecutionState.OK,
             mutation_count=len(mutations),
             mutations_killed=mutations_killed,
             kill_rate=kill_rate,

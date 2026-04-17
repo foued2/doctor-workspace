@@ -115,31 +115,26 @@ def _build_test_suites() -> Dict[str, List[TestCase]]:
 def _to_test_input(raw_input, problem_key: str):
     """Convert a JSON-serialized test input to executable form.
 
-    run_test_with_trace calls func(*input_data), so input_data must be
-    an iterable where each element is one function argument.
+    The registry always wraps function arguments in a JSON list.
+    This function unwraps that list into positional arguments.
 
-    Registry format: inputs are always wrapped in a JSON list, e.g.
-      two_sum:      [[2,7,11,15], 9]     → ((2,7,11,15), 9)
-      three_sum:    [[-1,0,1,2,-1,-4]]   → ((-1,0,1,2,-1,-4),)
-      merge:        [[[1,2],[3,4]]]       → ([ListNode, ListNode],) [special]
-      gen_parens:   [[3]]                 → ((3,),)
+    Convention: the registry input format is always:
+      [arg1, arg2, ...]  →  (arg1, arg2, ...) for func(*args)
 
-    Special case: merge_two_sorted_lists converts list elements to ListNodes
-    and returns a plain list (not tuple) so the two ListNodes are unpacked
-    as separate arguments.
+    Special cases:
+      merge_two_sorted_lists: converts list elements to ListNodes, returns
+        plain list so each is unpacked as a separate arg. Returns [L, L].
+
+    All other problems: convert the registry list to a tuple of args.
     """
     if problem_key == "merge_two_sorted_lists" and isinstance(raw_input, list):
         return [_maybe_list_to_listnode(x) if isinstance(x, list) else x for x in raw_input]
 
     if isinstance(raw_input, list):
-        processed = tuple(_to_test_input(x, problem_key) for x in raw_input)
-        if len(processed) == 1:
-            first = processed[0]
-            if isinstance(first, (tuple, list)):
-                return (first,)
-            return (first,)
-        return processed
-    return raw_input
+        if len(raw_input) == 1:
+            return (raw_input[0],)
+        return tuple(raw_input)
+    return (raw_input,)
 
 
 def _maybe_list_to_listnode(obj):

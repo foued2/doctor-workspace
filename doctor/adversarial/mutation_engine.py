@@ -32,25 +32,32 @@ class MutationResult:
     description: str
 
 
-MUTATION_CLASSES = [
-    "boundary_weakness",
-    "control_compression",
-    "state_corruption",
-    "precision_degradation",
-    "input_interpretation_drift",
-    "arithmetic_perturbation",
-    "sign_flip",
-    "coefficient_scaling",
-    "range_boundary_shift",
-    "operator_substitution",
-]
+MUTATION_CLASSES: List[str] = []
+_MUTATORS: Dict[str, Any] = {}
+
+
+def _init_mutators():
+    global MUTATION_CLASSES, _MUTATORS
+    _MUTATORS = {
+        "boundary_weakness": _BoundaryWeakness(),
+        "control_compression": _ControlCompression(),
+        "state_corruption": _StateCorruption(),
+        "precision_degradation": _PrecisionDegradation(),
+        "input_interpretation_drift": _InputInterpretationDrift(),
+        "arithmetic_perturbation": _ArithmeticPerturbation(),
+        "sign_flip": _SignFlip(),
+        "coefficient_scaling": _CoefficientScaling(),
+        "range_boundary_shift": _RangeBoundaryShift(),
+        "operator_substitution": _OperatorSubstitution(),
+    }
+    MUTATION_CLASSES = list(_MUTATORS.keys())
 
 
 class MutationEngine:
     def __init__(self, problem_id: str, num_variants_per_class: int = 3):
         self.problem_id = problem_id
         self.num_variants = num_variants_per_class
-        self._mutators = _build_mutators()
+        self._mutators = _MUTATORS
 
     def _seed(self, mutation_class: str, variant: int) -> random.Random:
         seed_str = f"{self.problem_id}:{mutation_class}:{variant}"
@@ -199,7 +206,8 @@ class _InputInterpretationDrift:
 
 
 def _build_mutators() -> Dict[str, Any]:
-    return {
+    global MUTATION_CLASSES
+    mutators = {
         "boundary_weakness": _BoundaryWeakness(),
         "control_compression": _ControlCompression(),
         "state_corruption": _StateCorruption(),
@@ -211,6 +219,8 @@ def _build_mutators() -> Dict[str, Any]:
         "range_boundary_shift": _RangeBoundaryShift(),
         "operator_substitution": _OperatorSubstitution(),
     }
+    MUTATION_CLASSES = list(mutators.keys())
+    return mutators
 
 
 class _ArithmeticPerturbation:
@@ -364,4 +374,6 @@ class _OperatorSubstitution:
         mutated = re.sub(pattern, replacement, code, count=1)
         if mutated != code:
             return mutated, f"operator_swap_{name}"
-        return code, "no_operator_target_found"
+
+
+_init_mutators()
