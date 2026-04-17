@@ -239,25 +239,52 @@ class _ArithmeticPerturbation:
 
 
 class _SignFlip:
-    """Negate return values or intermediate arithmetic terms."""
+    """Negate return values. Targets only the final nominal return, skipping literals and guard clauses."""
 
     def apply(self, code: str, rng: random.Random) -> Tuple[str, str]:
-        mutations = [
-            (r'return\s+(-?\d+)', lambda m: 'return ' + str(-int(m.group(1))), 'negate_literal_return'),
-            (r'return\s+(\w+)', lambda m: f'return -{m.group(1)}', 'negate_var_return'),
-            (r'rev\s*=\s*rev\s*\*\s*10', 'rev = rev * 10', 'drop_sign_flip'),
-        ]
-        for pattern, replacement, name in mutations:
-            if callable(replacement):
-                if re.search(pattern, code):
-                    mutated = re.sub(pattern, replacement, code, count=1)
-                    if mutated != code:
-                        return mutated, f"sign_flip_{name}"
-            else:
-                if re.search(pattern, code):
-                    mutated = re.sub(pattern, replacement, code, count=1)
-                    if mutated != code:
-                        return mutated, f"sign_flip_{name}"
+        lines = code.split('\n')
+        candidates = []
+
+        for i, line in enumerate(lines):
+            stripped = line.lstrip()
+            m = re.match(r'^(\s*)return\s+(.+)', stripped)
+            if not m:
+                continue
+            expr = m.group(2).strip()
+            if expr.lstrip('-').isdigit():
+                continue
+            if self._is_guard_return(lines, i):
+                continue
+            candidates.append((i, expr))
+
+        if not candidates:
+            return code, "no_sign_target_found"
+
+        chosen_idx, expr = rng.choice(candidates)
+        return self._negate_return_expr(code, chosen_idx, expr)
+
+    def _is_guard_return(self, lines: list, line_idx: int) -> bool:
+        if line_idx == 0:
+            return False
+        prev = lines[line_idx - 1].rstrip()
+        prev_stripped = prev.lstrip()
+        curr_indent = len(lines[line_idx]) - len(lines[line_idx].lstrip())
+        prev_indent = len(prev) - len(prev_stripped)
+        if prev_indent >= curr_indent:
+            return False
+        if prev_stripped.startswith('if ') or prev_stripped.startswith('elif '):
+            return True
+        return False
+
+    def _negate_return_expr(self, code: str, line_idx: int, expr: str) -> Tuple[str, str]:
+        lines = code.split('\n')
+        orig = lines[line_idx]
+        leading = len(orig) - len(orig.lstrip())
+        negated = f'-({expr})' if not expr.startswith('-') else expr[1:]
+        lines[line_idx] = ' ' * leading + f'return {negated}'
+        mutated = '\n'.join(lines)
+        if mutated != code:
+            return mutated, f"negated_return_expr"
         return code, "no_sign_target_found"
 
 

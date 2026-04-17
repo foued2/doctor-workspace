@@ -18,7 +18,7 @@ from typing import Any, Dict, List, Optional
 
 from doctor.adversarial.mutation_engine import MutationEngine
 from doctor.adversarial.adversarial_generator import AdversarialGenerator
-from doctor.adversarial.mutation_evaluator import _run_solution
+from doctor.adversarial.mutation_evaluator import _run_solution, _filter_effective_mutations
 from doctor.registry.problem_registry import get_problems, get_test_cases
 
 
@@ -41,6 +41,7 @@ class ProblemBenchmark:
     kill_rate: float
     mutation_breakdown: Dict[str, dict]
     adversarial_count: int
+    raw_mutation_count: int = 0
     notes: str = ""
 
 
@@ -88,7 +89,9 @@ def run_benchmark() -> List[ProblemBenchmark]:
             continue
 
         engine = MutationEngine(key, num_variants_per_class=3)
-        mutations = engine.generate_all(ref_code)
+        raw_mutations = engine.generate_all(ref_code)
+        canonical = [tuple(tc["input"]) for tc in tcs]
+        mutations = _filter_effective_mutations(ref_code, raw_mutations, canonical)
 
         ref_rate = _run_solution(ref_code, tcs)
 
@@ -126,6 +129,7 @@ def run_benchmark() -> List[ProblemBenchmark]:
             kill_rate=kill_rate,
             mutation_breakdown=breakdown,
             adversarial_count=adv_count,
+            raw_mutation_count=len(raw_mutations),
         ))
 
     return results
@@ -137,12 +141,19 @@ def format_benchmark(results: List[ProblemBenchmark]) -> str:
         "DOCTOR BENCHMARK — Test Suite Robustness Under Mutation Analysis",
         "=" * 80,
         "",
-        f"{'Problem':<35} {'Diff':<8} {'Tests':<6} {'Mutagen':<6} {'Killed':<7} {'Kill%':<7} {'Ref':<5} {'Notes'}",
+        f"{'Problem':<35} {'Diff':<8} {'Tests':<6} {'Mutagen':<8} {'Kill%':<7} {'Ref':<5} {'Notes'}",
         "-" * 80,
     ]
 
     for r in sorted(results, key=lambda x: x.kill_rate):
-        mut_str = f"{r.mutations_killed}/{r.mutation_count}" if r.mutation_count > 0 else "n/a"
+        if r.mutation_count > 0:
+            red = r.raw_mutation_count - r.mutation_count
+            if red > 0:
+                mut_str = f"{r.mutations_killed}/{r.mutation_count}({r.raw_mutation_count})"
+            else:
+                mut_str = f"{r.mutations_killed}/{r.mutation_count}"
+        else:
+            mut_str = "n/a"
         ref_str = "PASS" if r.ref_passes else "FAIL"
         pct = f"{r.kill_rate:.0%}" if r.mutation_count > 0 else "n/a"
         note = r.notes if r.notes else ""
