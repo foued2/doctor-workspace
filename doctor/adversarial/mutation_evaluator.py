@@ -58,6 +58,18 @@ def evaluate_suite_strength(
     A high kill rate means the test suite catches most mutations.
     A low kill rate means the test suite is shallow.
     """
+    if not reference_code:
+        return SuiteStrengthReport(
+            problem_id=problem_id,
+            reference_pass=False,
+            mutation_count=0,
+            mutations_killed=0,
+            mutation_kill_rate=0.0,
+            adversarial_count=0,
+            strength_score=0.0,
+            details={"mutation_classes": [], "mutation_breakdown": {}},
+        )
+
     mutation_engine = MutationEngine(problem_id, num_variants_per_class=3)
     adversarial_gen = AdversarialGenerator(problem_id, function_signature, difficulty)
 
