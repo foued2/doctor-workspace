@@ -1,115 +1,111 @@
-# Doctor Workspace - Session State (Updated 2026-04-16)
+# Doctor Workspace - Session State (Updated 2026-04-17)
 
-## Goal
+## Current Goal
 
-Complete Option A pipeline audit, dead code deletion, and test suite expansion.
+Stabilization Phase: Make Doctor reliably runnable so problem-solving dominates activity.
+Target: ~60-70% problem reasoning (vs ~5% before).
 
-## Option A Pipeline (FINAL)
+## Tier 1-2 Stabilization (COMPLETED)
+
+### Priority 1 — Execution Contract ✅
+
+| File | Changes |
+|------|---------|
+| `doctor/adversarial/mutation_evaluator.py` | `ExecutionState` enum (OK/WRONG/TIMEOUT/ERROR). Every evaluation returns exactly one state. `ExecutionResult` (frozen), `ExecutionSummary` (structured). |
+
+Guarantee: No `None` returns. No mixed states. Clear `is_ok/is_wrong/is_timeout/is_error` methods.
+
+### Priority 2 — Normalizer Subset Enforcement ✅
+
+| File | Changes |
+|------|---------|
+| `doctor/normalize/solution_normalizer.py` | `NormalizationError` on unsupported constructs. Validates BEFORE transformation (fast fail). Rejects walrus `:=`, async/await, `@overload`, Protocol classes, complex default args. |
+
+### Priority 3 — `_to_test_input` Cleanup ✅
+
+| File | Changes |
+|------|---------|
+| `doctor/core/test_executor.py` | Removed recursive calls. Simple explicit logic. Special case only for `merge_two_sorted_lists` (ListNode conversion). |
+
+### Priority 4 — Mutation Preflight ✅
+
+Filters applied in `_filter_effective_mutations`:
+1. **DISCARD** if times out on ALL canonical inputs (infinite loop)
+2. **DISCARD** if output identical to reference on ALL inputs (no-op)
+3. **DEDUPLICATE** by output signature → keep first representative
+
+### Priority 5 — Auto-Registration ✅
+
+| File | Changes |
+|------|---------|
+| `doctor/adversarial/mutation_engine.py` | `MUTATION_CLASSES` derived from `_init_mutators()` keys. `_init_mutators()` called at module load. No hardcoded list. |
+
+Adding a new mutator class is now sufficient. No separate list to update.
+
+### Priority 6 — Mutation Result Classification ✅
+
+Breakdown includes `by_state` dict: OK/WRONG/TIMEOUT/ERROR counts per class.
+
+### Priority 7 — Full Failure Mapping ✅
+
+`ExecutionSummary.failing_tests`: list of `{label, input, expected, failure_state, got}` for every failed test case.
+
+### Priority 9 — Metric Clarity ✅
+
+Benchmark shows `effective/raw` per problem (e.g., `6/12` = 6 effective of 12 raw).
+Format report shows explicit redundancy percentage.
+
+## Benchmark Results (Final)
+
+```
+Problems:              32
+With references:       11
+Raw mutations:        106
+Effective mutations:   34
+Duplication rate:     68%
+Average kill rate:   100%
+```
+
+| Problem                     | Eff/Raw | Kill% |
+|----------------------------|---------|-------|
+| Multiples of 3 and 5      | 6/12    | 100%  |
+| Even Fibonacci Numbers      | 3/9     | 100%  |
+| Largest Prime Factor       | 2/6     | 100%  |
+| Generate Parentheses       | 4/14    | 100%  |
+| 3Sum                      | 7/19    | 100%  |
+| N-Queens                  | 3/11    | 100%  |
+
+## Remaining Pain Points
+
+1. **Test contribution = 0 for all tests** — suite has redundancy but we don't know which tests cover the same failure modes
+2. **Mutation classes are domain-specific** — `arithmetic_perturbation` fires 0 effective mutations (always no-ops after filter)
+3. **No systematic test design** — inputs chosen manually, no bug-pattern-to-test mapping
+4. **No pipeline command** — running ingest → benchmark → report requires separate steps
+
+## Tier 3 Visibility (NEXT — Not Started)
+
+- Priority 7: Pipeline command (`python -m doctor.pipeline --problem euler_3`)
+- Priority 8: Failure clustering ("mutations A,B,C all fail on prime inputs")
+- Priority 11: Test suite intelligence (detect redundant tests, suggest missing cases)
+
+## Tier 4 Controlled Improvements (Future)
+
+- Priority 10: Mutation context awareness (loop/return/arithmetic restrictions)
+- Priority 11: Test suite design tool (auto-generate from bug patterns)
+
+## Key Files
 
 | Component | File | Status |
 |-----------|------|--------|
-| Solution Normalizer | `doctor/solution_normalizer.py` | ✅ Validated (6/6 tests pass) |
-| Test Executor | `doctor/test_executor.py` | ✅ 29 problems, 10+ test cases each |
-| Evidence Strength | `doctor/evidence.py` | ✅ Pure execution metrics only |
-| Trust Classifier | `doctor/trust.py` | ✅ No pre-oracle features |
-| Problem Ingestion | `doctor/ingestion.py` | ✅ Schema/validation logic (KEEP) |
+| Normalizer | `doctor/normalize/solution_normalizer.py` | ✅ Hardened with subset validation |
+| Test Executor | `doctor/core/test_executor.py` | ✅ `_to_test_input` simplified |
+| Mutation Engine | `doctor/adversarial/mutation_engine.py` | ✅ Auto-registration, sign_flip fixed |
+| Mutation Evaluator | `doctor/adversarial/mutation_evaluator.py` | ✅ Execution contract, prefilters, failure mapping |
+| Benchmark | `doctor/benchmark/benchmark.py` | ✅ Uses ExecutionState, shows eff/raw |
+| Registry | `doctor/registry/problem_registry.json` | 32 problems, 11 with references |
 
-## Audit Results (2026-04-16)
+## Commits (This Session)
 
-| Step | Description | Status |
-|------|-------------|--------|
-| 1 | trust.py audit | ✅ Clean - no pre-oracle features |
-| 2 | evidence.py audit | ✅ Pure execution - formula documented |
-| 3 | normalizer tests | ✅ 6/6 PASS |
-| 4 | pipeline test (5 problems) | ✅ All E=1 |
-| 5 | gap analysis | ✅ Documented: no automated problem addition |
-| 6 | dead code deletion | ✅ 33 files deleted |
-| 7 | test suite expansion | ✅ Two Sum 5→10, Trap 5→10 |
-
-## Pipeline Results (Final - v2)
-
-```
-Problem                        | E |    e | tests | trust_type                  | risk
-Two Sum                       | 1 | 1.000 | 10/10 | aligned_confident_correct  | LOW
-Valid Parentheses             | 1 | 0.820 |  7/7  | aligned_confident_correct  | LOW
-Longest Palindromic Substring| 1 | 0.880 |  8/8  | aligned_confident_correct  | LOW
-Trapping Rain Water          | 1 | 1.000 | 10/10 | aligned_confident_correct  | LOW
-N-Queens                     | 1 | 0.940 |  9/9  | aligned_confident_correct  | LOW
-```
-
-## Ollama Status
-
-- **Port:** 11434 (fixed via `OLLAMA_HOST=127.0.0.1:11434`)
-- **GPU:** NVIDIA GTX 780 (3GB) - running CPU-only
-- **Models:** phi3:latest, mistral:latest
-- **Issue:** phi3 returns confidence=1.00 always (no logprobs) - Classification: Conceptual
-- **Version:** 0.20.7
-
-## Gap Documented
-
-**Adding a new problem requires manual edits to:**
-1. `doctor/test_executor.py` - Add to TEST_SUITES and PROBLEM_KEY_MAP
-2. `doctor/solution_normalizer.py` - Add to PROBLEM_FUNCTION_MAP
-
-No automated ingestion system. System cannot self-extend.
-
-## Dead Code Deleted (33 files)
-
-**Tests (22):**
-pre_oracle_validation.py, statistical_evaluation.py, phase2_validation*.py,
-confidence_validation.py, L3_stability*.py, mismatch_experiment.py,
-run_delta*.py, run_phi3_delta.py, run_e2e*.py, run_trace_first.py,
-analyze_delta_results.py, run_offline_analysis.py, stress_test_trust.py,
-verify_measurement_validity.py, confidence_calibration_experiment.py,
-verify_code_only_baseline.py, test_reproducibility.py
-
-**Doctor (8):**
-mutation_trace.py, llm_doctor.py, code_analyzer.py, layer1_ai.py,
-s_measurement.py, s_efficiency.py, delta_experiment.py, undefined_detection.py
-
-**Documentation (5):**
-mutation_grammar_spec.md, mutation_trace_schema.md, statistical_interpretation.md,
-discussion_feedback_loop.md, session_state_202604*.md
-
-## Files Retained
-
-**Core Option A:**
-- `doctor/test_executor.py`
-- `doctor/evidence.py`
-- `doctor/trust.py`
-- `doctor/solution_normalizer.py`
-
-**Option A Supporting:**
-- `doctor/ingestion.py` (schema/validation)
-- `doctor/output_validators.py` (in use)
-- `doctor/doctor_grader.py` (in use)
-- `doctor/confidence_calibrator.py` (in use)
-- `doctor/execution_trace.py` (in use)
-- `doctor/__init__.py` (updated for Option A only)
-
-## Scratch Artifacts
-
-- https://raw.githubusercontent.com/foued2/doctor-workspace/main/scratch/step1_trust_audit.txt
-- https://raw.githubusercontent.com/foued2/doctor-workspace/main/scratch/step2_evidence_audit.txt
-- https://raw.githubusercontent.com/foued2/doctor-workspace/main/scratch/step3_normalizer_results.txt
-- https://raw.githubusercontent.com/foued2/doctor-workspace/main/scratch/step4_pipeline_results.txt
-- https://raw.githubusercontent.com/foued2/doctor-workspace/main/scratch/step4_pipeline_results_v2.txt
-- https://raw.githubusercontent.com/foued2/doctor-workspace/main/scratch/step5_gap_analysis.txt
-- https://raw.githubusercontent.com/foued2/doctor-workspace/main/scratch/step6_dead_code.txt
-
-## Historical Findings (Preserved)
-
-### Pre-Oracle Validation (2026-04-15)
-- trust_pre correlation with E: -0.430 (NEGATIVE)
-- Token count correlation: 0.813 (9x better)
-- Complexity correlation: 0.745 (9x better)
-
-### Residual Orthogonalization (2026-04-15)
-```
-corr(trust_pre, E) = -0.6864
-corr(trust_pre, residuals) = -0.0396
-Variance reduction: 94%
-VERDICT: FULLY REDUNDANT
-```
-
-**Conclusion:** trust.py is NOT a confidence model. It is a syntactic difficulty proxy. Hypothesis space exhausted.
+- `bbb3cc1`: Add timeout protection, fix precision_degradation infinite loop, add euler_2 and euler_3
+- `89858c0`: Semantic mutation filtering, deduplication, test contribution analysis
+- `64df1a3`: Tier 1-2 Stabilization: execution contract, normalizer hardening, auto-registration
