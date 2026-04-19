@@ -74,13 +74,15 @@ def build_registry_context(problems: Dict[str, Dict]) -> str:
 
 _MATCH_PROMPT = """You are a registry matcher for algorithmic problems.
 
-RULES:
-1. If input structure and output format clearly match sample test cases, MATCH
-2. Be lenient when inputs and outputs are the same type
-3. Only reject when clearly different (different data structures)
+STRICT RULES - REJECTION CONTRACT:
+1. Match ONLY if input_type, output_type, AND objective ALL align explicitly with registry
+2. Similarity alone is NOT sufficient
+3. When in doubt, return no match
+4. Reject if objective differs even when input/output types match
+5. Ambiguous formulations must reject, NOT guess
 
 OUTPUT FORMAT (match):
-{{"match": "problem_id", "justification": "why this matches"}}
+{{"match": "problem_id", "justification": "why this matches - cite all three: input_type, output_type, objective"}}
 
 OUTPUT FORMAT (no match):
 {{"match": "no match", "justification": "why this does not match"}}
@@ -99,7 +101,7 @@ PARSED MODEL TO MATCH:
 - constraints: {constraints}
 - edge_conditions: {edge_conditions}
 
-Match if input/output structure aligns with registry samples. Output ONLY JSON:"""
+Match ONLY if all three (input_type, output_type, objective) align. Output ONLY JSON:"""
 
 
 def match_to_registry(model: Dict) -> Tuple[Optional[str], str]:
