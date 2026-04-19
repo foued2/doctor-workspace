@@ -9,6 +9,7 @@ import os
 import json
 import shutil
 from pathlib import Path
+from datetime import datetime
 
 os.environ['GROQ_API_KEY'] = os.environ.get('GROQ_API_KEY', '')
 
@@ -148,5 +149,4 @@ def main():
 
 
 if __name__ == "__main__":
-    from datetime import datetime
     main()
