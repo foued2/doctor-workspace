@@ -1,0 +1,66 @@
+COLD TEST PACK - 15 Manual Cases
+No API calls - runs when quota resets
+
+==========================================
+CATEGORY 1: PARAPHRASED VARIANTS
+(Same problem, different wording - matcher must hit correct registry entry)
+==========================================
+
+[1] PARAPHRASE_TWO_SUM_ALPHA
+Given an array of numbers and a target value k, find the indices of two elements that add up to k. Return them as a list. Assume exactly one solution exists.
+
+[2] PARAPHRASE_TWO_SUM_BETA
+You have a collection of integers and a goal sum. Return the positions of the two numbers that together equal the goal.
+
+[3] PARAPHRASE_LONGEST_PREFIX
+Take multiple strings and find their longest common prefix. If no common prefix exists, return an empty string.
+
+[4] PARAPHRASE_VALID_PARENS
+Check whether a string of brackets (parentheses, braces, brackets) is properly balanced. Return true if every opening bracket has a matching closing bracket in the correct order.
+
+[5] PARAPHRASE_MERGE_LISTS
+Combine two sorted linked lists into a single sorted linked list. Return the head of the merged list.
+
+==========================================
+CATEGORY 2: AMBIGUOUS FORMULATIONS
+(Could map to multiple problems - matcher must reject or ask clarification)
+==========================================
+
+[6] AMBIG_SHORTEST_PATH
+Find the shortest path from start to end. No grid or graph structure specified.
+
+[7] AMBIG_MAX_ELEMENT
+Find the maximum element in a data structure. No indication whether it's an array, BST, or heap.
+
+[8] AMBIG_FIND_PAIRS
+Find all pairs of elements that satisfy a condition. Unclear whether sum, difference, or product.
+
+[9] AMBIG_SORTED_OUTPUT
+Return a sorted version of the input. No algorithm specified (merge sort, quick sort, heap sort?).
+
+[10] AMBIG_TRAVERSE
+Traverse the nodes in the data structure. Could be depth-first or breadth-first.
+
+==========================================
+CATEGORY 3: STRUCTURALLY SIMILAR, DIFFERENT
+(Similar input/output, different objective - matcher must distinguish)
+==========================================
+
+[11] SIMILAR_MAX_SUM_VS_PRODUCT
+Find the contiguous subarray with the maximum sum. (vs maximum PRODUCT would be different)
+
+[12] SIMILAR_TWO_SUM_VS_THREE_SUM
+Find three numbers in the array that add up to zero. (vs Two Sum - same structure, different count)
+
+[13] SIMILAR_CLIMBING_WAYS_VS_COST
+Find the number of ways to reach the top. (vs Min Cost Climbing Stairs - both ask for minimal/optimal)
+
+[14] SIMILAR_LIS_VS_LCS
+Find the longest increasing subsequence. (vs Longest Common Subsequence - similar DP pattern)
+
+[15] SIMILAR_DFS_VS_BFS_TRAVERSAL
+Traverse the tree below:
+    1
+   / \
+  2   3
+(Identical input structure, fundamentally different algorithms)
