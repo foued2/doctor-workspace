@@ -116,9 +116,11 @@ def main():
         
         results.append({
             "case": case_id,
+            "statement": statement,  # Full input
             "status": "success",
-            "parsed": parse_ok,
+            "parsed_model": model,  # Full parser output
             "matched": match_id,
+            "justification": justification,  # Matcher reasoning
             "expected": expected_match,
             "expected_type": expected_type,
             "correct": correct,
