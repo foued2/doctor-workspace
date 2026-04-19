@@ -7,19 +7,19 @@ CATEGORY 1: PARAPHRASED VARIANTS
 ==========================================
 
 [1] PARAPHRASE_TWO_SUM_ALPHA
-Given an array of numbers and a target value k, find the indices of two elements that add up to k. Return them as a list. Assume exactly one solution exists.
+Given a list and a value, return the positions of a pair whose combination reaches the target. Only one such pair exists.
 
 [2] PARAPHRASE_TWO_SUM_BETA
-You have a collection of integers and a goal sum. Return the positions of the two numbers that together equal the goal.
+Input: numbers and a goal. Output: indices of two items that produce the goal when combined. No other pair works.
 
 [3] PARAPHRASE_LONGEST_PREFIX
-Take multiple strings and find their longest common prefix. If no common prefix exists, return an empty string.
+Given multiple text sequences, return the longest shared prefix appearing at the start of each. Empty string if nothing matches.
 
 [4] PARAPHRASE_VALID_PARENS
-Check whether a string of brackets (parentheses, braces, brackets) is properly balanced. Return true if every opening bracket has a matching closing bracket in the correct order.
+Verify that all opening delimiters have corresponding closing delimiters in the correct sequence. Return true/false.
 
 [5] PARAPHRASE_MERGE_LISTS
-Combine two sorted linked lists into a single sorted linked list. Return the head of the merged list.
+Join two sorted sequences into a single sorted result. Preserve the ordering.
 
 ==========================================
 CATEGORY 2: AMBIGUOUS FORMULATIONS
@@ -53,14 +53,15 @@ Find the contiguous subarray with the maximum sum. (vs maximum PRODUCT would be 
 Find three numbers in the array that add up to zero. (vs Two Sum - same structure, different count)
 
 [13] SIMILAR_CLIMBING_WAYS_VS_COST
-Find the number of ways to reach the top. (vs Min Cost Climbing Stairs - both ask for minimal/optimal)
+Find the number of ways to reach the top.
+EXPECTED: Match to climbing_stairs (count ways, not min cost). If matcher returns no match, that's also acceptable - ambiguity acknowledged.
 
 [14] SIMILAR_LIS_VS_LCS
 Find the longest increasing subsequence. (vs Longest Common Subsequence - similar DP pattern)
 
 [15] SIMILAR_DFS_VS_BFS_TRAVERSAL
-Traverse the tree below:
+Visit all nodes in the structure below:
     1
    / \
   2   3
-(Identical input structure, fundamentally different algorithms)
+EXPECTED: REJECT (algorithm not problem). This is a traversal METHOD, not a problem identity. Matcher should return "no match" or ask for clarification (DFS vs BFS?).
