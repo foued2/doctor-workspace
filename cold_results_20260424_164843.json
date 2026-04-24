@@ -1,0 +1,122 @@
+[
+  {
+    "case": "PARAPHRASE_TWO_SUM_ALPHA",
+    "status": "parse_error",
+    "expected": [
+      "two_sum",
+      "match"
+    ]
+  },
+  {
+    "case": "PARAPHRASE_TWO_SUM_BETA",
+    "status": "parse_error",
+    "expected": [
+      "two_sum",
+      "match"
+    ]
+  },
+  {
+    "case": "PARAPHRASE_LONGEST_PREFIX",
+    "status": "parse_error",
+    "expected": [
+      "longest_common_prefix",
+      "match"
+    ]
+  },
+  {
+    "case": "PARAPHRASE_VALID_PARENS",
+    "status": "parse_error",
+    "expected": [
+      "valid_parentheses",
+      "match"
+    ]
+  },
+  {
+    "case": "PARAPHRASE_MERGE_LISTS",
+    "status": "parse_error",
+    "expected": [
+      "merge_two_sorted_lists",
+      "match"
+    ]
+  },
+  {
+    "case": "AMBIG_SHORTEST_PATH",
+    "status": "parse_error",
+    "expected": [
+      null,
+      "reject"
+    ]
+  },
+  {
+    "case": "AMBIG_MAX_ELEMENT",
+    "status": "parse_error",
+    "expected": [
+      null,
+      "reject"
+    ]
+  },
+  {
+    "case": "AMBIG_FIND_PAIRS",
+    "status": "parse_error",
+    "expected": [
+      null,
+      "reject"
+    ]
+  },
+  {
+    "case": "AMBIG_SORTED_OUTPUT",
+    "status": "parse_error",
+    "expected": [
+      null,
+      "reject"
+    ]
+  },
+  {
+    "case": "AMBIG_TRAVERSE",
+    "status": "parse_error",
+    "expected": [
+      null,
+      "reject"
+    ]
+  },
+  {
+    "case": "SIMILAR_MAX_SUM_VS_PRODUCT",
+    "status": "parse_error",
+    "expected": [
+      "max_subarray",
+      "match"
+    ]
+  },
+  {
+    "case": "SIMILAR_TWO_SUM_VS_THREE_SUM",
+    "status": "parse_error",
+    "expected": [
+      "three_sum",
+      "match"
+    ]
+  },
+  {
+    "case": "SIMILAR_CLIMBING_WAYS_VS_COST",
+    "status": "parse_error",
+    "expected": [
+      "climbing_stairs",
+      "match_or_reject"
+    ]
+  },
+  {
+    "case": "SIMILAR_LIS_VS_LCS",
+    "status": "parse_error",
+    "expected": [
+      "longest_increasing_subsequence",
+      "match"
+    ]
+  },
+  {
+    "case": "SIMILAR_DFS_VS_BFS_TRAVERSAL",
+    "status": "parse_error",
+    "expected": [
+      null,
+      "reject"
+    ]
+  }
+]
