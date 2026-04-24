@@ -1,0 +1,195 @@
+[
+  {
+    "case": "PARAPHRASE_TWO_SUM_ALPHA",
+    "statement": "Given a list and a value, return the positions of a pair whose combination reaches the target. Only one such pair exists.",
+    "status": "success",
+    "parsed_model": {
+      "input_type": "list, integer",
+      "output_type": "list of integers",
+      "objective": "Return the positions of a pair whose combination reaches the target",
+      "constraints": [
+        "1 <= len(list) <= infinity",
+        "exactly one solution",
+        "list contains integers"
+      ],
+      "edge_conditions": [
+        "empty list",
+        "single element",
+        "no solution exists"
+      ],
+      "_inferred": {
+        "input_type": false,
+        "output_type": false,
+        "constraints": true,
+        "edge_conditions": true,
+        "infer_confidence": "high"
+      }
+    },
+    "matched": "two_sum",
+    "justification": "The input_type is a list of integers, the output_type is a list of integers, and the objective is to return the positions of a pair whose combination reaches the target, which aligns with the two_sum problem in the registry.",
+    "expected": "two_sum",
+    "expected_type": "match",
+    "correct": true,
+    "verdict": "CORRECT"
+  },
+  {
+    "case": "PARAPHRASE_TWO_SUM_BETA",
+    "statement": "Input: numbers and a goal. Output: indices of two items that produce the goal when combined. No other pair works.",
+    "status": "success",
+    "parsed_model": {
+      "input_type": "list of numbers, target number",
+      "output_type": "list of indices",
+      "objective": "Find indices of two numbers that produce the goal when combined",
+      "constraints": [
+        "exactly one solution",
+        "2 <= len(numbers)"
+      ],
+      "edge_conditions": [
+        "empty list",
+        "single element",
+        "no solution exists"
+      ],
+      "_inferred": {
+        "input_type": false,
+        "output_type": false,
+        "constraints": true,
+        "edge_conditions": true,
+        "infer_confidence": "high"
+      }
+    },
+    "matched": "two_sum",
+    "justification": "The input_type is a list of numbers and a target number, the output_type is a list of indices, and the objective is to find the indices of two numbers that add up to the target number, which exactly matches the two_sum problem in the registry.",
+    "expected": "two_sum",
+    "expected_type": "match",
+    "correct": true,
+    "verdict": "CORRECT"
+  },
+  {
+    "case": "PARAPHRASE_LONGEST_PREFIX",
+    "statement": "Given multiple text sequences, return the longest shared prefix appearing at the start of each. Empty string if nothing matches.",
+    "status": "success",
+    "parsed_model": {
+      "input_type": "list of strings",
+      "output_type": "string",
+      "objective": "Find the longest shared prefix among multiple text sequences",
+      "constraints": [
+        "at least one sequence",
+        "sequences are non-empty strings"
+      ],
+      "edge_conditions": [
+        "empty list",
+        "single sequence",
+        "no common prefix"
+      ],
+      "_inferred": {
+        "input_type": false,
+        "output_type": false,
+        "constraints": true,
+        "edge_conditions": true,
+        "infer_confidence": "high"
+      }
+    },
+    "matched": "longest_common_prefix",
+    "justification": "The input_type is a list of strings, the output_type is a string, and the objective is to find the longest shared prefix among multiple text sequences, which aligns with the 'longest_common_prefix' problem in the registry.",
+    "expected": "longest_common_prefix",
+    "expected_type": "match",
+    "correct": true,
+    "verdict": "CORRECT"
+  },
+  {
+    "case": "PARAPHRASE_VALID_PARENS",
+    "status": "parse_error",
+    "expected": [
+      "valid_parentheses",
+      "match"
+    ]
+  },
+  {
+    "case": "PARAPHRASE_MERGE_LISTS",
+    "status": "parse_error",
+    "expected": [
+      "merge_two_sorted_lists",
+      "match"
+    ]
+  },
+  {
+    "case": "AMBIG_SHORTEST_PATH",
+    "status": "parse_error",
+    "expected": [
+      null,
+      "reject"
+    ]
+  },
+  {
+    "case": "AMBIG_MAX_ELEMENT",
+    "status": "parse_error",
+    "expected": [
+      null,
+      "reject"
+    ]
+  },
+  {
+    "case": "AMBIG_FIND_PAIRS",
+    "status": "parse_error",
+    "expected": [
+      null,
+      "reject"
+    ]
+  },
+  {
+    "case": "AMBIG_SORTED_OUTPUT",
+    "status": "parse_error",
+    "expected": [
+      null,
+      "reject"
+    ]
+  },
+  {
+    "case": "AMBIG_TRAVERSE",
+    "status": "parse_error",
+    "expected": [
+      null,
+      "reject"
+    ]
+  },
+  {
+    "case": "SIMILAR_MAX_SUM_VS_PRODUCT",
+    "status": "parse_error",
+    "expected": [
+      "max_subarray",
+      "match"
+    ]
+  },
+  {
+    "case": "SIMILAR_TWO_SUM_VS_THREE_SUM",
+    "status": "parse_error",
+    "expected": [
+      "three_sum",
+      "match"
+    ]
+  },
+  {
+    "case": "SIMILAR_CLIMBING_WAYS_VS_COST",
+    "status": "parse_error",
+    "expected": [
+      "climbing_stairs",
+      "match_or_reject"
+    ]
+  },
+  {
+    "case": "SIMILAR_LIS_VS_LCS",
+    "status": "parse_error",
+    "expected": [
+      "longest_increasing_subsequence",
+      "match"
+    ]
+  },
+  {
+    "case": "SIMILAR_DFS_VS_BFS_TRAVERSAL",
+    "status": "parse_error",
+    "expected": [
+      null,
+      "reject"
+    ]
+  }
+]
