@@ -1,0 +1,257 @@
+[
+  {
+    "case": "PARAPHRASE_TWO_SUM_ALPHA",
+    "statement": "Given a list and a value, return the positions of a pair whose combination reaches the target. Only one such pair exists.",
+    "status": "parse_error",
+    "expected": [
+      "two_sum",
+      "match"
+    ],
+    "gate_fired": "unknown",
+    "infer_confidence": "unknown",
+    "parse_retry_count": 1,
+    "expected_layer": "parser",
+    "observed_layer": "parser",
+    "layer_match": true,
+    "perturbation_type": "none"
+  },
+  {
+    "case": "PARAPHRASE_TWO_SUM_BETA",
+    "statement": "Input: numbers and a goal. Output: indices of two items that produce the goal when combined. No other pair works.",
+    "status": "parse_error",
+    "expected": [
+      "two_sum",
+      "match"
+    ],
+    "gate_fired": "unknown",
+    "infer_confidence": "unknown",
+    "parse_retry_count": 1,
+    "expected_layer": "parser",
+    "observed_layer": "parser",
+    "layer_match": true,
+    "perturbation_type": "none"
+  },
+  {
+    "case": "PARAPHRASE_LONGEST_PREFIX",
+    "statement": "Given multiple text sequences, return the longest shared prefix appearing at the start of each. Empty string if nothing matches.",
+    "status": "parse_error",
+    "expected": [
+      "longest_common_prefix",
+      "match"
+    ],
+    "gate_fired": "unknown",
+    "infer_confidence": "unknown",
+    "parse_retry_count": 1,
+    "expected_layer": "parser",
+    "observed_layer": "parser",
+    "layer_match": true,
+    "perturbation_type": "none"
+  },
+  {
+    "case": "PARAPHRASE_VALID_PARENS",
+    "statement": "Verify that all opening delimiters have corresponding closing delimiters in the correct sequence. Return true/false.",
+    "status": "parse_error",
+    "expected": [
+      "valid_parentheses",
+      "match"
+    ],
+    "gate_fired": "unknown",
+    "infer_confidence": "unknown",
+    "parse_retry_count": 1,
+    "expected_layer": "parser",
+    "observed_layer": "parser",
+    "layer_match": true,
+    "perturbation_type": "none"
+  },
+  {
+    "case": "PARAPHRASE_MERGE_LISTS",
+    "statement": "Join two sorted sequences into a single sorted result. Preserve the ordering.",
+    "status": "parse_error",
+    "expected": [
+      "merge_two_sorted_lists",
+      "match"
+    ],
+    "gate_fired": "unknown",
+    "infer_confidence": "unknown",
+    "parse_retry_count": 1,
+    "expected_layer": "parser",
+    "observed_layer": "parser",
+    "layer_match": true,
+    "perturbation_type": "none"
+  },
+  {
+    "case": "AMBIG_SHORTEST_PATH",
+    "statement": "Find the shortest path from start to end. No grid or graph structure specified.",
+    "status": "parse_error",
+    "expected": [
+      null,
+      "reject"
+    ],
+    "gate_fired": "unknown",
+    "infer_confidence": "unknown",
+    "parse_retry_count": 1,
+    "expected_layer": "parser",
+    "observed_layer": "parser",
+    "layer_match": true,
+    "perturbation_type": "none"
+  },
+  {
+    "case": "AMBIG_MAX_ELEMENT",
+    "statement": "Find the maximum element in a data structure. No indication whether it's an array, BST, or heap.",
+    "status": "parse_error",
+    "expected": [
+      null,
+      "reject"
+    ],
+    "gate_fired": "unknown",
+    "infer_confidence": "unknown",
+    "parse_retry_count": 1,
+    "expected_layer": "parser",
+    "observed_layer": "parser",
+    "layer_match": true,
+    "perturbation_type": "none"
+  },
+  {
+    "case": "AMBIG_FIND_PAIRS",
+    "statement": "Find all pairs of elements that satisfy a condition. Unclear whether sum, difference, or product.",
+    "status": "parse_error",
+    "expected": [
+      null,
+      "reject"
+    ],
+    "gate_fired": "unknown",
+    "infer_confidence": "unknown",
+    "parse_retry_count": 1,
+    "expected_layer": "parser",
+    "observed_layer": "parser",
+    "layer_match": true,
+    "perturbation_type": "none"
+  },
+  {
+    "case": "AMBIG_SORTED_OUTPUT",
+    "statement": "Return a sorted version of the input. No algorithm specified (merge sort, quick sort, heap sort?).",
+    "status": "parse_error",
+    "expected": [
+      null,
+      "reject"
+    ],
+    "gate_fired": "unknown",
+    "infer_confidence": "unknown",
+    "parse_retry_count": 1,
+    "expected_layer": "parser",
+    "observed_layer": "parser",
+    "layer_match": true,
+    "perturbation_type": "none"
+  },
+  {
+    "case": "AMBIG_TRAVERSE",
+    "statement": "Traverse the nodes in the data structure. Could be depth-first or breadth-first.",
+    "status": "parse_error",
+    "expected": [
+      null,
+      "reject"
+    ],
+    "gate_fired": "unknown",
+    "infer_confidence": "unknown",
+    "parse_retry_count": 1,
+    "expected_layer": "parser",
+    "observed_layer": "parser",
+    "layer_match": true,
+    "perturbation_type": "none"
+  },
+  {
+    "case": "SIMILAR_MAX_SUM_VS_PRODUCT",
+    "statement": "Find the contiguous subarray with the maximum sum. (vs maximum PRODUCT would be different)",
+    "status": "parse_error",
+    "expected": [
+      "max_subarray",
+      "match"
+    ],
+    "gate_fired": "unknown",
+    "infer_confidence": "unknown",
+    "parse_retry_count": 1,
+    "expected_layer": "parser",
+    "observed_layer": "parser",
+    "layer_match": true,
+    "perturbation_type": "none"
+  },
+  {
+    "case": "SIMILAR_TWO_SUM_VS_THREE_SUM",
+    "statement": "Find three numbers in the array that add up to zero. (vs Two Sum - same structure, different count)",
+    "status": "parse_error",
+    "expected": [
+      "three_sum",
+      "match"
+    ],
+    "gate_fired": "unknown",
+    "infer_confidence": "unknown",
+    "parse_retry_count": 1,
+    "expected_layer": "parser",
+    "observed_layer": "parser",
+    "layer_match": true,
+    "perturbation_type": "none"
+  },
+  {
+    "case": "SIMILAR_CLIMBING_WAYS_VS_COST",
+    "statement": "Find the number of ways to reach the top.",
+    "status": "parse_error",
+    "expected": [
+      "climbing_stairs",
+      "match_or_reject"
+    ],
+    "gate_fired": "unknown",
+    "infer_confidence": "unknown",
+    "parse_retry_count": 1,
+    "expected_layer": "parser",
+    "observed_layer": "parser",
+    "layer_match": true,
+    "perturbation_type": "none"
+  },
+  {
+    "case": "SIMILAR_LIS_VS_LCS",
+    "statement": "Find the longest increasing subsequence. (vs Longest Common Subsequence - similar DP pattern)",
+    "status": "parse_error",
+    "expected": [
+      "longest_increasing_subsequence",
+      "match"
+    ],
+    "gate_fired": "unknown",
+    "infer_confidence": "unknown",
+    "parse_retry_count": 1,
+    "expected_layer": "parser",
+    "observed_layer": "parser",
+    "layer_match": true,
+    "perturbation_type": "none"
+  },
+  {
+    "case": "SIMILAR_DFS_VS_BFS_TRAVERSAL",
+    "statement": "Visit all nodes in the structure below:\n    1\n   / \\\n  2   3",
+    "status": "parse_error",
+    "expected": [
+      null,
+      "reject"
+    ],
+    "gate_fired": "unknown",
+    "infer_confidence": "unknown",
+    "parse_retry_count": 1,
+    "expected_layer": "parser",
+    "observed_layer": "parser",
+    "layer_match": true,
+    "perturbation_type": "none"
+  },
+  {
+    "_summary": {
+      "timestamp": "20260424_171051",
+      "total": 15,
+      "parse_errors": 15,
+      "rejects": 0,
+      "accepted": 0,
+      "correct_accepts": 0,
+      "correct_rejects": 0,
+      "accepts_with_expected_reject": 0,
+      "reject_rate": 0.0,
+      "correctness_conditional_on_accept": 0,
+      "correctness_unconditional": 0.0
+    }
+  }
+]
