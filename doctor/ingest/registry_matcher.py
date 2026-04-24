@@ -18,6 +18,9 @@ import requests
 
 GROQ_API_KEY = os.environ.get("GROQ_API_KEY", "")
 GROQ_MODEL = os.environ.get("GROQ_MODEL", "llama-3.3-70b-versatile")
+GOOGLE_API_KEY = os.environ.get("GOOGLE_API_KEY", "")
+GOOGLE_MODEL = os.environ.get("GOOGLE_MODEL", "gemini-2.5-flash")
+PROVIDER = os.environ.get("LLM_PROVIDER", "groq")
 MAX_RETRIES = 5
 INITIAL_BACKOFF = 2
 
@@ -85,45 +88,49 @@ def _validate_objective_alignment(objective: str, match_id: str) -> Tuple[bool, 
     semantic_requirements = {
         "max_subarray": {
             "semantic_type": "optimization on contiguous array",
-            "positive_signals": ["sum", "maximum sum", "max sum", "contiguous"],
+            "positive_signals": ["sum", "maximum sum", "max sum", "contiguous", "subarray", "total"],
             "negative_signals": ["product", "multiplication", "maximum product", "max product"],
         },
         "longest_increasing_subsequence": {
             "semantic_type": "longest subsequence following order",
-            "positive_signals": ["increasing", "strictly increasing", "rising", "non-decreasing"],
+            "positive_signals": ["increasing", "strictly increasing", "rising", "non-decreasing", "subsequence", "consecutive"],
             "negative_signals": ["common", "lcs", "common subsequence", "matching"],
         },
     }
     
-    if match_id in semantic_requirements:
-        reqs = semantic_requirements[match_id]
-        
-        # Check for negative signals (strong rejection)
-        for neg in reqs.get("negative_signals", []):
-            if neg in obj_lower:
-                return False, f"Objective describes different problem: '{neg}'"
-        
-        # Check for positive signals (required for match)
-        has_positive = any(pos in obj_lower for pos in reqs.get("positive_signals", []))
-        if not has_positive and len(reqs.get("positive_signals", [])) > 0:
-            return False, f"Objective missing required semantic: {reqs['semantic_type']}"
+    if match_id not in semantic_requirements:
+        return True, "no semantic requirements defined"
+    
+    reqs = semantic_requirements[match_id]
+    
+    # Check for negative signals (strong rejection)
+    for neg in reqs.get("negative_signals", []):
+        if neg in obj_lower:
+            return False, f"Objective describes different problem: '{neg}'"
+    
+    # Check for positive signals (required for match)
+    has_positive = any(pos in obj_lower for pos in reqs.get("positive_signals", []))
+    if not has_positive and len(reqs.get("positive_signals", [])) > 0:
+        return False, f"Objective missing required semantic: {reqs['semantic_type']}"
     
     return True, "semantically aligned"
 
 
 def _call_llm_with_stats(prompt: str, retries: int = 0) -> Tuple[str, int]:
-    headers = {"Authorization": f"Bearer {GROQ_API_KEY}", "Content-Type": "application/json"}
-    payload = {
-        "model": GROQ_MODEL,
-        "messages": [{"role": "user", "content": prompt}],
-        "temperature": 0.1,
-        "max_tokens": 1000
-    }
+    if PROVIDER == "google" and GOOGLE_API_KEY:
+        url = f"https://generativelanguage.googleapis.com/v1beta/models/{GOOGLE_MODEL}:generateContent"
+        params = {"key": GOOGLE_API_KEY}
+        payload = {"contents": [{"parts": [{"text": prompt}]}], "generationConfig": {"temperature": 0.1, "maxOutputTokens": 1000}}
+        use_google = True
+    else:
+        headers = {"Authorization": f"Bearer {GROQ_API_KEY}", "Content-Type": "application/json"}
+        payload = {"model": GROQ_MODEL, "messages": [{"role": "user", "content": prompt}], "temperature": 0.1, "max_tokens": 1000}
+        url = "https://api.groq.com/openai/v1/chat/completions"
+        params = None
+        use_google = False
+    
     try:
-        response = requests.post(
-            "https://api.groq.com/openai/v1/chat/completions",
-            headers=headers, json=payload, timeout=60
-        )
+        response = requests.post(url, params=params, headers=headers if not use_google else None, json=payload, timeout=60)
     except requests.exceptions.RequestException as e:
         if retries < MAX_RETRIES:
             wait = INITIAL_BACKOFF ** retries
@@ -136,11 +143,16 @@ def _call_llm_with_stats(prompt: str, retries: int = 0) -> Tuple[str, int]:
             wait = INITIAL_BACKOFF ** retries
             time.sleep(wait)
             return _call_llm_with_stats(prompt, retries + 1)
-        raise RuntimeError(f"Groq error 429: rate limit exceeded after {MAX_RETRIES} retries")
+        raise RuntimeError(f"Rate limit exceeded after {MAX_RETRIES} retries")
     
     if response.status_code != 200:
-        raise RuntimeError(f"Groq error {response.status_code}: {response.text[:200]}")
-    return response.json()["choices"][0]["message"]["content"], retries
+        raise RuntimeError(f"API error {response.status_code}: {response.text[:200]}")
+    
+    if use_google:
+        result = response.json()
+        return result["candidates"][0]["content"]["parts"][0]["text"], retries
+    else:
+        return response.json()["choices"][0]["message"]["content"], retries
 
 
 def _call_llm(prompt: str) -> str:
