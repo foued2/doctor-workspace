@@ -75,19 +75,40 @@ def _semantic_fallback(model: Dict) -> Tuple[Optional[str], str]:
 
 
 def _validate_objective_alignment(objective: str, match_id: str) -> Tuple[bool, str]:
+    """
+    Semantic validation: check if the objective is actually asking for the matched problem.
+    Uses semantic patterns, not just keyword blacklists.
+    """
     obj_lower = objective.lower()
-    alignment_requirements = {
-        "max_subarray": {"required": ["sum", "contiguous", "subarray"], "reject_keywords": ["product"]},
-        "longest_increasing_subsequence": {"required": ["increasing", "subsequence"], "reject_keywords": ["common", "lcs"]},
+    
+    # Semantic requirements for each problem
+    semantic_requirements = {
+        "max_subarray": {
+            "semantic_type": "optimization on contiguous array",
+            "positive_signals": ["sum", "maximum sum", "max sum", "contiguous"],
+            "negative_signals": ["product", "multiplication", "maximum product", "max product"],
+        },
+        "longest_increasing_subsequence": {
+            "semantic_type": "longest subsequence following order",
+            "positive_signals": ["increasing", "strictly increasing", "rising", "non-decreasing"],
+            "negative_signals": ["common", "lcs", "common subsequence", "matching"],
+        },
     }
-    if match_id in alignment_requirements:
-        reqs = alignment_requirements[match_id]
-        for kw in reqs.get("reject_keywords", []):
-            if kw in obj_lower:
-                return False, f"Reject keyword: '{kw}'"
-        if not any(kw in obj_lower for kw in reqs.get("required", [])):
-            return False, f"Missing required: {reqs['required']}"
-    return True, "aligned"
+    
+    if match_id in semantic_requirements:
+        reqs = semantic_requirements[match_id]
+        
+        # Check for negative signals (strong rejection)
+        for neg in reqs.get("negative_signals", []):
+            if neg in obj_lower:
+                return False, f"Objective describes different problem: '{neg}'"
+        
+        # Check for positive signals (required for match)
+        has_positive = any(pos in obj_lower for pos in reqs.get("positive_signals", []))
+        if not has_positive and len(reqs.get("positive_signals", [])) > 0:
+            return False, f"Objective missing required semantic: {reqs['semantic_type']}"
+    
+    return True, "semantically aligned"
 
 
 def _call_llm_with_stats(prompt: str, retries: int = 0) -> Tuple[str, int]:
