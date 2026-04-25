@@ -1,7 +1,0 @@
-[
-  {"user_id": "cs_01", "statement": "Find the longest subsequence where each element is greater than or equal to the previous.", "expected_match": null, "expected_type": "reject", "note": "non-strict: greater than or equal"},
-  {"user_id": "cs_02", "statement": "Find the longest non-decreasing subsequence in an array.", "expected_match": null, "expected_type": "reject", "note": "non-strict: non-decreasing"},
-  {"user_id": "cs_03", "statement": "Find the longest monotonically increasing subsequence, allowing equal values.", "expected_match": null, "expected_type": "reject", "note": "non-strict: allowing equal values"},
-  {"user_id": "cs_04", "statement": "Find the longest subsequence where no element is smaller than the one before it.", "expected_match": null, "expected_type": "reject", "note": "non-strict: not smaller than"},
-  {"user_id": "cs_05", "statement": "Find the longest subsequence where each element is not less than the previous one.", "expected_match": null, "expected_type": "reject", "note": "non-strict: not less than"}
-]

@@ -149,3 +149,15 @@ doctor/ingest/.llm_cache/
 # Doctor workspace workspace
 production_log.jsonl
 session_state.json
+
+# Phase results - keep only final versions
+*_batch*_results.json
+phase*_results_*.json
+cold_results_*.json
+
+# Scratch/run/debug/test scripts (development only)
+run_*.py
+debug_*.py
+test_*.py
+fix_*.py
+*_runner.py
