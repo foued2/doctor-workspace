@@ -1,7 +1,0 @@
-doctor/llm_doctor.py: SYNTAX OK
-doctor/doctor_grader.py: SYNTAX OK
-doctor/code_analyzer.py: SYNTAX OK
-doctor/test_executor.py: SYNTAX OK
-doctor/llm_doctor.py: BALANCE parens=-1 brackets=+0 braces=+0
-doctor/code_analyzer.py: BALANCE parens=+31 brackets=+2 braces=+0
-doctor/test_executor.py: BALANCE parens=+2 brackets=-1 braces=+0
