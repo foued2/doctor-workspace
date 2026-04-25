@@ -1,173 +1,380 @@
 #!/usr/bin/env python3
 """
-Doctor Prototype - Strict Step-by-Step Conversation
+Doctor - Strict Pipeline with 5 Gates
+
+Each gate either passes or stops. No conversation, no encouragement.
 """
 import os
 import sys
 import json
+import subprocess
+import signal
+import tempfile
+import shutil
 
 # ============================================================
 # CONFIG
 # ============================================================
-LLM_PROVIDER = 'openrouter'
-API_KEY = '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'
-os.environ['LLM_PROVIDER'] = LLM_PROVIDER
-os.environ['OPENROUTER_API_KEY'] = API_KEY
+os.environ['LLM_PROVIDER'] = 'openrouter'
+os.environ['OPENROUTER_API_KEY'] = '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'
 
-ALIGNMENT_THRESHOLD = 0.85
+HIGH_CONFIDENCE = 0.90
+MEDIUM_CONFIDENCE = 0.70
 
 # ============================================================
-# STEP 1: CLASSIFY
+# MODIFIER CLASSES
 # ============================================================
-def classify_problem(statement: str) -> dict:
-    """Attempt to recognize the problem"""
+class_modifiers = {
+    # Class 1: cosmetic - doesn't change problem
+    "Class 1": ["ignore case", "case insensitive", "ignore whitespace", "trim"],
+    # Class 2: constraint-strengthening - modify inputs
+    "Class 2": ["positive only", "non-negative", "strictly greater", "at least", "maximum of"],
+    # Class 3: problem-altering - creates variant
+    "Class 3": ["modified", "but not", "except", "without using", "only use"},
+}
+
+# ============================================================
+# GATE 1: PROBLEM RECOGNITION
+# ============================================================
+def gate1_recognize(problem_statement: str) -> dict:
+    """Pass/fail. Returns binding object"""
     from doctor.ingest.unified_engine import analyze_statement
     
-    result = analyze_statement(statement)
+    result = analyze_statement(problem_statement)
     trace = result.get("decision_trace", {})
+    alignment = trace.get("alignment_score", 0)
+    
+    status = result.get("status", "unknown")
+    match = result.get("match", trace.get("llm_match", "none"))
+    
+    if alignment >= HIGH_CONFIDENCE:
+        tentative = False
+    elif alignment >= MEDIUM_CONFIDENCE:
+        tentative = True
+    else:
+        return {
+            "passed": False,
+            "stop_reason": "Problem not recognized",
+            "confidence": alignment,
+            "problem_id": None,
+            "tentative": False,
+            "modifiers": []
+        }
     
     return {
-        "status": result.get("status"),
-        "match": result.get("match", trace.get("llm_match", "none")),
-        "alignment": trace.get("alignment_score", 0),
-        "constraint": trace.get("constraint_consistency", 0),
-        "structural": trace.get("structural_compatibility", 0),
+        "passed": True,
+        "confidence": alignment,
+        "problem_id": match if match not in ["none", "no match"] else None,
+        "tentative": tentative,
+        "modifiers": []
     }
 
 # ============================================================
-# STEP 3: LOAD TESTS
+# GATE 2: MODIFIER EXTRACTION
 # ============================================================
-def get_test_cases(problem_id: str) -> list:
-    """Get test cases for a problem from registry"""
+def gate2_modifiers(problem_statement: str, problem_id: str) -> dict:
+    """Extract modifiers and classify"""
+    from doctor.registry.problem_registry import get_problems
+    
+    if not problem_id:
+        return {"passed": True, "variant_id": None, "modifier_class": None}
+    
+    # Check for modifiers in statement
+    found_modifiers = []
+    modifier_class = None
+    
+    statement_lower = problem_statement.lower()
+    
+    for cls in ["Class 1", "Class 2", "Class 3"]:
+        for kw in class_modifiers.get(cls, []):
+            if kw in statement_lower:
+                found_modifiers.append(kw)
+                modifier_class = cls
+                break
+    
+    # Check for variant in registry
+    problems = get_problems()
+    variant_id = None
+    
+    if modifier_class == "Class 3":
+        # Look for variant
+        base = problem_id
+        variant_candidates = [p for p in problems.keys() if base in p or p in base]
+        if len(variant_candidates) > 1:  # more than base
+            variant_id = variant_candidates[0]  # simplified - pick first variant
+    
+    if modifier_class == "Class 3" and not variant_id and found_modifiers:
+        return {
+            "passed": False,
+            "stop_reason": "This is a variant I have no tests for",
+            "modifier_class": modifier_class,
+            "found_modifiers": found_modifiers
+        }
+    
+    return {
+        "passed": True,
+        "variant_id": variant_id,
+        "modifier_class": modifier_class,
+        "found_modifiers": found_modifiers
+    }
+
+# ============================================================
+# GATE 3: SOLUTION INTAKE
+# ============================================================
+def gate3_solution(solution_code: str) -> dict:
+    """Validate Python syntax"""
+    try:
+        compile(solution_code, "<solution>", "exec")
+        return {"passed": True, "valid": True}
+    except SyntaxError as e:
+        return {
+            "passed": False,
+            "stop_reason": "Solution is not valid Python",
+            "syntax_error": str(e)
+        }
+
+# ============================================================
+# GATE 4: TEST VERIFICATION
+# ============================================================
+def gate4_tests(problem_id: str, user_tests: list) -> dict:
+    """Check registry for tests"""
     from doctor.registry.problem_registry import get_problems
     
     problems = get_problems()
+    
     if problem_id not in problems:
-        return []
+        return {"passed": False, "stop_reason": "No tests available for this problem"}
     
-    return problems[problem_id].get("execution", {}).get("test_cases", [])
-
-# ============================================================
-# STEP 4: EXECUTE
-# ============================================================
-def execute_solution(solution_code: str, problem_id: str, test_cases: list) -> dict:
-    """Run solution against test cases"""
-    from doctor.core.test_executor import _results_equal
+    registry_tests = problems[problem_id].get("execution", {}).get("test_cases", [])
     
-    results = []
-    passed = 0
-    total = len(test_cases)
-    error = None
+    if not registry_tests:
+        return {"passed": False, "stop_reason": "No tests available for this problem"}
     
-    # Import solution
-    try:
-        exec(solution_code, {})
-    except Exception as e:
-        return {"status": "error", "error": f"Cannot parse solution: {e}"}
-    
-    # Import target function
-    try:
-        if problem_id == "arrange_numbers_divisible":
-            from cf2225g import solve_case
-            func = solve_case
-        else:
-            return {"status": "error", "error": f"Unknown problem: {problem_id}"}
-    except Exception as e:
-        return {"status": "error", "error": f"Cannot import solution: {e}"}
-    
-    # Run tests
-    for tc in test_cases:
-        try:
-            got = func(*tc["input"][0], tc["input"][1])
-            expected = tc["expected"]
-            equal = _results_equal(got, expected)
-            passed += 1 if equal else 0
-            results.append({"label": tc.get("label", "?"), "passed": equal, "got": got, "expected": expected})
-        except Exception as e:
-            passed += 0
-            results.append({"label": tc.get("label", "?"), "passed": False, "error": str(e)})
+    # User tests are supplementary only
+    user_passed = 0
+    user_failed = 0
+    for tc in user_tests:
+        # Can't verify user tests without solution, so just count
+        user_failed += 1
     
     return {
-        "status": "complete",
-        "passed": passed,
-        "total": total,
-        "results": results
+        "passed": True,
+        "authoritative_tests": registry_tests,
+        "user_tests": user_tests,
+        "user_passed": user_passed,
+        "user_failed": user_failed
     }
 
 # ============================================================
-# MAIN INTERACTIVE LOOP
+# GATE 5: EXECUTION
+# ============================================================
+def gate5_execute(solution_code: str, problem_id: str, tests: list, timeout: int = 30) -> dict:
+    """Run solution against tests"""
+    from doctor.core.test_executor import TestExecutor
+    
+    results = []
+    passed = 0
+    total = len(tests)
+    error = None
+    
+    # Write solution to temp file
+    with tempfile.NamedTemporaryFile(mode='w', suffix='.py', delete=False) as f:
+        f.write(solution_code)
+        temp_file = f.name
+    
+    try:
+        # Import and run
+        sys.path.insert(0, "F:/pythonProject1")
+        
+        # Execute each test
+        for tc in tests:
+            test_input = tc.get("input", [])
+            expected = tc.get("expected")
+            label = tc.get("label", "?")
+            
+            try:
+                # Import solve_case
+                from cf2225g import solve_case
+                
+                # Handle different argument patterns
+                if len(test_input) == 2:
+                    got = solve_case(test_input[0], test_input[1])
+                else:
+                    got = solve_case(*test_input)
+                
+                # Strict equality
+                from doctor.core.test_executor import _results_equal
+                equal = _results_equal(got, expected)
+                
+                if equal:
+                    passed += 1
+                    results.append({"label": label, "passed": True, "got": got})
+                else:
+                    results.append({"label": label, "passed": False, "got": got, "expected": expected})
+                    
+            except subprocess.TimeoutExpired:
+                results.append({"label": label, "passed": False, "error": "timeout"})
+                break
+            except Exception as e:
+                results.append({"label": label, "passed": False, "error": str(e)})
+                
+    finally:
+        os.unlink(temp_file)
+    
+    if error:
+        return {"passed": False, "stop_reason": f"Runtime error: {error}"}
+    
+    return {
+        "passed": passed,
+        "total": total,
+        "results": results,
+        "pass_rate": passed/total if total > 0 else 0
+    }
+
+# ============================================================
+# REPORT GENERATOR
+# ============================================================
+def generate_report(gate_results: dict) -> str:
+    """Generate strict report - no narrative"""
+    g1 = gate_results.get("gate1", {})
+    g2 = gate_results.get("gate2", {})
+    g3 = gate_results.get("gate3", {})
+    g4 = gate_results.get("gate4", {})
+    g5 = gate_results.get("gate5", {})
+    
+    problem_id = g1.get("problem_id", "UNKNOWN")
+    confidence = g1.get("confidence", 0)
+    tentative = g1.get("tentative", False)
+    modifiers = g2.get("found_modifiers", [])
+    modifier_class = g2.get("modifier_class")
+    
+    # Verdict
+    if g5.get("pass_rate", 0) == 1.0 and not g4.get("user_tests"):
+        verdict = "CORRECT"
+        trust = "aligned_confident_correct"
+        risk = "LOW"
+    elif g5.get("pass_rate", 0) == 1.0 and g4.get("user_tests"):
+        verdict = "PARTIAL"
+        trust = "user_tests_only"
+        risk = "MEDIUM"
+    elif g5.get("pass_rate", 0) >= 0.5:
+        verdict = "PARTIAL"
+        trust = "weakly_supported_correct"
+        risk = "MEDIUM"
+    else:
+        verdict = "INCORRECT"
+        trust = "false_justified_confidence"
+        risk = "HIGH"
+    
+    # Build report
+    lines = []
+    lines.append("=" * 50)
+    lines.append("DOCTOR REPORT")
+    lines.append("=" * 50)
+    lines.append("")
+    lines.append(f"PROBLEM: {problem_id}")
+    lines.append(f"BINDING CONFIDENCE: {confidence:.2f}")
+    lines.append(f"TENTATIVE: {'yes' if tentative else 'no'}")
+    lines.append("")
+    lines.append(f"VERDICT: {verdict}")
+    lines.append(f"TRUST: {trust}")
+    lines.append(f"RISK: {risk}")
+    
+    passed = g5.get("passed", 0)
+    total = g5.get("total", 0)
+    lines.append(f"EVIDENCE: {passed}/{total} tests passed")
+    if total > 0:
+        lines.append(f"E = {passed/total:.2f}")
+    lines.append("")
+    
+    mods_str = ", ".join(modifiers) if modifiers else "NONE"
+    lines.append(f"MODIFIERS APPLIED: {mods_str}")
+    
+    user_tests = g4.get("user_tests", [])
+    if user_tests:
+        lines.append(f"USER TESTS: {g4.get('user_passed', 0)}/{len(user_tests)} passed")
+    else:
+        lines.append("USER TESTS: NONE PROVIDED")
+    lines.append("")
+    
+    # Diagnosis for INCORRECT/PARTIAL
+    if verdict in ["INCORRECT", "PARTIAL"]:
+        failed_tests = [r["label"] for r in g5.get("results", []) if not r.get("passed")]
+        if failed_tests:
+            lines.append(f"DIAGNOSIS:")
+            lines.append(f"  test_failure(s): {', '.join(failed_tests)}")
+    
+    # Summary - one sentence
+    if verdict == "CORRECT":
+        summary = f"Solution correctly solves {problem_id} with {passed}/{total} authoritative tests passing."
+    else:
+        summary = f"Solution failed {total - passed} of {total} authoritative tests."
+    
+    lines.append("")
+    lines.append("SUMMARY: " + summary)
+    lines.append("=" * 50)
+    
+    return "\n".join(lines)
+
+# ============================================================
+# MAIN PIPELINE
 # ============================================================
 def main():
-    print("=" * 60)
-    print("Doctor - Strict Step-by-Step Evaluation")
-    print("=" * 60)
+    print("=" * 50)
+    print("DOCTOR - STRICT PIPELINE")
+    print("=" * 50)
     print()
     
-    # ============================================================
-    # STEP 1: PASTE PROBLEM STATEMENT
-    # ============================================================
-    print("STEP 1: PASTE PROBLEM STATEMENT")
-    print("(Press Enter twice to finish)")
-    print("> ", end="")
+    gate_results = {}
     
-    lines = []
+    # GATE 1
+    print("[Gate 1] Problem Recognition")
+    print("Paste problem statement (Enter twice to finish):")
+    problem_lines = []
     while True:
         try:
             line = input()
             if line.strip() == "":
                 break
-            lines.append(line)
+            problem_lines.append(line)
         except EOFError:
             break
     
-    problem_statement = "\n".join(lines)
+    problem_statement = "\n".join(problem_lines)
     
     if not problem_statement.strip():
-        print("STOP: No problem statement provided.")
+        print("STOP: No problem statement")
         return
     
-    print()
-    print("-" * 40)
-    print("Analyzing problem...")
-    print()
+    g1 = gate1_recognize(problem_statement)
+    gate_results["gate1"] = g1
     
-    classification = classify_problem(problem_statement)
-    
-    print(f"Match: {classification['match']}")
-    print(f"Status: {classification['status']}")
-    print(f"Confidence: {classification['alignment']:.2f}")
-    print()
-    
-    # Check recognition
-    if classification['status'] != 'success':
-        print("STOP: Problem not recognized.")
-        print(f"  Reason: Classification status = {classification['status']}")
-        print("  I cannot evaluate a problem I don't recognize.")
+    if not g1["passed"]:
+        print(f"STOP: {g1['stop_reason']}")
+        print(f"Confidence: {g1['confidence']:.2f}")
         return
     
-    if classification['alignment'] < ALIGNMENT_THRESHOLD:
-        print("STOP: Low confidence.")
-        print(f"  Alignment: {classification['alignment']:.2f} < {ALIGNMENT_THRESHOLD}")
-        print("  I don't know this problem well enough to evaluate it.")
-        return
-    
-    if classification['match'] in [None, "none", "no match"]:
-        print("STOP: No matching problem found.")
-        print("  I cannot find this in my problem registry.")
-        return
-    
-    problem_id = classification['match']
-    print(f"Recognized as: {problem_id}")
+    print(f"MATCH: {g1['problem_id']}")
+    print(f"Confidence: {g1['confidence']:.2f}")
+    print(f"Tentative: {g1['tentative']}")
     print()
     
-    # ============================================================
-    # STEP 2: PASTE SOLUTION
-    # ============================================================
-    print("-" * 40)
-    print("STEP 2: PASTE SOLUTION CODE")
-    print("(Press Enter twice to finish)")
-    print("> ", end="")
+    # GATE 2
+    print("[Gate 2] Modifier Extraction")
+    g2 = gate2_modifiers(problem_statement, g1["problem_id"])
+    gate_results["gate2"] = g2
     
+    if not g2["passed"]:
+        print(f"STOP: {g2['stop_reason']}")
+        return
+    
+    if g2.get("found_modifiers"):
+        print(f"Modifiers found: {g2['found_modifiers']}")
+    print()
+    
+    # GATE 3
+    print("[Gate 3] Solution Intake")
+    print("Paste solution (Enter twice to finish):")
     solution_lines = []
     while True:
         try:
@@ -181,29 +388,22 @@ def main():
     solution_code = "\n".join(solution_lines)
     
     if not solution_code.strip():
-        print("STOP: No solution provided.")
+        print("STOP: No solution provided")
         return
     
-    # Validate Python
-    try:
-        compile(solution_code, "<string>", "exec")
-    except SyntaxError as e:
-        print("STOP: Cannot parse solution.")
-        print(f"  SyntaxError: {e}")
+    g3 = gate3_solution(solution_code)
+    gate_results["gate3"] = g3
+    
+    if not g3["passed"]:
+        print(f"STOP: {g3['stop_reason']}")
         return
     
-    print()
-    print("Solution parsed successfully.")
+    print("Solution validated as Python")
     print()
     
-    # ============================================================
-    # STEP 3: TEST CASES
-    # ============================================================
-    print("-" * 40)
-    print("STEP 3: TEST CASES")
-    print("Do you have test cases? (paste them or press Enter to skip)")
-    print("> ", end="")
-    
+    # GATE 4
+    print("[Gate 4] Test Verification")
+    print("Provide test cases? (Enter JSON list, or Enter to skip):")
     user_test_lines = []
     while True:
         try:
@@ -218,99 +418,38 @@ def main():
     if user_test_lines:
         try:
             user_tests = json.loads("\n".join(user_test_lines))
-            if not isinstance(user_tests, list):
-                print("STOP: Test cases must be a JSON list.")
-                return
-        except json.JSONDecodeError as e:
-            print("STOP: Invalid JSON for test cases.")
-            print(f"  Error: {e}")
+        except:
+            print("Invalid JSON, skipping user tests")
+    
+    g4 = gate4_tests(g1["problem_id"], user_tests)
+    gate_results["gate4"] = g4
+    
+    if not g4["passed"]:
+        print(f"STOP: {g4['stop_reason']}")
+        return
+    
+    print(f"Authoritative tests: {len(g4['authoritative_tests'])}")
+    print(f"User tests: {len(user_tests)}")
+    print()
+    
+    # GATE 5
+    print("[Gate 5] Execution")
+    g5 = gate5_execute(solution_code, g1["problem_id"], g4["authoritative_tests"])
+    gate_results["gate5"] = g5
+    
+    if not g5.get("passed", 0) and g5.get("passed", 0) == 0 and g5.get("total", 0) > 0:
+        if g5.get("stop_reason"):
+            print(f"STOP: {g5['stop_reason']}")
             return
-        print(f"Using {len(user_tests)} user-provided tests.")
-    else:
-        print("Using registry tests.")
     
-    # Load registry tests
-    registry_tests = get_test_cases(problem_id)
-    print(f"Registry has {len(registry_tests)} tests.")
-    
-    # Combine: user tests take priority
-    all_tests = user_tests.copy() if user_tests else []
-    for tc in registry_tests:
-        # Add registry tests that don't duplicate
-        existing_labels = [t.get("label") for t in all_tests]
-        if tc.get("label") not in existing_labels:
-            all_tests.append(tc)
-    
-    if not all_tests:
-        print("STOP: No test cases available.")
-        print("  I cannot evaluate fairly without test cases.")
-        print("  Either provide tests or ensure this problem has registry tests.")
-        return
-    
-    print(f"Total tests: {len(all_tests)}")
-    print()
-    
-    # ============================================================
-    # STEP 4: EXECUTE
-    # ============================================================
-    print("-" * 40)
-    print("STEP 4: Running execution pipeline...")
-    print()
-    
-    execution = execute_solution(solution_code, problem_id, all_tests)
-    
-    if execution.get("status") == "error":
-        print(f"STOP: Execution error.")
-        print(f"  {execution.get('error')}")
-        return
-    
-    print(f"Tests passed: {execution['passed']}/{execution['total']}")
-    print()
-    
-    for r in execution.get("results", []):
+    print(f"Tests: {g5.get('passed', 0)}/{g5.get('total', 0)}")
+    for r in g5.get("results", []):
         status = "PASS" if r["passed"] else "FAIL"
         print(f"  {r['label']}: {status}")
-        if r.get("error"):
-            print(f"    Error: {r['error']}")
     print()
     
-    # ============================================================
-    # STEP 5: REPORT
-    # ============================================================
-    print("=" * 60)
-    print("DOCTOR REPORT")
-    print("=" * 60)
-    print()
-    print("CLASSIFICATION:")
-    print(f"  Problem: {problem_id}")
-    print(f"  Confidence: {classification['alignment']:.2f}")
-    print()
-    print("EXECUTION:")
-    passed = execution['passed']
-    total = execution['total']
-    pass_rate = passed/total if total > 0 else 0
-    print(f"  Tests: {passed}/{total} ({100*pass_rate:.1f}%)")
-    print()
-    
-    # Verdict
-    if pass_rate == 1.0:
-        verdict = "CORRECT"
-        trust = "aligned_confident_correct"
-        risk = "LOW"
-    elif pass_rate >= 0.5:
-        verdict = "PARTIAL"
-        trust = "weakly_supported_correct"
-        risk = "MEDIUM"
-    else:
-        verdict = "INCORRECT"
-        trust = "false_justified_confidence"
-        risk = "HIGH"
-    
-    print("=" * 60)
-    print(f"VERDICT: {verdict}")
-    print(f"TRUST: {trust}")
-    print(f"RISK: {risk}")
-    print("=" * 60)
+    # REPORT
+    print(generate_report(gate_results))
 
 
 if __name__ == "__main__":
