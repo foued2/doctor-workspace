@@ -10,20 +10,46 @@
 - Phase 3: closed (28 cases, 1 false accept, adversarial 10/10)
 - Phase 4: in progress — batch 1 (12/12), batch 2 atomic (10/10), batch 3 (11/12)
 
-**Batch 3 results:**
-- Long-tail semantic drift: 3/3 reject (optimal, best, efficient)
-- Unseen phrasing: 3/3 accept (valid_parentheses, coin_change, merge_two_sorted_lists)
-- Multi-constraint conflicts: 4/4 reject (jointly inconsistent constraints caught correctly)
-- Compositional ambiguity: 1/2 reject (p4b3_12), 1 FAIL (p4b3_10: "ignore spaces" accepted)
+**Batch 3 score: 11/12 (91.7%)**
 
-**Score: 11/12 (91.7%)**
+**Full Phase 4 so far: 33/34 (97.1%)**
 
-**Key finding: Multi-constraint gap CONFIRMED but nuanced:**
-- constraint_consistency = 0.0 → reject (p4b3_07-09)
-- constraint_consistency = 0.2 → reject (p4b3_11)  
-- constraint_consistency = 0.8 → ACCEPT (p4b3_10) — FALSE POSITIVE
-- Gap: constraint_consistency needs min threshold for accept (e.g., ≥ 0.9)
+---
 
-**Next session: Final decision contract + constraint threshold fix**
+**Batch 3 detailed:**
+- Long-tail semantic drift (p4b3_01-03): 3/3 reject ✓
+- Unseen phrasing (p4b3_04-06): 3/3 accept ✓
+- Multi-constraint conflicts (p4b3_07-09, 11): 4/4 reject ✓
+- Compositional/modifier (p4b3_10, 12): 1/2 — FAIL p4b3_10
+
+---
+
+**FAIL: p4b3_10 — "ignore spaces" false accept**
+
+This is NOT a threshold problem. It's a parser/norm layer gap:
+- "ignore spaces" modifies the problem structure
+- Should be extracted as explicit constraint flag
+- Currently absorbed into normalization → treated as minor variation
+
+**Fix required (do NOT implement threshold yet):**
+1. Extract structural modifiers ("ignore X", "except X", "only X") as constraint flags
+2. Evaluate against registry definition, not normalization
+3. Measure recall impact before changing threshold
+
+---
+
+**Three architectural questions — to answer before final decision contract:**
+
+1. Is constraint_consistency authoritative or advisory?
+2. What is evaluated before vs after normalization?
+3. Is multi-constraint inconsistency pairwise or global set?
+
+---
+
+**Next session (in order):**
+1. Fix modifier extraction in normalization layer
+2. Measure recall cost of any threshold change
+3. Answer the three architectural questions in writing
+4. THEN write final decision contract
 
 **Provider:** OpenRouter, deepseek/deepseek-v4-flash
