@@ -69,8 +69,11 @@ def _check_contradiction(objective: str, match_id: str) -> Tuple[bool, str]:
             return True, "Product objective contradicts sum-based max_subarray"
     
     if match_id == "longest_increasing_subsequence":
+        non_strict_keywords = ["at least as large", "at least as big", "non-decreasing", "not decreasing", "greater or equal", "largest possible", "at most as small"]
         if "common subsequence" in obj_lower or "lcs" in obj_lower:
             return True, "Common subsequence contradicts increasing subsequence"
+        if any(kw in obj_lower for kw in non_strict_keywords):
+            return True, "Non-strict subsequence contradicts strictly increasing LIS"
     
     if match_id == "climbing_stairs":
         if "cost" in obj_lower:
