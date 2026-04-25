@@ -15,8 +15,7 @@ import shutil
 # ============================================================
 # CONFIG
 # ============================================================
-os.environ['LLM_PROVIDER'] = 'openrouter'
-os.environ['OPENROUTER_API_KEY'] = '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'
+os.environ.setdefault("LLM_PROVIDER", "openrouter")
 
 HIGH_CONFIDENCE = 0.90
 MEDIUM_CONFIDENCE = 0.70
@@ -55,36 +54,49 @@ def gate1_recognize(problem_statement: str) -> dict:
             "confidence": alignment,
             "problem_id": None,
             "tentative": False,
-            "modifiers": []
+            "modifiers": [],
+            "parsed_model": result.get("parsed_model", {})
         }
-    
+
     return {
         "passed": True,
         "confidence": alignment,
         "problem_id": match if match not in ["none", "no match"] else None,
         "tentative": tentative,
-        "modifiers": []
+        "modifiers": [],
+        "parsed_model": result.get("parsed_model", {})
     }
 
 # ============================================================
 # GATE 2: MODIFIER EXTRACTION
 # ============================================================
-def gate2_modifiers(problem_statement: str, problem_id: str) -> dict:
-    """Extract modifiers and classify"""
+def _modifier_source_fields(parsed_model: dict) -> list[str]:
+    """Gate 2 only scans parsed constraints, not the raw statement text."""
+    fields = []
+    for key in ("constraints", "edge_conditions"):
+        values = parsed_model.get(key, [])
+        if isinstance(values, list):
+            fields.extend(str(value).lower() for value in values if value)
+        elif values:
+            fields.append(str(values).lower())
+    return fields
+
+
+def gate2_modifiers(parsed_model: dict, problem_id: str) -> dict:
+    """Extract modifiers from parsed constraint fields and classify."""
     from doctor.registry.problem_registry import get_problems
     
     if not problem_id:
         return {"passed": True, "variant_id": None, "modifier_class": None}
     
-    # Check for modifiers in statement
+    # Check for modifiers in parsed constraint fields only.
     found_modifiers = []
     modifier_class = None
-    
-    statement_lower = problem_statement.lower()
+    modifier_fields = _modifier_source_fields(parsed_model or {})
     
     for cls_name, keywords in class_modifiers:
         for kw in keywords:
-            if kw in statement_lower:
+            if any(kw in field for field in modifier_fields):
                 found_modifiers.append(kw)
                 modifier_class = cls_name
                 break
@@ -317,7 +329,7 @@ def main():
     
     # GATE 2
     print("[Gate 2] Modifier Extraction")
-    g2 = gate2_modifiers(problem_statement, g1["problem_id"])
+    g2 = gate2_modifiers(g1.get("parsed_model", {}), g1["problem_id"])
     gate_results["gate2"] = g2
     
     if not g2["passed"]:

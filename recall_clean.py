@@ -3,8 +3,7 @@ import os
 import sys
 
 sys.path.insert(0, "F:/pythonProject1")
-os.environ['LLM_PROVIDER'] = 'openrouter'
-os.environ['OPENROUTER_API_KEY'] = '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'
+os.environ.setdefault("LLM_PROVIDER", "openrouter")
 
 from doctor.ingest.unified_engine import analyze_statement
 
@@ -31,10 +30,10 @@ for s in verified_accepts:
     trace = r.get("decision_trace", {})
     match = trace.get("llm_match", "none")
     status = r.get("status")
-    
+
     # Check if this would have flipped to reject due to structural modifier (not alignment)
     has_mod = r.get("error", "").find("Structural modifier") >= 0
-    
+
     if "success" in str(status).lower():
         print("PASS: {0}".format(s[:50]))
     else:

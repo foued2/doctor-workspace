@@ -4,8 +4,7 @@ import os
 import sys
 
 sys.path.insert(0, "F:/pythonProject1")
-os.environ['LLM_PROVIDER'] = 'openrouter'
-os.environ['OPENROUTER_API_KEY'] = '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'
+os.environ.setdefault("LLM_PROVIDER", "openrouter")
 
 from doctor.ingest.unified_engine import analyze_statement
 
@@ -43,9 +42,9 @@ for statement, expected in known_accept_cases:
     try:
         result = analyze_statement(statement)
         status = result.get("status", "unknown")
-        
+
         is_accept = "success" in str(status).lower() or "accept" in str(status).lower()
-        
+
         if is_accept:
             passed += 1
             print("ACCEPT: {0} -> {1}".format(expected or "unknown", status))

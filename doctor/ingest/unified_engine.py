@@ -74,12 +74,12 @@ def _check_operation_restriction(objective: str, constraints: list, match_id: st
     return False, ""
 
 
-def _check_structural_modifier(objective: str, constraints: list, match_id: str) -> Tuple[bool, str]:
-    """Check if constraints contain structural modifiers that change problem definition."""
+def _check_structural_modifier(constraints: list, edge_conditions: list, match_id: str) -> Tuple[bool, str]:
+    """Check parsed constraint fields for structural modifiers that change problem definition."""
     if match_id in ("no match", None, ""):
         return False, ""
     
-    constraint_text = (objective + " " + " ".join(constraints)).lower()
+    constraint_text = " ".join(list(constraints) + list(edge_conditions)).lower()
     
     for keyword in STRUCTURAL_MODIFIERS["restrictive_keywords"]:
         if keyword in constraint_text:
@@ -419,8 +419,8 @@ def _evaluate_decision(
             }
         
         has_modifier, modifier_reason = _check_structural_modifier(
-            model.get("objective", ""),
             model.get("constraints", []),
+            model.get("edge_conditions", []),
             match
         )
         if has_modifier:
