@@ -137,6 +137,9 @@ memory.json
 sample_input/
 renamed_output/
 reports/
+scratch/
+*_results*.json
+cold_results_*.json
 
 # Temporary files
 *.tmp
