@@ -1,0 +1,7 @@
+[
+  {"user_id": "gate_01", "statement": "Find two numbers in the array that multiply to give the target value.", "expected_match": null, "expected_type": "reject", "note": "LLM may map to two_sum (same structure), contradiction gate must catch multiply"},
+  {"user_id": "gate_02", "statement": "Given coins and a target, determine if it's possible to form the exact amount.", "expected_match": null, "expected_type": "reject", "note": "LLM may map to coin_change, but this is feasibility not optimization"},
+  {"user_id": "gate_03", "statement": "Find the longest subsequence where each element is at least as large as the previous.", "expected_match": null, "expected_type": "reject", "note": "LLM may map to LIS, non-strict is OUT"},
+  {"user_id": "gate_04", "statement": "Given a string, find the longest substring where each character appears at most twice.", "expected_match": null, "expected_type": "reject", "note": "LLM may map to longest_substring, modified constraint"},
+  {"user_id": "gate_05", "statement": "Convert string A to string B using only character swaps.", "expected_match": null, "expected_type": "reject", "note": "LLM may map to min_distance, operation restriction must catch swaps only"}
+]

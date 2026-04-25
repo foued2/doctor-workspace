@@ -1,0 +1,12 @@
+[
+  {"user_id": "p4b2_01", "statement": "Find two numbers that sum to target, but the array is sorted.", "expected_match": null, "expected_type": "reject", "note": "constraint mismatch: sorted array"},
+  {"user_id": "p4b2_02", "statement": "Find the longest increasing subsequence, but only consider even numbers.", "expected_match": null, "expected_type": "reject", "note": "constraint mismatch: even numbers only"},
+  {"user_id": "p4b2_03", "statement": "Given an array of integers, find the element that appears most frequently.", "expected_match": null, "expected_type": "reject", "note": "no registry match"},
+  {"user_id": "p4b2_04", "statement": "Given a string, return the character that appears least often.", "expected_match": null, "expected_type": "reject", "note": "no registry match"},
+  {"user_id": "p4b2_05", "statement": "Given an array and target, return indices of the two numbers that add up to target.", "expected_match": "two_sum", "expected_type": "accept", "note": "clean two_sum"},
+  {"user_id": "p4b2_06", "statement": "Given a string containing just brackets, determine if it is valid.", "expected_match": "valid_parentheses", "expected_type": "accept", "note": "clean valid_parentheses"},
+  {"user_id": "p4b2_07", "statement": "Find the subarray with sum closest to zero.", "expected_match": null, "expected_type": "reject", "note": "objective mismatch"},
+  {"user_id": "p4b2_08", "statement": "Find the two numbers with the smallest difference in the array.", "expected_match": null, "expected_type": "reject", "note": "objective mismatch"},
+  {"user_id": "p4b2_09", "statement": "A warehouse has daily profit/loss records. Find the period with highest total gain.", "expected_match": "max_subarray", "expected_type": "accept", "note": "domain disguise max_subarray"},
+  {"user_id": "p4b2_10", "statement": "Given transaction amounts, find the contiguous block with maximum total value.", "expected_match": "max_subarray", "expected_type": "accept", "note": "domain disguise max_subarray"}
+]
