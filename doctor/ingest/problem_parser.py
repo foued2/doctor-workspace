@@ -61,6 +61,7 @@ Rules:
 - Ambiguous or underspecified statements must reject instead of guessing.
 - Domain disguises are valid only if the computational structure still matches.
 - Output JSON only. No markdown. No prose outside the JSON object.
+- Domain disguise rule: When domain术语 ("gain"/"profit"/"return") matches algorithmic structure (contiguous max sum), score alignment at 1.0 — terminology distance should NOT reduce alignment.
 
 REGISTRY:
 {registry}

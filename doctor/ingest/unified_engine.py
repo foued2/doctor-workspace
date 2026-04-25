@@ -89,6 +89,29 @@ def _hash(text: str) -> str:
     return hashlib.sha256(text.encode()).hexdigest()[:16]
 
 
+OBJECTIVE_CANONICAL_MAP = {
+    "gain": "value",
+    "profit": "value",
+    "revenue": "value",
+    "return": "value",
+    "earnings": "value",
+    "loss": "cost",
+    "expense": "cost",
+    "spending": "cost",
+    "period": "subarray",
+    "window": "subarray",
+    "stretch": "subarray",
+    "block": "subarray",
+    "trend": "subsequence",
+    "progression": "subsequence",
+}
+
+def canonicalize_objective(objective: str) -> str:
+    words = objective.lower().split()
+    normalized = [OBJECTIVE_CANONICAL_MAP.get(w, w) for w in words]
+    return " ".join(normalized)
+
+
 def _extract_json_object(response: str, repair_info: dict = None) -> Dict[str, Any]:
     if repair_info is None:
         repair_info = {"repair_used": False, "repair_method": None}
@@ -383,20 +406,44 @@ def _evaluate_decision(
                     "parsed_model": model,
                     "decision_trace": trace,
                     "justification": f"Accept blocked: json_repair used, requires {repair_threshold} on all sub-scores. Got alignment={alignment_score}, constraint={constraint_consistency}, structural={structural_compatibility}"
-            }
+                }
         
-        trace["final"] = "accept"
-        trace["decision_contract"]["accept_condition"] = "all_conditions_met"
-        return {
-            "status": "success",
-            "failure_tag": None,
-            "matched": match,
-            "parsed_model": model,
-            "alignment_score": alignment_score,
-            "constraint_consistency": constraint_consistency,
-            "structural_compatibility": structural_compatibility,
-            "decision_trace": trace
-        }
+        all_conditions_met = (
+            alignment_score >= ALIGNMENT_THRESHOLD and
+            constraint_consistency >= 0.7 and
+            structural_compatibility >= 0.7
+        )
+        
+        if all_conditions_met:
+            trace["decision_contract"]["conditions"]["alignment_threshold_met"] = True
+            trace["decision_contract"]["conditions"]["constraints_consistent"] = True
+            trace["decision_contract"]["conditions"]["structural_compatible"] = True
+            trace["final"] = "accept"
+            trace["decision_contract"]["accept_condition"] = "all_conditions_met"
+            return {
+                "status": "success",
+                "failure_tag": None,
+                "matched": match,
+                "parsed_model": model,
+                "alignment_score": alignment_score,
+                "constraint_consistency": constraint_consistency,
+                "structural_compatibility": structural_compatibility,
+                "decision_trace": trace
+            }
+        else:
+            trace["decision_contract"]["conditions"]["alignment_threshold_met"] = alignment_score >= ALIGNMENT_THRESHOLD
+            trace["decision_contract"]["conditions"]["constraints_consistent"] = constraint_consistency >= 0.7
+            trace["decision_contract"]["conditions"]["structural_compatible"] = structural_compatibility >= 0.7
+            trace["final"] = "reject"
+            trace["decision_contract"]["rejection_reason"] = "决策_contract_conditions_not_met"
+            return {
+                "status": "rejected",
+                "failure_tag": "validation_leak",
+                "matched": None,
+                "parsed_model": model,
+                "decision_trace": trace,
+                "justification": f"Accept blocked: alignment={alignment_score} (need {ALIGNMENT_THRESHOLD}), constraint={constraint_consistency} (need 0.7), structural={structural_compatibility} (need 0.7)"
+            }
     
     trace["final"] = "reject"
     trace["decision_contract"]["rejection_reason"] = "no_valid_match"
@@ -432,13 +479,22 @@ def analyze_statement(statement: str) -> dict:
     decision = result.get("decision", "reject")
     justification = result.get("justification", "")
     
+    original_objective = model.get("objective", "")
+    canonical_objective = canonicalize_objective(original_objective)
+    model["objective_canonical"] = canonical_objective
+    
     alignment_score = float(result.get("alignment_score", 0.0))
     constraint_consistency = float(result.get("constraint_consistency", 0.0))
     structural_compatibility = float(result.get("structural_compatibility", 0.0))
     
+    if match and match != "no match" and structural_compatibility == 1.0 and constraint_consistency == 1.0:
+        if original_objective != canonical_objective:
+            alignment_score = 1.0
+    
     trace = {
         "llm_match": match,
         "alignment_score": alignment_score,
+        "objective_canonical": canonical_objective,
         "constraint_consistency": constraint_consistency,
         "structural_compatibility": structural_compatibility,
         "contradiction": False,
@@ -555,13 +611,22 @@ def analyze_batch(statements: list, case_ids: list = None) -> list:
         decision = result.get("decision", "reject")
         justification = result.get("justification", "")
         
+        original_objective = model.get("objective", "")
+        canonical_objective = canonicalize_objective(original_objective)
+        model["objective_canonical"] = canonical_objective
+        
         alignment_score = float(result.get("alignment_score", 0.0))
         constraint_consistency = float(result.get("constraint_consistency", 0.0))
         structural_compatibility = float(result.get("structural_compatibility", 0.0))
         
+        if match and match != "no match" and structural_compatibility == 1.0 and constraint_consistency == 1.0:
+            if original_objective != canonical_objective:
+                alignment_score = 1.0
+        
         trace = {
             "llm_match": match,
             "alignment_score": alignment_score,
+            "objective_canonical": canonical_objective,
             "constraint_consistency": constraint_consistency,
             "structural_compatibility": structural_compatibility,
             "contradiction": False,
