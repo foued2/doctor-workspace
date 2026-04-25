@@ -51,6 +51,14 @@ OPERATION_RESTRICTIONS = {
     }
 }
 
+STRUCTURAL_MODIFIERS = {
+    "required_operations": ["ignore", "except", "excluding", "but not", "only"],
+    "restrictive_keywords": [
+        "ignore", "excluding", "except", "but not", "only",
+        "without using", "do not consider", "skip"
+    ]
+}
+
 
 def _check_operation_restriction(objective: str, constraints: list, match_id: str) -> Tuple[bool, str]:
     if match_id not in OPERATION_RESTRICTIONS:
@@ -61,6 +69,20 @@ def _check_operation_restriction(objective: str, constraints: list, match_id: st
     for keyword in OPERATION_RESTRICTIONS[match_id]["restrictive_keywords"]:
         if keyword in constraint_text:
             return True, f"Constraint '{keyword}' conflicts with required operations for {match_id}"
+    
+    return False, ""
+
+
+def _check_structural_modifier(objective: str, constraints: list, match_id: str) -> Tuple[bool, str]:
+    """Check if constraints contain structural modifiers that change problem definition."""
+    if match_id in ("no match", None, ""):
+        return False, ""
+    
+    constraint_text = (objective + " " + " ".join(constraints)).lower()
+    
+    for keyword in STRUCTURAL_MODIFIERS["restrictive_keywords"]:
+        if keyword in constraint_text:
+            return True, f"Structural modifier '{keyword}' changes problem definition"
     
     return False, ""
 
@@ -393,6 +415,25 @@ def _evaluate_decision(
                 "parsed_model": model,
                 "decision_trace": trace,
                 "error": restriction_reason
+            }
+        
+        has_modifier, modifier_reason = _check_structural_modifier(
+            model.get("objective", ""),
+            model.get("constraints", []),
+            match
+        )
+        if has_modifier:
+            trace["decision_contract"]["conditions"]["constraints_consistent"] = False
+            trace["structural_modifier"] = True
+            trace["final"] = "reject"
+            trace["decision_contract"]["rejection_reason"] = "structural_modifier"
+            return {
+                "status": "rejected",
+                "failure_tag": "validation_leak",
+                "matched": None,
+                "parsed_model": model,
+                "decision_trace": trace,
+                "error": modifier_reason
             }
         
         if repair_info.get("repair_used"):
