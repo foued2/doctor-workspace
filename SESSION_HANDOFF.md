@@ -8,7 +8,7 @@
 - Phase 1: closed (8/8)
 - Phase 2: closed (94% conditional)
 - Phase 3: closed (28 cases, 1 false accept, adversarial 10/10)
-- Phase 4: in progress — batch 1 (12/12), batch 2 atomic (10/10), batch 3 (11/12)
+- Phase 4: in progress — batch 1 (12/12), batch 2 atomic (10/10), batch 3 (11/12), batch 3 FIXED
 
 **Batch 3 score: 11/12 (91.7%)**
 
@@ -47,7 +47,7 @@ This is NOT a threshold problem. It's a parser/norm layer gap:
 ---
 
 **Next session (in order):**
-1. Fix modifier extraction in normalization layer
+1. Fix modifier extraction in normalization layer — DONE (structural_modifier check added)
 2. Measure recall cost of any threshold change
 3. Answer the three architectural questions in writing
 4. THEN write final decision contract
