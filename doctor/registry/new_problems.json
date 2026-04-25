@@ -2,10 +2,12 @@
   "climbing_stairs": {
     "spec": {
       "display_name": "Climbing Stairs",
+      "description": "Given n steps and the ability to climb 1 or 2 steps at a time, return the number of distinct ways to reach the top.",
       "constraints": {"n": "1 <= n <= 45"},
       "difficulty": "easy",
       "tags": ["dynamic_programming", "math"],
-      "problem_id": "climbing_stairs"
+      "problem_id": "climbing_stairs",
+      "reference_solution": "def climbStairs(n):\n    if n <= 2:\n        return n\n    a, b = 1, 2\n    for _ in range(3, n + 1):\n        a, b = b, a + b\n    return b\n"
     },
     "execution": {
       "test_cases": [
@@ -21,10 +23,12 @@
   "coin_change": {
     "spec": {
       "display_name": "Coin Change",
+      "description": "Given coin denominations and a target amount, return the minimum number of coins needed to make the amount, or -1 if it is impossible.",
       "constraints": {"amount": "0 <= amount <= 10^4", "coins": "1 <= len <= 12"},
       "difficulty": "medium",
       "tags": ["dynamic_programming", "breadth_first_search"],
-      "problem_id": "coin_change"
+      "problem_id": "coin_change",
+      "reference_solution": "def coinChange(coins, amount):\n    dp = [amount + 1] * (amount + 1)\n    dp[0] = 0\n    for value in range(1, amount + 1):\n        for coin in coins:\n            if coin <= value:\n                dp[value] = min(dp[value], dp[value - coin] + 1)\n    return dp[amount] if dp[amount] != amount + 1 else -1\n"
     },
     "execution": {
       "test_cases": [
@@ -40,10 +44,12 @@
   "longest_substring_without_repeating_characters": {
     "spec": {
       "display_name": "Longest Substring Without Repeating Characters",
+      "description": "Given a string, return the length of the longest substring without repeating characters.",
       "constraints": {"s": "0 <= len <= 10^5"},
       "difficulty": "medium",
       "tags": ["sliding_window", "hash_table", "string"],
-      "problem_id": "longest_substring_without_repeating_characters"
+      "problem_id": "longest_substring_without_repeating_characters",
+      "reference_solution": "def lengthOfLongestSubstring(s):\n    last_seen = {}\n    left = 0\n    best = 0\n    for right, ch in enumerate(s):\n        if ch in last_seen and last_seen[ch] >= left:\n            left = last_seen[ch] + 1\n        last_seen[ch] = right\n        best = max(best, right - left + 1)\n    return best\n"
     },
     "execution": {
       "test_cases": [

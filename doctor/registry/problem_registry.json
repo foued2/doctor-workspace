@@ -174,10 +174,12 @@
   "palindrome_number": {
     "spec": {
       "display_name": "Palindrome Number",
+      "description": "Given an integer x, return true if x reads the same forward and backward, and false otherwise.",
       "constraints": {},
       "difficulty": "easy",
       "tags": [],
-      "problem_id": "palindrome_number"
+      "problem_id": "palindrome_number",
+      "reference_solution": "def isPalindrome(x):\n    if x < 0 or (x % 10 == 0 and x != 0):\n        return False\n    reverted = 0\n    while x > reverted:\n        reverted = reverted * 10 + x % 10\n        x //= 10\n    return x == reverted or x == reverted // 10\n"
     },
     "execution": {
       "test_cases": [
@@ -232,10 +234,12 @@
   "roman_to_integer": {
     "spec": {
       "display_name": "Roman to Integer",
+      "description": "Given a Roman numeral string, convert it to its integer value.",
       "constraints": {},
       "difficulty": "easy",
       "tags": [],
-      "problem_id": "roman_to_integer"
+      "problem_id": "roman_to_integer",
+      "reference_solution": "def romanToInt(s):\n    values = {'I': 1, 'V': 5, 'X': 10, 'L': 50, 'C': 100, 'D': 500, 'M': 1000}\n    total = 0\n    for i, ch in enumerate(s):\n        if i + 1 < len(s) and values[ch] < values[s[i + 1]]:\n            total -= values[ch]\n        else:\n            total += values[ch]\n    return total\n"
     },
     "execution": {
       "test_cases": [
@@ -290,10 +294,12 @@
   "longest_common_prefix": {
     "spec": {
       "display_name": "Longest Common Prefix",
+      "description": "Given a list of strings, return the longest common prefix shared by all strings.",
       "constraints": {},
       "difficulty": "easy",
       "tags": [],
-      "problem_id": "longest_common_prefix"
+      "problem_id": "longest_common_prefix",
+      "reference_solution": "def longestCommonPrefix(strs):\n    if not strs:\n        return ''\n    prefix = strs[0]\n    for s in strs[1:]:\n        while not s.startswith(prefix):\n            prefix = prefix[:-1]\n            if not prefix:\n                return ''\n    return prefix\n"
     },
     "execution": {
       "test_cases": [
@@ -2113,11 +2119,13 @@
   "min_distance": {
     "spec": {
       "display_name": "Edit Distance",
+      "description": "Given two strings word1 and word2, return the minimum number of insertions, deletions, and replacements needed to transform word1 into word2.",
       "constraints": {},
       "difficulty": "hard",
       "tags": [],
       "problem_id": "min_distance",
-      "order_sensitive": true
+      "order_sensitive": true,
+      "reference_solution": "def minDistance(word1, word2):\n    rows = len(word1) + 1\n    cols = len(word2) + 1\n    dp = [[0] * cols for _ in range(rows)]\n    for i in range(rows):\n        dp[i][0] = i\n    for j in range(cols):\n        dp[0][j] = j\n    for i in range(1, rows):\n        for j in range(1, cols):\n            if word1[i - 1] == word2[j - 1]:\n                dp[i][j] = dp[i - 1][j - 1]\n            else:\n                dp[i][j] = 1 + min(dp[i - 1][j], dp[i][j - 1], dp[i - 1][j - 1])\n    return dp[-1][-1]\n"
     },
     "execution": {
       "test_cases": [
@@ -2927,6 +2935,7 @@
   "climbing_stairs": {
     "spec": {
       "display_name": "Climbing Stairs",
+      "description": "Given n steps and the ability to climb 1 or 2 steps at a time, return the number of distinct ways to reach the top.",
       "constraints": {
         "n": "1 <= n <= 45"
       },
@@ -2935,7 +2944,8 @@
         "dynamic_programming",
         "math"
       ],
-      "problem_id": "climbing_stairs"
+      "problem_id": "climbing_stairs",
+      "reference_solution": "def climbStairs(n):\n    if n <= 2:\n        return n\n    a, b = 1, 2\n    for _ in range(3, n + 1):\n        a, b = b, a + b\n    return b\n"
     },
     "execution": {
       "test_cases": [
@@ -2975,6 +2985,7 @@
   "coin_change": {
     "spec": {
       "display_name": "Coin Change",
+      "description": "Given coin denominations and a target amount, return the minimum number of coins needed to make the amount, or -1 if it is impossible.",
       "constraints": {
         "amount": "0 <= amount <= 10^4",
         "coins": "1 <= len <= 12"
@@ -2984,7 +2995,8 @@
         "dynamic_programming",
         "breadth_first_search"
       ],
-      "problem_id": "coin_change"
+      "problem_id": "coin_change",
+      "reference_solution": "def coinChange(coins, amount):\n    dp = [amount + 1] * (amount + 1)\n    dp[0] = 0\n    for value in range(1, amount + 1):\n        for coin in coins:\n            if coin <= value:\n                dp[value] = min(dp[value], dp[value - coin] + 1)\n    return dp[amount] if dp[amount] != amount + 1 else -1\n"
     },
     "execution": {
       "test_cases": [
@@ -3035,6 +3047,7 @@
   "longest_substring_without_repeating_characters": {
     "spec": {
       "display_name": "Longest Substring Without Repeating Characters",
+      "description": "Given a string, return the length of the longest substring without repeating characters.",
       "constraints": {
         "s": "0 <= len <= 10^5"
       },
@@ -3044,7 +3057,8 @@
         "hash_table",
         "string"
       ],
-      "problem_id": "longest_substring_without_repeating_characters"
+      "problem_id": "longest_substring_without_repeating_characters",
+      "reference_solution": "def lengthOfLongestSubstring(s):\n    last_seen = {}\n    left = 0\n    best = 0\n    for right, ch in enumerate(s):\n        if ch in last_seen and last_seen[ch] >= left:\n            left = last_seen[ch] + 1\n        last_seen[ch] = right\n        best = max(best, right - left + 1)\n    return best\n"
     },
     "execution": {
       "test_cases": [
