@@ -267,3 +267,40 @@ Monitoring:
 - `reject_rate`: rejected / total per batch
 - `reject_rate_trend`: rolling average across batches
 - Alert threshold: if reject_rate > 40% or < 10%, flag for review
+
+---
+
+## Architectural Decisions
+
+### Question 1: Is constraint_consistency authoritative or advisory?
+**Answer:** Authoritative. If constraint_consistency falls below threshold, the case rejects regardless of objective_match or structural_compatibility scores. It is not a soft signal.
+
+### Question 2: What is evaluated before vs after normalization?
+**Answer:** Normalization (canonicalization of domain terminology) runs first. Structural modifier extraction runs second. Constraint evaluation runs third. Alignment scoring runs last. Order is fixed and must not be violated.
+
+### Question 3: Is multi-constraint inconsistency pairwise or global set?
+**Answer:** Currently pairwise — each constraint is checked independently against the registry definition. Global set inconsistency (jointly inconsistent constraints that individually pass) is a known gap, documented as a Phase 5 requirement. Doctor does not claim to detect emergent constraint conflicts.
+
+---
+
+## Final Decision Contract
+
+```
+Accept ⟺
+  ¬contradiction
+  ∧ ¬structural_modifier
+  ∧ (objective_match ≥ T₁)
+  ∧ (constraint_consistency ≥ T₂)
+  ∧ (structural_compatibility ≥ T₃)
+  ∧ (json_repair → alignment ≥ 0.90)
+  ∧ match_candidate ∈ registry
+```
+
+Where:
+- `¬contradiction`: No contradictory keywords in objective for matched problem
+- `¬structural_modifier`: No structural modifiers ("ignore X", "except X", "only X") in constraints
+- `objective_match ≥ T₁`: alignment_score ≥ 0.85 (T₁ tunable)
+- `constraint_consistency ≥ T₂`: constraint_consistency ≥ 0.7 (T₂ tunable)
+- `structural_compatibility ≥ T₃`: structural_compatibility ≥ 0.7 (T₃ tunable)
+- `json_repair → alignment ≥ 0.90`: If json_repair triggered, require alignment ≥ 0.90 on all scores
+- `match_candidate ∈ registry`: Match is not "no match"
