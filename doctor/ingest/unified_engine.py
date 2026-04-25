@@ -294,17 +294,22 @@ def _evaluate_decision(
                 "error": con_reason
             }
         
-        if repair_info.get("repair_used") and alignment_score < ALIGNMENT_THRESHOLD:
-            trace["decision_contract"]["conditions"]["alignment_threshold_met"] = False
-            trace["final"] = "reject"
-            trace["decision_contract"]["rejection_reason"] = "reduced_confidence_due_to_repair"
-            return {
-                "status": "rejected",
-                "failure_tag": "matcher_miss",
-                "matched": None,
-                "parsed_model": model,
-                "decision_trace": trace,
-                "justification": f"Accept blocked: json_repair used and alignment {alignment_score} < {ALIGNMENT_THRESHOLD}"
+        if repair_info.get("repair_used"):
+            repair_threshold = 0.90
+            if alignment_score < repair_threshold or constraint_consistency < repair_threshold or structural_compatibility < repair_threshold:
+                trace["decision_contract"]["conditions"]["alignment_threshold_met"] = False
+                trace["decision_contract"]["conditions"]["constraints_consistent"] = constraint_consistency < repair_threshold
+                trace["decision_contract"]["conditions"]["structural_compatible"] = structural_compatibility < repair_threshold
+                trace["final"] = "reject"
+                trace["decision_contract"]["rejection_reason"] = "reduced_confidence_due_to_repair"
+                trace["decision_contract"]["repair_threshold"] = repair_threshold
+                return {
+                    "status": "rejected",
+                    "failure_tag": "matcher_miss",
+                    "matched": None,
+                    "parsed_model": model,
+                    "decision_trace": trace,
+                    "justification": f"Accept blocked: json_repair used, requires {repair_threshold} on all sub-scores. Got alignment={alignment_score}, constraint={constraint_consistency}, structural={structural_compatibility}"
             }
         
         trace["final"] = "accept"
