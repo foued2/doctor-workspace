@@ -244,6 +244,37 @@ def normalize_solution(code: str) -> Optional[str]:
         return None
 
 
+def _defined_function_names(code: str) -> list[str]:
+    """Return module-level function names defined in the solution code."""
+    try:
+        tree = ast.parse(code)
+    except SyntaxError:
+        return []
+
+    names: list[str] = []
+    for node in tree.body:
+        if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
+            names.append(node.name)
+    return names
+
+
+def _expected_function_names(problem_name: str) -> list[str]:
+    """Return registry-declared function names for a problem key or display name."""
+    from doctor.registry.problem_registry import get_problem, get_all_display_names
+
+    entry = get_problem(problem_name)
+    if entry is None:
+        problem_key = get_all_display_names().get(problem_name)
+        if problem_key:
+            entry = get_problem(problem_key)
+
+    if entry is None:
+        return []
+
+    func_names = entry.get("normalization", {}).get("function_names", [])
+    return [name for name in func_names if isinstance(name, str) and name]
+
+
 def extract_function(code: str, problem_name: str = None) -> Optional[Callable]:
     """
     Extract the solution function from normalized code.
@@ -259,26 +290,21 @@ def extract_function(code: str, problem_name: str = None) -> Optional[Callable]:
     namespace["ListNode"] = _get_listnode()
     
     try:
+        defined_names = _defined_function_names(code)
         exec(code, namespace)
-        
-        # Collect all callables
-        functions = []
-        classes = []
-        
-        for name, val in namespace.items():
-            if not name.startswith("_") and name != "ListNode" and callable(val):
-                if isinstance(val, type):
-                    classes.append((name, val))
-                else:
-                    functions.append((name, val))
-        
-        # Priority: standalone functions > classes
-        if functions:
-            return functions[0][1]
-        if classes:
-            # Return the class for instantiation
-            return classes[0][1]
-        
+
+        if problem_name:
+            for name in _expected_function_names(problem_name):
+                if name in defined_names:
+                    val = namespace.get(name)
+                    if callable(val) and not isinstance(val, type):
+                        return val
+
+        for name in defined_names:
+            val = namespace.get(name)
+            if callable(val) and not isinstance(val, type):
+                return val
+
         return None
     except Exception:
         return None
@@ -304,23 +330,6 @@ def _get_listnode():
     return _listnode_class
 
 
-def _build_problem_function_map() -> Dict[str, str]:
-    """Build PROBLEM_FUNCTION_MAP from registry: display_name -> function_name."""
-    from doctor.registry.problem_registry import get_problems
-    result: Dict[str, str] = {}
-    for key, entry in get_problems().items():
-        if not isinstance(entry, dict):
-            continue
-        display_name = entry.get("spec", {}).get("display_name", "")
-        func_names = entry.get("normalization", {}).get("function_names", [])
-        if display_name and func_names:
-            result[display_name] = func_names[0]
-    return result
-
-
-PROBLEM_FUNCTION_MAP: Dict[str, str] = _build_problem_function_map()
-
-
 def extract_function_for_problem(code: str, problem_name: str) -> Optional[Callable]:
     """
     Extract function specifically for a known problem.
@@ -329,30 +338,6 @@ def extract_function_for_problem(code: str, problem_name: str) -> Optional[Calla
     then extracts that specific function.
     """
     normalized = normalize_solution(code)
-    
-    expected_func = PROBLEM_FUNCTION_MAP.get(problem_name)
-    
-    namespace: Dict[str, Any] = {}
-    namespace["ListNode"] = _get_listnode()
-    
-    try:
-        exec(normalized, namespace)
-        
-        if expected_func:
-            for name, val in namespace.items():
-                if name == expected_func and callable(val) and not isinstance(val, type):
-                    return val
-        
-        for name, val in namespace.items():
-            if (not name.startswith("_") and name != "ListNode" and 
-                callable(val) and not isinstance(val, type)):
-                return val
-        
-        for name, val in namespace.items():
-            if (not name.startswith("_") and name != "ListNode" and 
-                callable(val) and isinstance(val, type)):
-                return val
-        
+    if normalized is None:
         return None
-    except Exception:
-        return None
+    return extract_function(normalized, problem_name)

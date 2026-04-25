@@ -237,9 +237,6 @@ def _build_validator_params(test_input: tuple) -> dict:
 
 def _results_equal(got, expected) -> bool:
     """Compare got vs expected, handling lists, floats, linked lists."""
-    # Handle impossible case for arrange_numbers_divisible
-    if expected == -1:
-        return got == -1 or got is None
     # Handle None linked list as empty list
     if got is None and expected == []:
         return True
@@ -285,14 +282,16 @@ def validate_arrangement(output, input_args):
     return True
 
 
-def _safe_exec(code: str) -> Optional[callable]:
+def _safe_exec(code: str, problem_name: str = None) -> Optional[callable]:
     """Execute solution code and return the function, or None on error."""
     from ..normalize.solution_normalizer import normalize_solution, extract_function
     
     # Normalize GPT-generated solutions through the normalizer
     code = normalize_solution(code)
+    if code is None:
+        return None
     
-    return extract_function(code)
+    return extract_function(code, problem_name)
 
 
 # ===========================================================================
@@ -328,7 +327,7 @@ class TestExecutor:
             )
 
         # Extract function
-        func = _safe_exec(solution_code)
+        func = _safe_exec(solution_code, suite_key)
         if func is None:
             return ExecutionReport(
                 verdict="incorrect", pass_rate=0.0, total=len(test_cases), passed=0,

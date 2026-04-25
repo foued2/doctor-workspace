@@ -5,12 +5,7 @@ Doctor - Strict Pipeline with 5 Gates
 Each gate either passes or stops. No conversation, no encouragement.
 """
 import os
-import sys
 import json
-import subprocess
-import signal
-import tempfile
-import shutil
 
 # ============================================================
 # CONFIG
@@ -130,15 +125,47 @@ def gate2_modifiers(parsed_model: dict, problem_id: str) -> dict:
 # ============================================================
 # GATE 3: SOLUTION INTAKE
 # ============================================================
-def gate3_solution(solution_code: str) -> dict:
-    """Validate Python syntax"""
+def gate3_solution(solution_path: str) -> dict:
+    """Load solution file from disk and validate Python syntax."""
+    if not solution_path.strip():
+        return {
+            "passed": False,
+            "stop_reason": "No solution file path provided",
+        }
+
+    if not os.path.isfile(solution_path):
+        return {
+            "passed": False,
+            "stop_reason": f"Solution file not found: {solution_path}",
+        }
+
     try:
-        compile(solution_code, "<solution>", "exec")
-        return {"passed": True, "valid": True}
+        with open(solution_path, "r", encoding="utf-8") as f:
+            solution_code = f.read()
+    except OSError as e:
+        return {
+            "passed": False,
+            "stop_reason": f"Could not read solution file: {e}",
+        }
+
+    if not solution_code.strip():
+        return {
+            "passed": False,
+            "stop_reason": f"Solution file is empty: {solution_path}",
+        }
+
+    try:
+        compile(solution_code, solution_path, "exec")
+        return {
+            "passed": True,
+            "valid": True,
+            "solution_code": solution_code,
+            "solution_path": solution_path,
+        }
     except SyntaxError as e:
         return {
             "passed": False,
-            "stop_reason": "Solution is not valid Python",
+            "stop_reason": f"Solution file is not valid Python: {solution_path}",
             "syntax_error": str(e)
         }
 
@@ -178,26 +205,52 @@ def gate4_tests(problem_id: str, user_tests: list) -> dict:
 # GATE 5: EXECUTION
 # ============================================================
 def gate5_execute(solution_code: str, problem_id: str, tests: list, timeout: int = 30) -> dict:
-    """Run solution against tests"""
+    """Run solution against tests using the shared executor path."""
     from doctor.core.test_executor import TestExecutor
     
     executor = TestExecutor()
     report = executor.verify(problem_id, solution_code)
     
-    results = [{"label": r.label, "passed": r.passed, "got": r.got, "expected": r.expected, "error": r.error} for r in report.results]
-    passed = report.passed
-    total = report.total
-    
     if report.error:
         return {"passed": False, "stop_reason": f"Execution error: {report.error}"}
     
+    results = [
+        {
+            "label": r.label,
+            "passed": r.passed,
+            "got": r.got,
+            "expected": r.expected,
+            "error": r.error,
+            "validation_type": getattr(r, "validator_kind", None),
+        }
+        for r in report.results
+    ]
+
     return {
-        "passed": passed,
-        "total": total,
+        "passed": report.passed,
+        "total": report.total,
         "results": results,
         "pass_rate": report.pass_rate,
         "error": report.error
     }
+
+
+def _diagnosis_line(result: dict) -> str:
+    label = result.get("label", "unknown")
+    got = repr(result.get("got"))
+    expected = result.get("expected")
+    validation_type = result.get("validation_type")
+    error = result.get("error", "")
+
+    if error:
+        return f"  {label}: got {got} — {error}"
+
+    if validation_type == "arrangement_validator":
+        if result.get("got") in (None, -1):
+            return f"  {label}: got {got} expected valid arrangement — algorithm returned no solution"
+        return f"  {label}: got {got} expected valid arrangement — arrangement invalid"
+
+    return f"  {label}: got {got} expected {repr(expected)}"
 
 # ============================================================
 # REPORT GENERATOR
@@ -267,10 +320,11 @@ def generate_report(gate_results: dict) -> str:
     
     # Diagnosis for INCORRECT/PARTIAL
     if verdict in ["INCORRECT", "PARTIAL"]:
-        failed_tests = [r["label"] for r in g5.get("results", []) if not r.get("passed")]
-        if failed_tests:
+        failed_results = [r for r in g5.get("results", []) if not r.get("passed")]
+        if failed_results:
             lines.append(f"DIAGNOSIS:")
-            lines.append(f"  test_failure(s): {', '.join(failed_tests)}")
+            for result in failed_results:
+                lines.append(_diagnosis_line(result))
     
     # Summary - one sentence
     if verdict == "CORRECT":
@@ -342,24 +396,13 @@ def main():
     
     # GATE 3
     print("[Gate 3] Solution Intake")
-    print("Paste solution (Enter twice to finish):")
-    solution_lines = []
-    while True:
-        try:
-            line = input()
-            if line.strip() == "":
-                break
-            solution_lines.append(line)
-        except EOFError:
-            break
-    
-    solution_code = "\n".join(solution_lines)
-    
-    if not solution_code.strip():
-        print("STOP: No solution provided")
-        return
-    
-    g3 = gate3_solution(solution_code)
+    print("Enter path to solution file:")
+    try:
+        solution_path = input().strip()
+    except EOFError:
+        solution_path = ""
+
+    g3 = gate3_solution(solution_path)
     gate_results["gate3"] = g3
     
     if not g3["passed"]:
@@ -402,7 +445,7 @@ def main():
     
     # GATE 5
     print("[Gate 5] Execution")
-    g5 = gate5_execute(solution_code, g1["problem_id"], g4["authoritative_tests"])
+    g5 = gate5_execute(g3["solution_code"], g1["problem_id"], g4["authoritative_tests"])
     gate_results["gate5"] = g5
     
     if not g5.get("passed", 0) and g5.get("passed", 0) == 0 and g5.get("total", 0) > 0:

@@ -140,7 +140,7 @@ def solve_case(n, ks):
             if valid:
                 return result
     
-    return None
+    return -1
 
 
 def solve():
@@ -152,7 +152,7 @@ def solve():
         ks = list(map(int, input().split()))
         
         result = solve_case(n, ks)
-        if result is None or len(result) != n:
+        if result == -1 or len(result) != n:
             outputs.append([-1])
         else:
             outputs.append(result)
