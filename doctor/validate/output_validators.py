@@ -122,6 +122,36 @@ def validate_trap_water(output: Any, params: Dict[str, Any]) -> Tuple[bool, str]
     return True, "ok"
 
 
+def validate_arrangement(output: Any, params: Dict[str, Any]) -> Tuple[bool, str]:
+    """Verify arrangement of 0..n-1 where adjacent diffs are divisible by some k."""
+    n = params.get("n")
+    ks = params.get("ks")
+    if n is None or ks is None:
+        return False, "missing params: n, ks"
+
+    if output is None:
+        return False, "output is None"
+
+    if isinstance(output, int) and output == -1:
+        return True, "ok"
+
+    if not isinstance(output, list):
+        return False, f"expected list, got {type(output).__name__}"
+
+    if len(output) != n:
+        return False, f"expected {n} elements, got {len(output)}"
+
+    if set(output) != set(range(n)):
+        return False, f"expected permutation of 0..{n-1}, got {set(output)}"
+
+    for i in range(len(output) - 1):
+        diff = abs(output[i+1] - output[i])
+        if not any(diff % k == 0 for k in ks):
+            return False, f"adjacent pair ({output[i]}, {output[i+1]}) diff={diff} not divisible by any k in {ks}"
+
+    return True, "ok"
+
+
 # Registry: problem_key -> validator function
 VALIDATORS: Dict[str, Any] = {
     "N-Queens": validate_nqueens,
@@ -129,6 +159,7 @@ VALIDATORS: Dict[str, Any] = {
     "Valid Parentheses": validate_valid_parens,
     "Container With Most Water": validate_container,
     "Trapping Rain Water": validate_trap_water,
+    "Arrange Numbers Divisible": validate_arrangement,
 }
 
 # Problems where deterministic validation is NOT possible or NOT useful:

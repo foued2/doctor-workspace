@@ -59,17 +59,19 @@
   "arrange_numbers_divisible": {
     "spec": {
       "display_name": "Arrange Numbers Divisible",
+      "description": "Given integers 0 to n-1, arrange them in a sequence such that the absolute difference between every adjacent pair is divisible by at least one value in the list k.",
       "constraints": {"n": "3 <= n <= 5000", "k": "1 <= len <= 10"},
       "difficulty": "hard",
       "tags": ["graphs", "greedy", "number_theory", "construction"],
-      "problem_id": "arrange_numbers_divisible"
+      "problem_id": "arrange_numbers_divisible",
+      "reference_solution": "\ndef arrangeNumbers(n, ks):\n    if 1 in ks:\n        return list(range(n))\n    for k in ks:\n        result = []\n        for r in range(k):\n            for x in range(r, n, k):\n                result.append(x)\n        valid = True\n        for i in range(len(result)-1):\n            diff = abs(result[i+1]-result[i])\n            if not any(diff % kk == 0 for kk in ks):\n                valid = False\n                break\n        if valid and len(result) == n:\n            return result\n    return None\n"
     },
     "execution": {
       "test_cases": [
-        {"input": [10, [2, 3]], "expected": [1, 3, 5, 7, 9, 0, 2, 4, 6, 8], "label": "sample", "source": "codeforces"},
+        {"input": [10, [2, 3]], "expected": null, "validation_type": "arrangement_validator", "label": "sample", "source": "codeforces"},
         {"input": [6, [2]], "expected": -1, "label": "impossible", "source": "codeforces"},
-        {"input": [3, [1]], "expected": [0, 1, 2], "label": "trivial_k1", "source": "boundary"},
-        {"input": [9, [2, 3]], "expected": [0, 3, 6, 4, 2, 8, 5, 7, 1], "label": "cross_boundary", "source": "independent"}
+        {"input": [3, [1]], "expected": null, "validation_type": "arrangement_validator", "label": "trivial_k1", "source": "boundary"},
+        {"input": [9, [2, 3]], "expected": null, "validation_type": "arrangement_validator", "label": "cross_boundary", "source": "independent"}
       ]
     },
     "normalization": {

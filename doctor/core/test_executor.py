@@ -27,6 +27,7 @@ class TestCase:
     input: tuple                # positional args to the function
     expected: Any               # expected return value
     label: str = ""             # human-readable label (e.g., "all_negative")
+    validation_type: str = None # "arrangement_validator" or None
 
 
 @dataclass
@@ -106,8 +107,9 @@ def _build_test_suites() -> Dict[str, List[TestCase]]:
         suites[key] = [
             TestCase(
                 input=_to_test_input(tc["input"], key),
-                expected=tc["expected"],
+                expected=tc.get("expected"),
                 label=tc["label"],
+                validation_type=tc.get("validation_type"),
             )
             for tc in test_cases
         ]
@@ -212,6 +214,10 @@ def _build_validator_params(test_input: tuple) -> dict:
     # Two Sum: (nums, target)
     if len(test_input) == 2 and isinstance(test_input[0], list):
         return {"nums": test_input[0], "target": test_input[1]}
+    
+    # Arrange Numbers Divisible: (n, ks)
+    if len(test_input) == 2 and isinstance(test_input[0], int) and isinstance(test_input[1], list):
+        return {"n": test_input[0], "ks": test_input[1]}
     
     # Valid Parentheses: (string,)
     if len(test_input) == 1 and isinstance(test_input[0], str):
@@ -322,11 +328,18 @@ class TestExecutor:
                 suite_key, trace.get("output"), tc.input
             )
 
-            # E = _results_equal is the ONLY correctness criterion
-            if trace["error"] is not None:
-                passed = False
+            # Arrangement validator: use validator result for pass/fail
+            if tc.validation_type == "arrangement_validator":
+                if trace["error"] is not None:
+                    passed = False
+                else:
+                    passed = validator_result == True
             else:
-                passed = _results_equal(trace["output"], tc.expected)
+                # E = _results_equal is the ONLY correctness criterion
+                if trace["error"] is not None:
+                    passed = False
+                else:
+                    passed = _results_equal(trace["output"], tc.expected)
 
             results.append(TestResult(
                 label=tc.label, passed=passed,

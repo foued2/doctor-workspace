@@ -169,63 +169,22 @@ def gate5_execute(solution_code: str, problem_id: str, tests: list, timeout: int
     """Run solution against tests"""
     from doctor.core.test_executor import TestExecutor
     
-    results = []
-    passed = 0
-    total = len(tests)
-    error = None
+    executor = TestExecutor()
+    report = executor.verify(problem_id, solution_code)
     
-    # Write solution to temp file
-    with tempfile.NamedTemporaryFile(mode='w', suffix='.py', delete=False) as f:
-        f.write(solution_code)
-        temp_file = f.name
+    results = [{"label": r.label, "passed": r.passed, "got": r.got, "expected": r.expected, "error": r.error} for r in report.results]
+    passed = report.passed
+    total = report.total
     
-    try:
-        # Import and run
-        sys.path.insert(0, "F:/pythonProject1")
-        
-        # Execute each test
-        for tc in tests:
-            test_input = tc.get("input", [])
-            expected = tc.get("expected")
-            label = tc.get("label", "?")
-            
-            try:
-                # Import solve_case
-                from cf2225g import solve_case
-                
-                # Handle different argument patterns
-                if len(test_input) == 2:
-                    got = solve_case(test_input[0], test_input[1])
-                else:
-                    got = solve_case(*test_input)
-                
-                # Strict equality
-                from doctor.core.test_executor import _results_equal
-                equal = _results_equal(got, expected)
-                
-                if equal:
-                    passed += 1
-                    results.append({"label": label, "passed": True, "got": got})
-                else:
-                    results.append({"label": label, "passed": False, "got": got, "expected": expected})
-                    
-            except subprocess.TimeoutExpired:
-                results.append({"label": label, "passed": False, "error": "timeout"})
-                break
-            except Exception as e:
-                results.append({"label": label, "passed": False, "error": str(e)})
-                
-    finally:
-        os.unlink(temp_file)
-    
-    if error:
-        return {"passed": False, "stop_reason": f"Runtime error: {error}"}
+    if report.error:
+        return {"passed": False, "stop_reason": f"Execution error: {report.error}"}
     
     return {
         "passed": passed,
         "total": total,
         "results": results,
-        "pass_rate": passed/total if total > 0 else 0
+        "pass_rate": report.pass_rate,
+        "error": report.error
     }
 
 # ============================================================
