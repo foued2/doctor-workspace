@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 """
-Unified Doctor Engine - Single LLM call for parse + match + confidence.
+Unified Doctor Engine - Single LLM call for parse + match + confidence + decision.
 
 Architecture:
 - 1 LLM call per statement (vs 3-4 before)
 - Parser + Matcher merged into one prompt
-- Output: parsed_model + match_candidate + confidence + decision
+- Output: parsed_model + match_candidate + alignment_score breakdown + decision
 """
 
 import os
@@ -53,6 +53,83 @@ def _check_contradiction(objective: str, match_id: str) -> Tuple[bool, str]:
 
 def _hash(text: str) -> str:
     return hashlib.sha256(text.encode()).hexdigest()[:16]
+
+
+def _extract_json_object(response: str, repair_info: dict = None) -> Dict[str, Any]:
+    if repair_info is None:
+        repair_info = {"repair_used": False, "repair_method": None}
+    
+    start, end = response.find("{"), response.rfind("}")
+    if start < 0 or end <= start:
+        raise ValueError("Invalid JSON response")
+    
+    try:
+        return json.loads(response[start : end + 1])
+    except json.JSONDecodeError:
+        pass
+    
+    last_brace = response.rfind("}")
+    if last_brace > start:
+        try:
+            repair_info["repair_used"] = True
+            repair_info["repair_method"] = "truncate"
+            return json.loads(response[start : last_brace + 1])
+        except json.JSONDecodeError:
+            pass
+    
+    import re
+    match = re.search(r'\{[^{}]*\}', response[start:end + 1], re.DOTALL)
+    if match:
+        try:
+            repair_info["repair_used"] = True
+            repair_info["repair_method"] = "regex"
+            return json.loads(match.group(0))
+        except json.JSONDecodeError:
+            pass
+    
+    raise ValueError("Invalid JSON response")
+
+
+def _extract_json_array(response: str, repair_info: dict = None) -> list:
+    if repair_info is None:
+        repair_info = {"repair_used": False, "repair_method": None}
+    
+    start, end = response.find("["), response.rfind("]")
+    if start < 0 or end <= start:
+        raise ValueError("Invalid JSON array response")
+    
+    try:
+        return json.loads(response[start:end+1])
+    except json.JSONDecodeError:
+        pass
+    
+    last_bracket = response.rfind("]")
+    if last_bracket > start:
+        try:
+            repair_info["repair_used"] = True
+            repair_info["repair_method"] = "truncate"
+            return json.loads(response[start:last_bracket+1])
+        except json.JSONDecodeError:
+            pass
+    
+    import re
+    matches = list(re.finditer(r'\{[^{}]*\}', response[start:end+1], re.DOTALL))
+    if matches:
+        try:
+            repair_info["repair_used"] = True
+            repair_info["repair_method"] = "regex_array"
+            results = []
+            for m in matches:
+                try:
+                    results.append(json.loads(m.group(0)))
+                except json.JSONDecodeError:
+                    continue
+            if results:
+                return results
+        except Exception:
+            pass
+    
+    raise ValueError("Invalid JSON array response")
 
 
 def _call_llm(prompt: str, retries: int = 0) -> str:
@@ -134,9 +211,11 @@ _UNIFIED_PROMPT = """You are a unified problem analyzer. For the given statement
 
 1. parsed_model: structured extraction
 2. match_candidate: best matching problem_id or "no match"
-3. confidence: "high", "medium", or "low" 
-4. decision: "accept" or "reject"
-5. justification: brief reasoning
+3. alignment_score: OBJECTIVE alignment (0.0-1.0) - explicit keyword match
+4. constraint_consistency: CONSTR alignment (0.0-1.0) - constraints match
+5. structural_compatibility: STRUCT alignment (0.0-1.0) - input/output type match
+6. decision: "accept" or "reject"
+7. justification: brief reasoning
 
 CRITICAL RULES:
 - Match ONLY if input_type, output_type, AND objective ALL align
@@ -145,6 +224,7 @@ CRITICAL RULES:
 - "Minimum cost" != "Number of ways" (min_cost_climbing vs climbing_stairs)
 - Ambiguous = reject, NOT guess
 - Domain disguise (shopping, temperatures) is valid if structure matches
+- alignment_score requires EXPLICIT keyword match, not inference
 
 Output Schema:
 {{
@@ -157,7 +237,9 @@ Output Schema:
     "types_explicit": "boolean - true if types stated explicitly, false if inferred"
   }},
   "match_candidate": "problem_id or 'no match'",
-  "confidence": "high|medium|low",
+  "alignment_score": "float 0.0-1.0 - OBJECTIVE keyword match",
+  "constraint_consistency": "float 0.0-1.0 - constraints aligned",
+  "structural_compatibility": "float 0.0-1.0 - input/output types match",
   "decision": "accept|reject",
   "justification": "why match/reject - cite key signals"
 }}
@@ -170,8 +252,87 @@ STATEMENT: {statement}
 Output ONLY JSON:"""
 
 
+ALIGNMENT_THRESHOLD = 0.85
+
+
+def _evaluate_decision(
+    match: str,
+    decision: str,
+    model: dict,
+    alignment_score: float,
+    constraint_consistency: float,
+    structural_compatibility: float,
+    repair_info: dict,
+    trace: dict
+) -> dict:
+    """Formal decision contract: Accept iff (no contradiction) AND (alignment >= T) AND (constraints consistent)"""
+    
+    trace["decision_contract"] = {
+        "conditions": {
+            "no_contradiction": True,
+            "alignment_threshold_met": alignment_score >= ALIGNMENT_THRESHOLD,
+            "constraints_consistent": constraint_consistency >= 0.7,
+            "structural_compatible": structural_compatibility >= 0.7
+        },
+        "threshold_used": ALIGNMENT_THRESHOLD,
+        "repair_active": repair_info.get("repair_used", False)
+    }
+    
+    if decision == "accept" and match and match != "no match":
+        is_con, con_reason = _check_contradiction(model.get("objective", ""), match)
+        if is_con:
+            trace["decision_contract"]["conditions"]["no_contradiction"] = False
+            trace["contradiction"] = True
+            trace["final"] = "reject"
+            trace["decision_contract"]["rejection_reason"] = "contradiction"
+            return {
+                "status": "rejected",
+                "failure_tag": "validation_leak",
+                "matched": None,
+                "parsed_model": model,
+                "decision_trace": trace,
+                "error": con_reason
+            }
+        
+        if repair_info.get("repair_used") and alignment_score < ALIGNMENT_THRESHOLD:
+            trace["decision_contract"]["conditions"]["alignment_threshold_met"] = False
+            trace["final"] = "reject"
+            trace["decision_contract"]["rejection_reason"] = "reduced_confidence_due_to_repair"
+            return {
+                "status": "rejected",
+                "failure_tag": "matcher_miss",
+                "matched": None,
+                "parsed_model": model,
+                "decision_trace": trace,
+                "justification": f"Accept blocked: json_repair used and alignment {alignment_score} < {ALIGNMENT_THRESHOLD}"
+            }
+        
+        trace["final"] = "accept"
+        trace["decision_contract"]["accept_condition"] = "all_conditions_met"
+        return {
+            "status": "success",
+            "failure_tag": None,
+            "matched": match,
+            "parsed_model": model,
+            "alignment_score": alignment_score,
+            "constraint_consistency": constraint_consistency,
+            "structural_compatibility": structural_compatibility,
+            "decision_trace": trace
+        }
+    
+    trace["final"] = "reject"
+    trace["decision_contract"]["rejection_reason"] = "no_valid_match"
+    return {
+        "status": "rejected",
+        "failure_tag": "matcher_miss" if match else "parser_fail",
+        "matched": match,
+        "parsed_model": model,
+        "decision_trace": trace
+    }
+
+
 def analyze_statement(statement: str) -> dict:
-    """Single LLM call: parse + match + confidence + decision."""
+    """Single LLM call: parse + match + alignment decomposition + decision."""
     problems = get_registry_problems()
     registry_context = build_registry_context(problems)
     
@@ -182,59 +343,35 @@ def analyze_statement(statement: str) -> dict:
     
     response = _call_llm(prompt)
     
-    start, end = response.find("{"), response.rfind("}")
-    if start < 0 or end <= start:
+    repair_info = {}
+    try:
+        result = _extract_json_object(response, repair_info)
+    except ValueError as e:
         raise ValueError(f"Invalid JSON response: {response[:200]}")
-    
-    result = json.loads(response[start:end+1])
     
     model = result.get("parsed_model", {})
     match = result.get("match_candidate")
     decision = result.get("decision", "reject")
-    confidence = result.get("confidence", "low")
     justification = result.get("justification", "")
+    
+    alignment_score = float(result.get("alignment_score", 0.0))
+    constraint_consistency = float(result.get("constraint_consistency", 0.0))
+    structural_compatibility = float(result.get("structural_compatibility", 0.0))
     
     trace = {
         "llm_match": match,
-        "confidence": confidence,
+        "alignment_score": alignment_score,
+        "constraint_consistency": constraint_consistency,
+        "structural_compatibility": structural_compatibility,
         "contradiction": False,
-        "final": None
+        "json_repair": repair_info
     }
     
-    if decision == "accept" and match and match != "no match":
-        is_con, con_reason = _check_contradiction(model.get("objective", ""), match)
-        if is_con:
-            trace["contradiction"] = True
-            trace["final"] = "reject"
-            return {
-                "status": "rejected",
-                "failure_tag": "validation_leak",
-                "matched": None,
-                "parsed_model": model,
-                "decision_trace": trace,
-                "error": con_reason
-            }
-        
-        trace["final"] = "accept"
-        return {
-            "status": "success",
-            "failure_tag": None,
-            "matched": match,
-            "parsed_model": model,
-            "confidence": confidence,
-            "decision_trace": trace,
-            "justification": justification
-        }
-    
-    trace["final"] = "reject"
-    return {
-        "status": "rejected",
-        "failure_tag": "matcher_miss" if match else "parser_fail",
-        "matched": match,
-        "parsed_model": model,
-        "decision_trace": trace,
-        "justification": justification
-    }
+    return _evaluate_decision(
+        match, decision, model,
+        alignment_score, constraint_consistency, structural_compatibility,
+        repair_info, trace
+    )
 
 
 def run_phase3_unified(statement: str, user_id: str) -> dict:
@@ -249,7 +386,6 @@ def run_phase3_unified(statement: str, user_id: str) -> dict:
         "failure_tag": None,
         "parsed_model": None,
         "matched": None,
-        "confidence": None,
         "decision_trace": {},
     }
     
@@ -262,6 +398,141 @@ def run_phase3_unified(statement: str, user_id: str) -> dict:
         result["error"] = str(e)
     
     return result
+
+
+_BATCH_PROMPT = """Analyze multiple problem statements against a registry.
+Return a JSON array, one result object per statement.
+
+Output Schema per statement:
+{{
+  "statement_id": "string - maps to input order",
+  "parsed_model": {{
+    "input_type": "string",
+    "output_type": "string", 
+    "objective": "string",
+    "constraints": ["list or empty if not stated"],
+    "edge_conditions": ["list or empty if not stated"],
+    "types_explicit": "boolean"
+  }},
+  "match_candidate": "problem_id or 'no match'",
+  "alignment_score": "float 0.0-1.0 - OBJECTIVE keyword match",
+  "constraint_consistency": "float 0.0-1.0",
+  "structural_compatibility": "float 0.0-1.0",
+  "decision": "accept|reject",
+  "justification": "string"
+}}
+
+CRITICAL RULES:
+- Match ONLY if input_type, output_type, AND objective ALL align
+- "Increasing subsequence" != "Common subsequence"
+- "Maximum product" != "Maximum sum"
+- "Minimum cost" != "Number of ways"
+- alignment_score requires EXPLICIT keyword match
+
+Return ONLY a JSON array. No markdown. No prose.
+
+{registry}
+
+---
+STATEMENTS:
+{numbered_statements}
+
+Output:"""
+
+
+def analyze_batch(statements: list, case_ids: list = None) -> list:
+    """Batch analyze multiple statements in one LLM call."""
+    if case_ids is None:
+        case_ids = [f"case_{i}" for i in range(len(statements))]
+    
+    problems = get_registry_problems()
+    registry_context = build_registry_context(problems)
+    
+    numbered = []
+    for i, (case_id, stmt) in enumerate(zip(case_ids, statements)):
+        numbered.append(f"{i+1}. [{case_id}] {stmt}")
+    
+    prompt = _BATCH_PROMPT.format(
+        registry=registry_context,
+        numbered_statements="\n".join(numbered)
+    )
+    
+    response = _call_llm(prompt)
+    
+    repair_info = {}
+    try:
+        results = _extract_json_array(response, repair_info)
+    except ValueError as e:
+        raise ValueError(f"Batch JSON parse failed: {e}. Response: {response[:500]}")
+    
+    if not isinstance(results, list):
+        raise ValueError(f"Expected JSON array, got {type(results)}")
+    
+    analyzed = []
+    for i, result in enumerate(results):
+        case_id = case_ids[i] if i < len(case_ids) else f"case_{i}"
+        
+        model = result.get("parsed_model", {})
+        match = result.get("match_candidate")
+        decision = result.get("decision", "reject")
+        justification = result.get("justification", "")
+        
+        alignment_score = float(result.get("alignment_score", 0.0))
+        constraint_consistency = float(result.get("constraint_consistency", 0.0))
+        structural_compatibility = float(result.get("structural_compatibility", 0.0))
+        
+        trace = {
+            "llm_match": match,
+            "alignment_score": alignment_score,
+            "constraint_consistency": constraint_consistency,
+            "structural_compatibility": structural_compatibility,
+            "contradiction": False,
+            "json_repair": repair_info,
+            "batch_mode": True
+        }
+        
+        decision_result = _evaluate_decision(
+            match, decision, model,
+            alignment_score, constraint_consistency, structural_compatibility,
+            repair_info, trace
+        )
+        
+        decision_result["statement"] = statements[i]
+        decision_result["user_id"] = case_id
+        
+        analyzed.append(decision_result)
+    
+    return analyzed
+
+
+def run_batch_phase3(statements: list, case_ids: list = None) -> list:
+    """Run Phase 3 batch with unified engine."""
+    from datetime import datetime
+    
+    results = []
+    for i, case_id in enumerate(case_ids or [f"case_{i}" for i in range(len(statements))]):
+        results.append({
+            "timestamp": datetime.now().isoformat(),
+            "user_id": case_id,
+            "statement": statements[i],
+            "status": None,
+            "failure_tag": None,
+            "parsed_model": None,
+            "matched": None,
+            "decision_trace": {},
+        })
+    
+    try:
+        analyzed = analyze_batch(statements, case_ids)
+        for i, analysis in enumerate(analyzed):
+            results[i].update(analysis)
+    except Exception as e:
+        for r in results:
+            r["status"] = "error"
+            r["failure_tag"] = "parser_fail"
+            r["error"] = str(e)
+    
+    return results
 
 
 if __name__ == "__main__":

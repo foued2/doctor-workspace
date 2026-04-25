@@ -25,7 +25,7 @@ from datetime import datetime
 os.environ['GROQ_API_KEY'] = os.environ.get('GROQ_API_KEY', '')
 os.environ['LLM_PROVIDER'] = os.environ.get('LLM_PROVIDER', 'groq')
 
-from doctor.ingest.unified_engine import run_phase3_unified
+from doctor.ingest.unified_engine import run_phase3_unified, run_batch_phase3
 
 
 def run_phase3(statement: str, user_id: str) -> dict:
@@ -50,6 +50,27 @@ def run_phase3(statement: str, user_id: str) -> dict:
         result["error"] = str(e)
     
     return result
+
+
+def run_batch_phase3_runner(statements: list, case_ids: list) -> list:
+    """Run batch of statements through unified engine."""
+    results = run_batch_phase3(statements, case_ids)
+    
+    for r in results:
+        if r.get('failure_tag'):
+            failure = r['failure_tag']
+        elif r['status'] == 'success' and r.get('matched'):
+            failure = None
+        elif r['status'] == 'success' and not r.get('matched'):
+            failure = 'false_accept'
+        elif r['status'] == 'rejected' and r.get('matched'):
+            failure = 'matcher_miss'
+        else:
+            failure = 'unresolved'
+        
+        r['failure_tag'] = failure
+    
+    return results
 
 
 def main():
