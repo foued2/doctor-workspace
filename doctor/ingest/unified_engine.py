@@ -17,6 +17,8 @@ from typing import Dict, Optional, Tuple
 
 GROQ_API_KEY = os.environ.get("GROQ_API_KEY", "")
 GROQ_MODEL = os.environ.get("GROQ_MODEL", "llama-3.3-70b-versatile")
+OPENROUTER_API_KEY = os.environ.get("OPENROUTER_API_KEY", "")
+OPENROUTER_MODEL = os.environ.get("OPENROUTER_MODEL", "deepseek/deepseek-chat-v3-0324")
 PROVIDER = os.environ.get("LLM_PROVIDER", "groq")
 
 CACHE_DIR = pathlib.Path(__file__).parent / ".llm_cache"
@@ -141,14 +143,26 @@ def _call_llm(prompt: str, retries: int = 0) -> str:
     
     import requests
     
-    headers = {"Authorization": f"Bearer {GROQ_API_KEY}", "Content-Type": "application/json"}
-    payload = {
-        "model": GROQ_MODEL,
-        "messages": [{"role": "user", "content": prompt}],
-        "temperature": 0.1,
-        "max_tokens": 3000
-    }
-    url = "https://api.groq.com/openai/v1/chat/completions"
+    if PROVIDER == "openrouter" and OPENROUTER_API_KEY:
+        headers = {"Authorization": f"Bearer {OPENROUTER_API_KEY}", "Content-Type": "application/json"}
+        payload = {
+            "model": OPENROUTER_MODEL,
+            "messages": [{"role": "user", "content": prompt}],
+            "temperature": 0.1,
+            "max_tokens": 3000
+        }
+        url = "https://openrouter.ai/api/v1/chat/completions"
+        use_openrouter = True
+    else:
+        headers = {"Authorization": f"Bearer {GROQ_API_KEY}", "Content-Type": "application/json"}
+        payload = {
+            "model": GROQ_MODEL,
+            "messages": [{"role": "user", "content": prompt}],
+            "temperature": 0.1,
+            "max_tokens": 3000
+        }
+        url = "https://api.groq.com/openai/v1/chat/completions"
+        use_openrouter = False
     
     try:
         response = requests.post(url, headers=headers, json=payload, timeout=120)
