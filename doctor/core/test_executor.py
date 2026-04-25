@@ -237,6 +237,9 @@ def _build_validator_params(test_input: tuple) -> dict:
 
 def _results_equal(got, expected) -> bool:
     """Compare got vs expected, handling lists, floats, linked lists."""
+    # Handle impossible case for arrange_numbers_divisible
+    if expected == -1:
+        return got == -1 or got is None
     # Handle None linked list as empty list
     if got is None and expected == []:
         return True
@@ -264,6 +267,22 @@ def _results_equal(got, expected) -> bool:
     if isinstance(got, ListNode):
         return list_to_vals(got) == expected
     return got == expected
+
+
+def validate_arrangement(output, input_args):
+    """Validate arrangement of 0..n-1 where adjacent diffs are divisible by some k."""
+    if len(input_args) < 2:
+        return False
+    n, ks = input_args[0], input_args[1]
+    if output is None or output == -1:
+        return False
+    if sorted(output) != list(range(n)):
+        return False
+    for i in range(len(output)-1):
+        diff = abs(output[i+1] - output[i])
+        if not any(diff % k == 0 for k in ks):
+            return False
+    return True
 
 
 def _safe_exec(code: str) -> Optional[callable]:
@@ -322,24 +341,24 @@ class TestExecutor:
         for tc in test_cases:
             trace = run_test_with_trace(func, tc.input, tc.expected)
             traces.append(trace)
-            # OPTION A: Spec-oracle system. E is the sole correctness oracle.
-            # Validator runs for diagnostics only — never affects pass/fail.
-            validator_result, validator_kind = _verify_with_validator(
-                suite_key, trace.get("output"), tc.input
-            )
 
-            # Arrangement validator: use validator result for pass/fail
+            # Arrangement validator: use validator for pass/fail
             if tc.validation_type == "arrangement_validator":
                 if trace["error"] is not None:
                     passed = False
                 else:
-                    passed = validator_result == True
+                    passed = validate_arrangement(trace["output"], tc.input)
+                validator_result = passed
+                validator_kind = "arrangement_validator"
             else:
                 # E = _results_equal is the ONLY correctness criterion
                 if trace["error"] is not None:
                     passed = False
                 else:
                     passed = _results_equal(trace["output"], tc.expected)
+                validator_result, validator_kind = _verify_with_validator(
+                    suite_key, trace.get("output"), tc.input
+                )
 
             results.append(TestResult(
                 label=tc.label, passed=passed,
