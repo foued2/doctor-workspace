@@ -24,6 +24,7 @@ GROQ_API_KEY = os.environ.get("GROQ_API_KEY", "")
 GROQ_MODEL = os.environ.get("GROQ_MODEL", "llama-3.3-70b-versatile")
 OPENROUTER_API_KEY = os.environ.get("OPENROUTER_API_KEY", "")
 OPENROUTER_MODEL = os.environ.get("OPENROUTER_MODEL", "deepseek/deepseek-chat-v3-0324")
+OPENROUTER_BASE_URL = os.environ.get("OPENROUTER_BASE_URL", "https://openrouter.ai/api/v1")
 PROVIDER = os.environ.get("LLM_PROVIDER", "groq")
 
 CACHE_DIR = pathlib.Path(__file__).parent / ".llm_cache"
@@ -233,7 +234,7 @@ def _call_llm(prompt: str, retries: int = 0) -> str:
             "temperature": 0.1,
             "max_tokens": 3000
         }
-        url = "https://openrouter.ai/api/v1/chat/completions"
+        url = f"{OPENROUTER_BASE_URL}/chat/completions"
         use_openrouter = True
     else:
         headers = {"Authorization": f"Bearer {GROQ_API_KEY}", "Content-Type": "application/json"}
