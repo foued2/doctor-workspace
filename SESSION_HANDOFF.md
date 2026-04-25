@@ -48,8 +48,11 @@ This is NOT a threshold problem. It's a parser/norm layer gap:
 
 **Next session (in order):**
 1. Fix modifier extraction in normalization layer — DONE (structural_modifier check added)
-2. Measure recall cost of any threshold change
+2. Measure recall cost of any threshold change — DONE (0 flips on verified accepts)
 3. Answer the three architectural questions in writing
 4. THEN write final decision contract
+
+**Recall measurement result:** 0/10 structural modifier flips
+Fix is safe — no recall loss on clean accept cases.
 
 **Provider:** OpenRouter, deepseek/deepseek-v4-flash
