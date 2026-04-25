@@ -6,6 +6,11 @@ Architecture:
 - 1 LLM call per statement (vs 3-4 before)
 - Parser + Matcher merged into one prompt
 - Output: parsed_model + match_candidate + alignment_score breakdown + decision
+
+IMPORTANT: Batch evaluation is not a valid scoring mode. Use atomic evaluation
+only. Batch mode is preserved for infrastructure testing only and must not be used
+for threshold calibration or Phase 4 metrics. Multi-statement evaluation creates
+inter-statement interference that violates determinism guarantees.
 """
 
 import os

@@ -16,6 +16,11 @@ Failure tagging schema:
 - false_accept: matched when should reject  
 - validation_leak: validation passed but match was wrong
 - unresolved: failure mode unclear after trace inspection
+
+IMPORTANT: Batch evaluation is not a valid scoring mode. Use atomic evaluation
+only. Batch mode is preserved for infrastructure testing only and must not be used
+for threshold calibration or Phase 4 metrics. Multi-statement evaluation creates
+inter-statement interference that violates determinism guarantees.
 """
 
 import os

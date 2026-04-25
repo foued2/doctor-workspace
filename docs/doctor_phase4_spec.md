@@ -9,12 +9,14 @@
 2. **Semantic representation** — decisions are grounded in extracted problem structure, not surface keywords
 3. **Full causal traceability** — every failure mode has a traceable cause, not an unexplainable "close enough" accept
 4. **Constraint-satisfaction framing** — matching requires all constraints (input_type, output_type, objective) to explicitly align, not just similarity
+5. **Atomic evaluation** — Determinism in semantic systems is only preserved under strict evaluation isolation. Doctor enforces atomic evaluation as the canonical scoring path.
 
 This invariant rejects:
 - Learning components that introduce unexplainability before formal semantic model exists
 - Heuristic debt without formal grounding (consolidated or not)
 - OOD detection crowding out objective-level consistency enforcement
 - Similarity-based matching without explicit constraint alignment
+- Batch evaluation as a calibration tool (multi-statement interference violates determinism)
 
 ## Phase 4 Execution Order
 
