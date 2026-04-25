@@ -6,6 +6,27 @@
 
 ---
 
+## Interpretation Policy
+
+**Philosophy:** Doctor operates under guided interpretation, not strict semantic determinism.
+
+- Common-usage equivalents of technical terms are accepted when the computational structure is unambiguous ("increasing sequence" → LIS)
+- Genuinely ambiguous statements with no clear computational structure → reject
+- The distinction between "resolvable" and "unresolvable" ambiguity is a judgment call encoded in boundary decisions, not an automatic gate
+
+**Examples of accepted common-usage equivalents:**
+- "increasing sequence" = "increasing subsequence" (LIS)
+- "stretch" = "subarray" when contiguous implied
+- "balance" = "valid" for bracket matching
+- "merge" = "combine" for sorted list merging
+
+**Examples of unresolvable ambiguity → reject:**
+- "find the longest subsequence" without "increasing" — subsequence is ambiguous without order constraint
+- "maximize the subarray" without sum/product specification — objective unconstrained
+- "sort and find common prefix" — operation chain not mapping to single problem
+
+---
+
 ## Explicit Inclusions
 
 ### two_sum
@@ -147,7 +168,7 @@ Every accept must log:
 
 ## Version
 
-v1.0 — Phase 4 boundary formalization initial
+v1.1 — Added interpretation policy section, stress expansion agenda
 
 Rules derived from Phase 3 empirical observations:
 - user_8: "sort and find what they start with" → LCP (incorrect accept, rule added)
@@ -155,3 +176,45 @@ Rules derived from Phase 3 empirical observations:
 - user_7: temperatures → LIS (valid disguise, added)
 - user_9: "maximum product" → OUT (product vs sum collision, added)
 - users 11-13: climbing_stairs, coin_change, longest_substring → now IN (coverage gaps resolved)
+- adversarial_4: "consecutive increases" → NOT LIS (sliding window, not subsequence)
+- adversarial_6: "increasing sequence" → LIS (common-usage equivalence, documented)
+
+---
+
+## Phase 4 Stress Expansion Agenda
+
+Target the collision surfaces that produce variant explosions:
+
+### Variant Explosions (coin_change variants)
+- "minimum coins" → coin_change (IN)
+- "count ways to make amount" → coin_combinations (OUT, not in registry)
+- "minimum coins with bounded supply" → partially specified, requires clarification
+- "minimum coins with cost per coin" → cost variant, not standard
+
+### Objective Mutations (same structure, different objectives)
+- "find IF any two sum to target" → exists variant (OUT)
+- "find COUNT of pairs summing to target" → count variant (OUT)
+- "find MAX pair sum" → max variant (OUT)
+- All have identical input/output but different computational goal
+
+### Mixed Constraints (partial specification)
+- "find two numbers that sum to target in sorted array" → extra constraint doesn't change problem
+- "find max subarray with at least K elements" → constraint variant
+- "find LIS of length at least K" → constraint variant
+
+These become Phase 4 batch 1 test cases for boundary stress testing.
+
+---
+
+## Contract Minimality Test (Pre-Phase 4 Code)
+
+**5-case manual test:** Derive expected decision from formal contract expression, compare to actual output. Any mismatch indicates hidden branches in contract.
+
+Cases:
+1. "find two numbers that add up to X" → expected accept (two_sum)
+2. "find the longest stretch of consecutive increases" → expected reject (not subsequence)
+3. "count minimum coins for amount" → expected accept (coin_change)
+4. "find duplicate characters in string" → expected reject (ad-hoc processing)
+5. "how many ways to climb n stairs" → expected accept (climbing_stairs)
+
+Run these through Doctor. If any output deviates from expected, the formal decision contract has undeclared branches.
