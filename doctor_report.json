@@ -1,0 +1,20 @@
+{
+  "problem": "arrange_numbers_divisible",
+  "verdict": "INCORRECT",
+  "trust": "false_justified_confidence",
+  "risk": "HIGH",
+  "evidence_score": 0.75,
+  "tests_passed": 3,
+  "tests_total": 4,
+  "test_results": [
+    {"label": "sample", "passed": true, "got": [1,3,5,7,9,0,2,4,6,8], "expected": [1,3,5,7,9,0,2,4,6,8]},
+    {"label": "impossible", "passed": true, "got": null, "expected": -1},
+    {"label": "trivial_k1", "passed": true, "got": [0,1,2], "expected": [0,1,2]},
+    {"label": "cross_boundary", "passed": false, "got": null, "expected": [0,3,6,4,2,8,5,7,1]}
+  ],
+  "diagnosis": {
+    "issue": "algorithm_class_mismatch",
+    "description": "Greedy residue-class chaining insufficient for cross-boundary transitions. Valid arrangement exists for n=9, k=[2,3] but algorithm returns -1.",
+    "root_cause": "Solution tries each k sequentially but never repairs boundary gaps between residue classes"
+  }
+}
