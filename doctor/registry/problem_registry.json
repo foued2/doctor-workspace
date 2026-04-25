@@ -2655,5 +2655,273 @@
         "solve"
       ]
     }
+  },
+  "longest_increasing_subsequence": {
+    "spec": {
+      "display_name": "Longest Increasing Subsequence",
+      "constraints": {},
+      "difficulty": "medium",
+      "tags": [
+        "dynamic-programming",
+        "binary-search"
+      ],
+      "problem_id": "longest_increasing_subsequence",
+      "reference_solution": "\ndef lengthOfLIS(nums):\n    if not nums:\n        return 0\n    dp = [1] * len(nums)\n    for i in range(1, len(nums)):\n        for j in range(i):\n            if nums[j] < nums[i]:\n                dp[i] = max(dp[i], dp[j] + 1)\n    return max(dp)\n"
+    },
+    "execution": {
+      "test_cases": [
+        {
+          "input": [
+            [
+              10,
+              9,
+              2,
+              5,
+              3,
+              7,
+              101,
+              18
+            ]
+          ],
+          "expected": 4,
+          "label": "classic",
+          "source": "manual"
+        },
+        {
+          "input": [
+            [
+              0,
+              1,
+              0,
+              3,
+              2,
+              3
+            ]
+          ],
+          "expected": 4,
+          "label": "nested",
+          "source": "manual"
+        },
+        {
+          "input": [
+            [
+              7,
+              7,
+              7,
+              7,
+              7,
+              7,
+              7
+            ]
+          ],
+          "expected": 1,
+          "label": "all_same",
+          "source": "boundary"
+        },
+        {
+          "input": [
+            []
+          ],
+          "expected": 0,
+          "label": "empty",
+          "source": "boundary"
+        },
+        {
+          "input": [
+            [
+              1
+            ]
+          ],
+          "expected": 1,
+          "label": "single",
+          "source": "boundary"
+        },
+        {
+          "input": [
+            [
+              1,
+              2,
+              3,
+              4,
+              5
+            ]
+          ],
+          "expected": 5,
+          "label": "already_increasing",
+          "source": "manual"
+        },
+        {
+          "input": [
+            [
+              5,
+              4,
+              3,
+              2,
+              1
+            ]
+          ],
+          "expected": 1,
+          "label": "decreasing",
+          "source": "manual"
+        },
+        {
+          "input": [
+            [
+              -2,
+              -1,
+              0,
+              1,
+              2,
+              3
+            ]
+          ],
+          "expected": 6,
+          "label": "negative_increasing",
+          "source": "manual"
+        }
+      ]
+    },
+    "normalization": {
+      "function_names": [
+        "lengthOfLIS",
+        "length_of_lis",
+        "lis",
+        "find_lis_length"
+      ]
+    }
+  },
+  "max_subarray": {
+    "spec": {
+      "display_name": "Maximum Subarray",
+      "constraints": {},
+      "difficulty": "medium",
+      "tags": [
+        "dynamic-programming",
+        "array",
+        "divide-and-conquer"
+      ],
+      "problem_id": "max_subarray",
+      "reference_solution": "\ndef maxSubArray(nums):\n    max_sum = nums[0]\n    current_sum = nums[0]\n    for i in range(1, len(nums)):\n        current_sum = max(nums[i], current_sum + nums[i])\n        max_sum = max(max_sum, current_sum)\n    return max_sum\n"
+    },
+    "execution": {
+      "test_cases": [
+        {
+          "input": [
+            [
+              -2,
+              1,
+              -3,
+              4,
+              -1,
+              2,
+              1,
+              -5,
+              4
+            ]
+          ],
+          "expected": 6,
+          "label": "classic_kadane",
+          "source": "manual"
+        },
+        {
+          "input": [
+            [
+              1
+            ]
+          ],
+          "expected": 1,
+          "label": "single_element",
+          "source": "boundary"
+        },
+        {
+          "input": [
+            [
+              5,
+              4,
+              -1,
+              7,
+              8
+            ]
+          ],
+          "expected": 23,
+          "label": "all_positive",
+          "source": "manual"
+        },
+        {
+          "input": [
+            [
+              -1,
+              -2,
+              -3,
+              -4
+            ]
+          ],
+          "expected": -1,
+          "label": "all_negative",
+          "source": "boundary"
+        },
+        {
+          "input": [
+            [
+              0,
+              0,
+              0,
+              0
+            ]
+          ],
+          "expected": 0,
+          "label": "all_zero",
+          "source": "boundary"
+        },
+        {
+          "input": [
+            [
+              -2,
+              -1,
+              -2
+            ]
+          ],
+          "expected": -1,
+          "label": "mixed_negative",
+          "source": "manual"
+        },
+        {
+          "input": [
+            [
+              1,
+              2,
+              3,
+              4,
+              5
+            ]
+          ],
+          "expected": 15,
+          "label": "sequential_positive",
+          "source": "manual"
+        },
+        {
+          "input": [
+            [
+              8,
+              -1,
+              3,
+              4
+            ]
+          ],
+          "expected": 14,
+          "label": "start_with_positive",
+          "source": "manual"
+        }
+      ]
+    },
+    "normalization": {
+      "function_names": [
+        "maxSubArray",
+        "max_sub_array",
+        "maximum_subarray",
+        "maxSubarray",
+        "find_max_subarray"
+      ]
+    }
   }
 }
