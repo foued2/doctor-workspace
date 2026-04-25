@@ -28,18 +28,44 @@ MAX_RETRIES = 5
 INITIAL_BACKOFF = 2
 
 CONTRADICTION_PAIRS = [
-    (["product", "maximum product", "multiply"], ["sum", "maximum sum", "total"]),
+    (["product", "maximum product", "max product", "multiply", "multiplication"], ["sum", "maximum sum", "max sum", "total"]),
     (["increasing", "increasing subsequence", "rising"], ["common", "common subsequence", "lcs"]),
     (["cost", "minimum cost", "expense"], ["ways", "number of ways", "count ways"]),
     (["budget", "expense", "spending", "price"], ["subarray", "contiguous"]),
 ]
 
 
+OPERATION_RESTRICTIONS = {
+    "min_distance": {
+        "required_operations": ["insert", "delete", "replace"],
+        "restrictive_keywords": ["only insert", "only delete", "only insertion", "only deletion", "no replace", "without replace", "no replacement"]
+    },
+    "edit_distance": {
+        "required_operations": ["insert", "delete", "replace"],
+        "restrictive_keywords": ["only insert", "only delete", "only insertion", "only deletion", "no replace", "without replace", "no replacement"]
+    }
+}
+
+
+def _check_operation_restriction(objective: str, constraints: list, match_id: str) -> Tuple[bool, str]:
+    if match_id not in OPERATION_RESTRICTIONS:
+        return False, ""
+    
+    constraint_text = (objective + " " + " ".join(constraints)).lower()
+    
+    for keyword in OPERATION_RESTRICTIONS[match_id]["restrictive_keywords"]:
+        if keyword in constraint_text:
+            return True, f"Constraint '{keyword}' conflicts with required operations for {match_id}"
+    
+    return False, ""
+
+
 def _check_contradiction(objective: str, match_id: str) -> Tuple[bool, str]:
     obj_lower = objective.lower()
     
     if match_id == "max_subarray":
-        if "product" in obj_lower and "sum" not in obj_lower:
+        product_keywords = ["product", "multiply", "multiplication", "max product", "maximum product"]
+        if any(kw in obj_lower for kw in product_keywords):
             return True, "Product objective contradicts sum-based max_subarray"
     
     if match_id == "longest_increasing_subsequence":
@@ -306,6 +332,25 @@ def _evaluate_decision(
                 "parsed_model": model,
                 "decision_trace": trace,
                 "error": con_reason
+            }
+        
+        is_restricted, restriction_reason = _check_operation_restriction(
+            model.get("objective", ""),
+            model.get("constraints", []),
+            match
+        )
+        if is_restricted:
+            trace["decision_contract"]["conditions"]["constraints_consistent"] = False
+            trace["operation_restriction"] = True
+            trace["final"] = "reject"
+            trace["decision_contract"]["rejection_reason"] = "operation_restriction"
+            return {
+                "status": "rejected",
+                "failure_tag": "validation_leak",
+                "matched": None,
+                "parsed_model": model,
+                "decision_trace": trace,
+                "error": restriction_reason
             }
         
         if repair_info.get("repair_used"):
