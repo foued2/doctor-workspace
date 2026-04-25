@@ -69,9 +69,12 @@ def _check_contradiction(objective: str, match_id: str) -> Tuple[bool, str]:
             return True, "Product objective contradicts sum-based max_subarray"
     
     if match_id == "longest_increasing_subsequence":
-        non_strict_keywords = ["at least as large", "at least as big", "non-decreasing", "not decreasing", "greater or equal", "largest possible", "at most as small"]
-        if "common subsequence" in obj_lower or "lcs" in obj_lower:
-            return True, "Common subsequence contradicts increasing subsequence"
+        non_strict_keywords = [
+            "at least as large", "at least as big", "non-decreasing", "not decreasing", 
+            "greater or equal", "largest possible", "at most as small",
+            "greater than or equal", "not smaller", "not less than", "allowing equal",
+            "monotonically increasing", "no element is smaller", "no element is less"
+        ]
         if any(kw in obj_lower for kw in non_strict_keywords):
             return True, "Non-strict subsequence contradicts strictly increasing LIS"
     
@@ -324,10 +327,18 @@ def _evaluate_decision(
     if decision == "accept" and match and match != "no match":
         is_con, con_reason = _check_contradiction(model.get("objective", ""), match)
         if is_con:
-            trace["decision_contract"]["conditions"]["no_contradiction"] = False
-            trace["contradiction"] = True
+            is_constraint_violation = "non-strict" in con_reason.lower() or "strictly" in con_reason.lower()
+            
+            if is_constraint_violation:
+                trace["decision_contract"]["conditions"]["constraints_consistent"] = False
+                trace["constraint_consistency_violation"] = True
+                trace["decision_contract"]["rejection_reason"] = "constraint_consistency_violation"
+            else:
+                trace["decision_contract"]["conditions"]["no_contradiction"] = False
+                trace["contradiction"] = True
+                trace["decision_contract"]["rejection_reason"] = "contradiction"
+            
             trace["final"] = "reject"
-            trace["decision_contract"]["rejection_reason"] = "contradiction"
             return {
                 "status": "rejected",
                 "failure_tag": "validation_leak",
