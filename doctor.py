@@ -24,14 +24,11 @@ MEDIUM_CONFIDENCE = 0.70
 # ============================================================
 # MODIFIER CLASSES
 # ============================================================
-class_modifiers = {
-    # Class 1: cosmetic - doesn't change problem
-    "Class 1": ["ignore case", "case insensitive", "ignore whitespace", "trim"],
-    # Class 2: constraint-strengthening - modify inputs
-    "Class 2": ["positive only", "non-negative", "strictly greater", "at least", "maximum of"],
-    # Class 3: problem-altering - creates variant
-    "Class 3": ["modified", "but not", "except", "without using", "only use"},
-}
+class_modifiers = [
+    ("Class 1", ["ignore case", "case insensitive", "ignore whitespace", "trim"]),
+    ("Class 2", ["positive only", "non-negative", "strictly greater", "at least", "maximum of"]),
+    ("Class 3", ["modified", "but not", "except", "without using", "only use"]),
+]
 
 # ============================================================
 # GATE 1: PROBLEM RECOGNITION
