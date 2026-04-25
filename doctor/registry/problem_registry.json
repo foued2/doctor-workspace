@@ -2,6 +2,7 @@
   "two_sum": {
     "spec": {
       "display_name": "Two Sum",
+      "description": "Given an array of integers nums and an integer target, return indices of the two numbers such that they add up to target.",
       "constraints": {},
       "difficulty": "easy",
       "tags": [],
@@ -370,6 +371,7 @@
   "valid_parentheses": {
     "spec": {
       "display_name": "Valid Parentheses",
+      "description": "Given a string s containing only the characters '(', ')', '{', '}', '[' and ']', return true if the input string is valid.",
       "constraints": {},
       "difficulty": "easy",
       "tags": [],
@@ -445,6 +447,7 @@
   "merge_two_sorted_lists": {
     "spec": {
       "display_name": "Merge Two Sorted Lists",
+      "description": "Merge two sorted linked lists and return the merged list as a sorted linked list.",
       "constraints": {},
       "difficulty": "easy",
       "tags": [],
@@ -556,10 +559,12 @@
   "remove_duplicates": {
     "spec": {
       "display_name": "Remove Duplicates from Sorted Array",
+      "description": "Given a sorted integer array nums, remove the duplicates in-place such that each unique element appears only once and return the number of unique elements.",
       "constraints": {},
       "difficulty": "easy",
       "tags": [],
-      "problem_id": "remove_duplicates"
+      "problem_id": "remove_duplicates",
+      "reference_solution": "def removeDuplicates(nums):\n    if not nums:\n        return 0\n    k = 1\n    for i in range(1, len(nums)):\n        if nums[i] != nums[k - 1]:\n            nums[k] = nums[i]\n            k += 1\n    return k\n"
     },
     "execution": {
       "test_cases": [
@@ -635,11 +640,13 @@
   "strStr": {
     "spec": {
       "display_name": "Implement strStr()",
+      "description": "Given two strings haystack and needle, return the index of the first occurrence of needle in haystack, or -1 if needle is not part of haystack.",
       "constraints": {},
       "difficulty": "easy",
       "tags": [],
       "problem_id": "strStr",
-      "order_sensitive": true
+      "order_sensitive": true,
+      "reference_solution": "def strStr(haystack, needle):\n    if needle == '':\n        return 0\n    for i in range(len(haystack) - len(needle) + 1):\n        if haystack[i:i + len(needle)] == needle:\n            return i\n    return -1\n"
     },
     "execution": {
       "test_cases": [
@@ -708,10 +715,12 @@
   "search_insert": {
     "spec": {
       "display_name": "Search Insert Position",
+      "description": "Given a sorted array of distinct integers and a target value, return the index if the target is found; otherwise, return the index where it would be inserted in order.",
       "constraints": {},
       "difficulty": "easy",
       "tags": [],
-      "problem_id": "search_insert"
+      "problem_id": "search_insert",
+      "reference_solution": "def searchInsert(nums, target):\n    left, right = 0, len(nums) - 1\n    while left <= right:\n        mid = (left + right) // 2\n        if nums[mid] == target:\n            return mid\n        if nums[mid] < target:\n            left = mid + 1\n        else:\n            right = mid - 1\n    return left\n"
     },
     "execution": {
       "test_cases": [
@@ -793,10 +802,12 @@
   "longest_palindrome": {
     "spec": {
       "display_name": "Longest Palindromic Substring",
+      "description": "Given a string s, return the longest palindromic substring in s.",
       "constraints": {},
       "difficulty": "medium",
       "tags": [],
-      "problem_id": "longest_palindrome"
+      "problem_id": "longest_palindrome",
+      "reference_solution": "def longestPalindrome(s):\n    if not s:\n        return ''\n    best_start = 0\n    best_len = 1\n\n    def expand(left, right):\n        while left >= 0 and right < len(s) and s[left] == s[right]:\n            left -= 1\n            right += 1\n        return left + 1, right - left - 1\n\n    for i in range(len(s)):\n        start, length = expand(i, i)\n        if length > best_len:\n            best_start, best_len = start, length\n        start, length = expand(i, i + 1)\n        if length > best_len:\n            best_start, best_len = start, length\n    return s[best_start:best_start + best_len]\n"
     },
     "execution": {
       "test_cases": [
@@ -875,10 +886,12 @@
   "zigzag_conversion": {
     "spec": {
       "display_name": "Zigzag Conversion",
+      "description": "Given a string s and an integer numRows, write the characters of s in a zigzag pattern across numRows rows and return the row-by-row reading of that pattern.",
       "constraints": {},
       "difficulty": "medium",
       "tags": [],
-      "problem_id": "zigzag_conversion"
+      "problem_id": "zigzag_conversion",
+      "reference_solution": "def convert(s, numRows):\n    if numRows == 1 or numRows >= len(s):\n        return s\n    rows = [''] * numRows\n    row = 0\n    step = 1\n    for ch in s:\n        rows[row] += ch\n        if row == 0:\n            step = 1\n        elif row == numRows - 1:\n            step = -1\n        row += step\n    return ''.join(rows)\n"
     },
     "execution": {
       "test_cases": [
@@ -938,6 +951,7 @@
   "reverse_integer": {
     "spec": {
       "display_name": "Reverse Integer",
+      "description": "Given a signed 32-bit integer x, return x with its digits reversed, or 0 if the reversed integer overflows the 32-bit signed integer range.",
       "constraints": {},
       "difficulty": "medium",
       "tags": [],
@@ -997,10 +1011,12 @@
   "string_to_integer": {
     "spec": {
       "display_name": "String to Integer (atoi)",
+      "description": "Implement the myAtoi(string s) function, which converts a string to a 32-bit signed integer.",
       "constraints": {},
       "difficulty": "medium",
       "tags": [],
-      "problem_id": "string_to_integer"
+      "problem_id": "string_to_integer",
+      "reference_solution": "def myAtoi(s):\n    i = 0\n    n = len(s)\n    while i < n and s[i] == ' ':\n        i += 1\n    if i == n:\n        return 0\n    sign = 1\n    if s[i] in '+-':\n        if s[i] == '-':\n            sign = -1\n        i += 1\n    value = 0\n    while i < n and s[i].isdigit():\n        value = value * 10 + ord(s[i]) - ord('0')\n        i += 1\n    value *= sign\n    if value < -2 ** 31:\n        return -2 ** 31\n    if value > 2 ** 31 - 1:\n        return 2 ** 31 - 1\n    return value\n"
     },
     "execution": {
       "test_cases": [
@@ -1063,10 +1079,12 @@
   "max_area": {
     "spec": {
       "display_name": "Container With Most Water",
+      "description": "Given an integer array height, return the maximum amount of water a container can store using any two lines.",
       "constraints": {},
       "difficulty": "medium",
       "tags": [],
-      "problem_id": "max_area"
+      "problem_id": "max_area",
+      "reference_solution": "def maxArea(height):\n    left, right = 0, len(height) - 1\n    best = 0\n    while left < right:\n        area = min(height[left], height[right]) * (right - left)\n        if area > best:\n            best = area\n        if height[left] <= height[right]:\n            left += 1\n        else:\n            right -= 1\n    return best\n"
     },
     "execution": {
       "test_cases": [
@@ -1136,6 +1154,7 @@
   "int_to_roman": {
     "spec": {
       "display_name": "Integer to Roman",
+      "description": "Given an integer, convert it to a Roman numeral.",
       "constraints": {},
       "difficulty": "medium",
       "tags": [],
@@ -1195,6 +1214,7 @@
   "three_sum": {
     "spec": {
       "display_name": "3Sum",
+      "description": "Given an integer array nums, return all unique triplets [nums[i], nums[j], nums[k]] such that i != j, i != k, j != k, and their sum is 0.",
       "constraints": {},
       "difficulty": "medium",
       "tags": [],
@@ -1289,10 +1309,12 @@
   "letter_combinations": {
     "spec": {
       "display_name": "Letter Combinations of a Phone Number",
+      "description": "Given a string containing digits from 2 to 9 inclusive, return all possible letter combinations that the number could represent.",
       "constraints": {},
       "difficulty": "medium",
       "tags": [],
-      "problem_id": "letter_combinations"
+      "problem_id": "letter_combinations",
+      "reference_solution": "def letterCombinations(digits):\n    if not digits:\n        return []\n    mapping = {\n        '2': 'abc', '3': 'def', '4': 'ghi', '5': 'jkl',\n        '6': 'mno', '7': 'pqrs', '8': 'tuv', '9': 'wxyz'\n    }\n    result = []\n\n    def backtrack(index, path):\n        if index == len(digits):\n            result.append(''.join(path))\n            return\n        for ch in mapping[digits[index]]:\n            path.append(ch)\n            backtrack(index + 1, path)\n            path.pop()\n\n    backtrack(0, [])\n    return result\n"
     },
     "execution": {
       "test_cases": [
@@ -1358,10 +1380,12 @@
   "four_sum": {
     "spec": {
       "display_name": "4Sum",
+      "description": "Given an integer array nums and an integer target, return all unique quadruplets [nums[a], nums[b], nums[c], nums[d]] such that their sum is target.",
       "constraints": {},
       "difficulty": "medium",
       "tags": [],
-      "problem_id": "four_sum"
+      "problem_id": "four_sum",
+      "reference_solution": "def fourSum(nums, target):\n    nums.sort()\n    result = []\n    n = len(nums)\n    for i in range(n - 3):\n        if i > 0 and nums[i] == nums[i - 1]:\n            continue\n        for j in range(i + 1, n - 2):\n            if j > i + 1 and nums[j] == nums[j - 1]:\n                continue\n            left, right = j + 1, n - 1\n            while left < right:\n                total = nums[i] + nums[j] + nums[left] + nums[right]\n                if total < target:\n                    left += 1\n                elif total > target:\n                    right -= 1\n                else:\n                    result.append([nums[i], nums[j], nums[left], nums[right]])\n                    left += 1\n                    right -= 1\n                    while left < right and nums[left] == nums[left - 1]:\n                        left += 1\n                    while left < right and nums[right] == nums[right + 1]:\n                        right -= 1\n    return result\n"
     },
     "execution": {
       "test_cases": [
@@ -1453,6 +1477,7 @@
   "generate_parenthesis": {
     "spec": {
       "display_name": "Generate Parentheses",
+      "description": "Given n pairs of parentheses, generate all combinations of well-formed parentheses.",
       "constraints": {},
       "difficulty": "medium",
       "tags": [],
@@ -1515,11 +1540,13 @@
   "find_median_sorted_arrays": {
     "spec": {
       "display_name": "Median of Two Sorted Arrays",
+      "description": "Given two sorted arrays nums1 and nums2 of sizes m and n, return the median of the two sorted arrays.",
       "constraints": {},
       "difficulty": "hard",
       "tags": [],
       "problem_id": "find_median_sorted_arrays",
-      "order_sensitive": true
+      "order_sensitive": true,
+      "reference_solution": "def findMedianSortedArrays(nums1, nums2):\n    merged = []\n    i = j = 0\n    while i < len(nums1) and j < len(nums2):\n        if nums1[i] <= nums2[j]:\n            merged.append(nums1[i])\n            i += 1\n        else:\n            merged.append(nums2[j])\n            j += 1\n    if i < len(nums1):\n        merged.extend(nums1[i:])\n    if j < len(nums2):\n        merged.extend(nums2[j:])\n    mid = len(merged) // 2\n    if len(merged) % 2 == 1:\n        return float(merged[mid])\n    return (merged[mid - 1] + merged[mid]) / 2.0\n"
     },
     "execution": {
       "test_cases": [
@@ -1601,11 +1628,13 @@
   "regular_expression_matching": {
     "spec": {
       "display_name": "Regular Expression Matching",
+      "description": "Given an input string s and a pattern p, implement regular expression matching with support for '.' and '*' and return whether the entire string matches the pattern.",
       "constraints": {},
       "difficulty": "hard",
       "tags": [],
       "problem_id": "regular_expression_matching",
-      "order_sensitive": true
+      "order_sensitive": true,
+      "reference_solution": "def isMatch(s, p):\n    memo = {}\n\n    def dp(i, j):\n        if (i, j) in memo:\n            return memo[(i, j)]\n        if j == len(p):\n            ans = i == len(s)\n        else:\n            first_match = i < len(s) and (p[j] == s[i] or p[j] == '.')\n            if j + 1 < len(p) and p[j + 1] == '*':\n                ans = dp(i, j + 2) or (first_match and dp(i + 1, j))\n            else:\n                ans = first_match and dp(i + 1, j + 1)\n        memo[(i, j)] = ans\n        return ans\n\n    return dp(0, 0)\n"
     },
     "execution": {
       "test_cases": [
@@ -1674,6 +1703,7 @@
   "trap": {
     "spec": {
       "display_name": "Trapping Rain Water",
+      "description": "Given n non-negative integers representing an elevation map where the width of each bar is 1, compute how much water it can trap after raining.",
       "constraints": {},
       "difficulty": "hard",
       "tags": [],
@@ -1827,10 +1857,12 @@
   "first_missing_positive": {
     "spec": {
       "display_name": "First Missing Positive",
+      "description": "Given an unsorted integer array nums, return the smallest missing positive integer.",
       "constraints": {},
       "difficulty": "hard",
       "tags": [],
-      "problem_id": "first_missing_positive"
+      "problem_id": "first_missing_positive",
+      "reference_solution": "def firstMissingPositive(nums):\n    n = len(nums)\n    for i in range(n):\n        while 1 <= nums[i] <= n and nums[nums[i] - 1] != nums[i]:\n            nums[nums[i] - 1], nums[i] = nums[i], nums[nums[i] - 1]\n    for i in range(n):\n        if nums[i] != i + 1:\n            return i + 1\n    return n + 1\n"
     },
     "execution": {
       "test_cases": [
@@ -1902,6 +1934,7 @@
   "solve_n_queens": {
     "spec": {
       "display_name": "N-Queens",
+      "description": "Given an integer n, return all distinct solutions to the n-queens puzzle.",
       "constraints": {},
       "difficulty": "hard",
       "tags": [],
@@ -2046,11 +2079,13 @@
   "wildcard_matching": {
     "spec": {
       "display_name": "Wildcard Matching",
+      "description": "Given an input string s and a pattern p, implement wildcard matching with support for '?' and '*' and return whether the entire string matches the pattern.",
       "constraints": {},
       "difficulty": "hard",
       "tags": [],
       "problem_id": "wildcard_matching",
-      "order_sensitive": true
+      "order_sensitive": true,
+      "reference_solution": "def isMatch(s, p):\n    i = j = 0\n    star = -1\n    match = 0\n    while i < len(s):\n        if j < len(p) and (p[j] == '?' or p[j] == s[i]):\n            i += 1\n            j += 1\n        elif j < len(p) and p[j] == '*':\n            star = j\n            match = i\n            j += 1\n        elif star != -1:\n            j = star + 1\n            match += 1\n            i = match\n        else:\n            return False\n    while j < len(p) and p[j] == '*':\n        j += 1\n    return j == len(p)\n"
     },
     "execution": {
       "test_cases": [
@@ -2185,11 +2220,13 @@
   "min_window": {
     "spec": {
       "display_name": "Minimum Window Substring",
+      "description": "Given two strings s and t, return the minimum window substring of s such that every character in t, including duplicates, is included in the window.",
       "constraints": {},
       "difficulty": "hard",
       "tags": [],
       "problem_id": "min_window",
-      "order_sensitive": true
+      "order_sensitive": true,
+      "reference_solution": "def minWindow(s, t):\n    if not s or not t:\n        return ''\n    need = {}\n    for ch in t:\n        need[ch] = need.get(ch, 0) + 1\n    missing = len(t)\n    left = 0\n    best_start = 0\n    best_len = len(s) + 1\n    for right, ch in enumerate(s):\n        if ch in need:\n            if need[ch] > 0:\n                missing -= 1\n            need[ch] -= 1\n        while missing == 0:\n            window_len = right - left + 1\n            if window_len < best_len:\n                best_start = left\n                best_len = window_len\n            left_char = s[left]\n            if left_char in need:\n                need[left_char] += 1\n                if need[left_char] > 0:\n                    missing += 1\n            left += 1\n    if best_len == len(s) + 1:\n        return ''\n    return s[best_start:best_start + best_len]\n"
     },
     "execution": {
       "test_cases": [
@@ -2240,10 +2277,12 @@
   "largest_rectangle_area": {
     "spec": {
       "display_name": "Largest Rectangle in Histogram",
+      "description": "Given an array of integers heights representing histogram bar heights where each bar has width 1, return the area of the largest rectangle in the histogram.",
       "constraints": {},
       "difficulty": "hard",
       "tags": [],
-      "problem_id": "largest_rectangle_area"
+      "problem_id": "largest_rectangle_area",
+      "reference_solution": "def largestRectangleArea(heights):\n    stack = []\n    best = 0\n    extended = heights + [0]\n    for i, h in enumerate(extended):\n        while stack and extended[stack[-1]] > h:\n            height = extended[stack.pop()]\n            left = stack[-1] if stack else -1\n            area = height * (i - left - 1)\n            if area > best:\n                best = area\n        stack.append(i)\n    return best\n"
     },
     "execution": {
       "test_cases": [
@@ -2313,10 +2352,12 @@
   "max_sliding_window": {
     "spec": {
       "display_name": "Sliding Window Maximum",
+      "description": "Given an array of integers nums and an integer k, return the maximum value in each sliding window of size k.",
       "constraints": {},
       "difficulty": "hard",
       "tags": [],
-      "problem_id": "max_sliding_window"
+      "problem_id": "max_sliding_window",
+      "reference_solution": "from collections import deque\n\ndef maxSlidingWindow(nums, k):\n    if not nums or k == 0:\n        return []\n    dq = deque()\n    result = []\n    for i, num in enumerate(nums):\n        while dq and dq[0] <= i - k:\n            dq.popleft()\n        while dq and nums[dq[-1]] <= num:\n            dq.pop()\n        dq.append(i)\n        if i >= k - 1:\n            result.append(nums[dq[0]])\n    return result\n"
     },
     "execution": {
       "test_cases": [
@@ -2399,6 +2440,7 @@
     "spec": {
       "problem_id": "euler_1",
       "display_name": "Multiples of 3 and 5",
+      "description": "Find the sum of all natural numbers below n that are multiples of 3 or 5.",
       "constraints": {},
       "difficulty": "easy",
       "tags": [
@@ -2481,6 +2523,7 @@
     "spec": {
       "problem_id": "euler_2",
       "display_name": "Even Fibonacci Numbers",
+      "description": "Return the sum of the even-valued Fibonacci terms that do not exceed n.",
       "constraints": {},
       "difficulty": "medium",
       "tags": [
@@ -2570,6 +2613,7 @@
     "spec": {
       "problem_id": "euler_3",
       "display_name": "Largest Prime Factor",
+      "description": "Return the largest prime factor of n.",
       "constraints": {},
       "difficulty": "medium",
       "tags": [
@@ -2667,6 +2711,7 @@
   "longest_increasing_subsequence": {
     "spec": {
       "display_name": "Longest Increasing Subsequence",
+      "description": "Given an integer array nums, return the length of the longest strictly increasing subsequence.",
       "constraints": {},
       "difficulty": "medium",
       "tags": [
@@ -2801,6 +2846,7 @@
   "max_subarray": {
     "spec": {
       "display_name": "Maximum Subarray",
+      "description": "Given an integer array nums, return the contiguous subarray with the largest sum, and return its sum.",
       "constraints": {},
       "difficulty": "medium",
       "tags": [
