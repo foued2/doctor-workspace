@@ -1,0 +1,851 @@
+[
+  {
+    "case": "PARAPHRASE_TWO_SUM_ALPHA_LEXICAL",
+    "statement": "Provided an array along with a target value, output indices of the two entries whose sum equals the target. Exactly one valid combination exists.",
+    "perturbation_type": "lexical",
+    "status": "success",
+    "parsed_model": {
+      "input_type": "array of integers, integer",
+      "output_type": "list of integers",
+      "objective": "Find indices of two numbers that sum to target",
+      "constraints": [
+        "exactly one valid combination exists"
+      ],
+      "edge_conditions": [
+        "empty array",
+        "single element",
+        "duplicates",
+        "no solution exists"
+      ],
+      "infer_confidence": "low",
+      "_inferred": {
+        "input_type": false,
+        "output_type": false,
+        "constraints": true,
+        "edge_conditions": true
+      }
+    },
+    "matched": "two_sum",
+    "justification": "The input_type is an array of integers and a target integer, the output_type is a list of integers, and the objective is to find the indices of two numbers that sum to the target, which exactly matches the two_sum problem in the registry.",
+    "expected": "two_sum",
+    "expected_type": "match",
+    "correct": true,
+    "verdict": "CORRECT",
+    "gate_fired": null,
+    "infer_confidence": "unknown",
+    "parse_retry_count": 0,
+    "matcher_retry_count": 0,
+    "decision_trace": {
+      "llm_match": "two_sum",
+      "contradiction": false,
+      "validation": true,
+      "fallback": false,
+      "final": "accept",
+      "retry_count": 0
+    }
+  },
+  {
+    "case": "PARAPHRASE_TWO_SUM_BETA_LEXICAL",
+    "statement": "Inputs: a collection of integers together with a goal sum. Outputs: index positions of two elements that together reach the goal. No alternative pairs are possible.",
+    "perturbation_type": "lexical",
+    "status": "success",
+    "parsed_model": {
+      "input_type": "collection of integers, integer",
+      "output_type": "list of integers",
+      "objective": "Find index positions of two elements that together reach the goal sum",
+      "constraints": [
+        "exactly one solution",
+        "collection is not empty"
+      ],
+      "edge_conditions": [
+        "empty collection",
+        "single element",
+        "no solution exists"
+      ],
+      "infer_confidence": "high",
+      "_inferred": {
+        "input_type": false,
+        "output_type": false,
+        "constraints": true,
+        "edge_conditions": true
+      }
+    },
+    "matched": "two_sum",
+    "justification": "The input_type is a collection of integers and an integer, the output_type is a list of integers, and the objective is to find the index positions of two elements that together reach the goal sum, which aligns with the 'two_sum' problem in the registry.",
+    "expected": "two_sum",
+    "expected_type": "match",
+    "correct": true,
+    "verdict": "CORRECT",
+    "gate_fired": null,
+    "infer_confidence": "unknown",
+    "parse_retry_count": 0,
+    "matcher_retry_count": 0,
+    "decision_trace": {
+      "llm_match": "two_sum",
+      "contradiction": false,
+      "validation": true,
+      "fallback": false,
+      "final": "accept",
+      "retry_count": 0
+    }
+  },
+  {
+    "case": "PARAPHRASE_LONGEST_PREFIX_LEXICAL",
+    "statement": "Receiving several text strings, determine the longest common prefix that begins every string. Return empty string when no match.",
+    "perturbation_type": "lexical",
+    "status": "success",
+    "parsed_model": {
+      "input_type": "list of strings",
+      "output_type": "string",
+      "objective": "Find the longest common prefix among all input strings",
+      "constraints": [
+        "at least one string",
+        "strings are non-empty"
+      ],
+      "edge_conditions": [
+        "empty list",
+        "single string",
+        "no common prefix"
+      ],
+      "infer_confidence": "high",
+      "_inferred": {
+        "input_type": false,
+        "output_type": false,
+        "constraints": true,
+        "edge_conditions": true
+      }
+    },
+    "matched": "longest_common_prefix",
+    "justification": "The input_type is a list of strings, the output_type is a string, and the objective is to find the longest common prefix among all input strings, which aligns with the 'longest_common_prefix' problem in the registry.",
+    "expected": "longest_common_prefix",
+    "expected_type": "match",
+    "correct": true,
+    "verdict": "CORRECT",
+    "gate_fired": null,
+    "infer_confidence": "unknown",
+    "parse_retry_count": 0,
+    "matcher_retry_count": 0,
+    "decision_trace": {
+      "llm_match": "longest_common_prefix",
+      "contradiction": false,
+      "validation": true,
+      "fallback": false,
+      "final": "accept",
+      "retry_count": 0
+    }
+  },
+  {
+    "case": "PARAPHRASE_VALID_PARENS_LEXICAL",
+    "statement": "Check that every opening bracket has a matching closing bracket in proper nesting order. Respond true or false.",
+    "perturbation_type": "lexical",
+    "status": "success",
+    "parsed_model": {
+      "input_type": "string of brackets",
+      "output_type": "boolean",
+      "objective": "Check if every opening bracket has a matching closing bracket in proper nesting order",
+      "constraints": [
+        "only contains valid bracket characters"
+      ],
+      "edge_conditions": [
+        "empty string",
+        "single bracket",
+        "no matching closing bracket"
+      ],
+      "infer_confidence": "low",
+      "_inferred": {
+        "input_type": true,
+        "output_type": false,
+        "constraints": true,
+        "edge_conditions": true
+      }
+    },
+    "matched": "valid_parentheses",
+    "justification": "The input_type is a string of brackets, the output_type is a boolean, and the objective is to check if every opening bracket has a matching closing bracket in proper nesting order, which aligns with the 'valid_parentheses' problem in the registry.",
+    "expected": "valid_parentheses",
+    "expected_type": "match",
+    "correct": true,
+    "verdict": "CORRECT",
+    "gate_fired": null,
+    "infer_confidence": "unknown",
+    "parse_retry_count": 0,
+    "matcher_retry_count": 0,
+    "decision_trace": {
+      "llm_match": "valid_parentheses",
+      "contradiction": false,
+      "validation": true,
+      "fallback": false,
+      "final": "accept",
+      "retry_count": 0
+    }
+  },
+  {
+    "case": "PARAPHRASE_MERGE_LISTS_LEXICAL",
+    "statement": "Combine two already-sorted sequences into one sorted sequence. Maintain the ordering.",
+    "perturbation_type": "lexical",
+    "status": "success",
+    "parsed_model": {
+      "input_type": "two sorted sequences of comparable elements",
+      "output_type": "sorted sequence of comparable elements",
+      "objective": "Combine two sorted sequences into one sorted sequence while maintaining the ordering",
+      "constraints": [
+        "input sequences are already sorted",
+        "comparable elements"
+      ],
+      "edge_conditions": [
+        "empty sequences",
+        "single element sequences",
+        "sequences of different lengths"
+      ],
+      "infer_confidence": "high",
+      "_inferred": {
+        "input_type": true,
+        "output_type": true,
+        "constraints": true,
+        "edge_conditions": true
+      }
+    },
+    "matched": "merge_two_sorted_lists",
+    "justification": "The input_type is two sorted sequences of comparable elements, the output_type is a sorted sequence of comparable elements, and the objective is to combine two sorted sequences into one sorted sequence while maintaining the ordering, which aligns with the 'merge_two_sorted_lists' problem in the registry.",
+    "expected": "merge_two_sorted_lists",
+    "expected_type": "match",
+    "correct": true,
+    "verdict": "CORRECT",
+    "gate_fired": null,
+    "infer_confidence": "unknown",
+    "parse_retry_count": 0,
+    "matcher_retry_count": 0,
+    "decision_trace": {
+      "llm_match": "merge_two_sorted_lists",
+      "contradiction": false,
+      "validation": true,
+      "fallback": false,
+      "final": "accept",
+      "retry_count": 0
+    }
+  },
+  {
+    "case": "SIMILAR_MAX_SUM_VS_PRODUCT_OBJ",
+    "statement": "Find the contiguous subarray with the maximum product. (vs maximum SUM would be different)",
+    "perturbation_type": "objective_swap",
+    "status": "success",
+    "parsed_model": {
+      "input_type": "array of integers",
+      "output_type": "array of integers",
+      "objective": "Find the contiguous subarray with the maximum product",
+      "constraints": [
+        "array length is greater than 0",
+        "array contains at least one non-zero element"
+      ],
+      "edge_conditions": [
+        "empty array",
+        "single element",
+        "all elements are zero",
+        "all elements are negative"
+      ],
+      "infer_confidence": "low",
+      "_inferred": {
+        "input_type": false,
+        "output_type": false,
+        "constraints": true,
+        "edge_conditions": true
+      }
+    },
+    "matched": null,
+    "justification": "The provided registry does not contain a problem that matches the given input_type (array of integers), output_type (array of integers), and objective (Find the contiguous subarray with the maximum product).",
+    "expected": null,
+    "expected_type": "reject",
+    "correct": true,
+    "verdict": "CORRECT_REJECT",
+    "gate_fired": null,
+    "infer_confidence": "unknown",
+    "parse_retry_count": 0,
+    "matcher_retry_count": 0,
+    "decision_trace": {
+      "llm_match": null,
+      "contradiction": false,
+      "validation": false,
+      "fallback": false,
+      "final": "reject",
+      "retry_count": 0
+    }
+  },
+  {
+    "case": "SIMILAR_TWO_SUM_VS_THREE_SUM_OBJ",
+    "statement": "Find three numbers in the array that add up to zero. (vs Two Sum - different count)",
+    "perturbation_type": "objective_swap",
+    "status": "success",
+    "parsed_model": {
+      "input_type": "array of integers",
+      "output_type": "list of integers",
+      "objective": "Find three numbers in the array that add up to zero",
+      "constraints": [
+        "1 <= len <= 10000",
+        "at least three elements",
+        "integer solutions"
+      ],
+      "edge_conditions": [
+        "empty array",
+        "less than three elements",
+        "no solution exists",
+        "duplicates"
+      ],
+      "infer_confidence": "low",
+      "_inferred": {
+        "input_type": false,
+        "output_type": false,
+        "constraints": true,
+        "edge_conditions": true
+      }
+    },
+    "matched": "three_sum",
+    "justification": "The input_type is an array of integers, the output_type is a list of integers, and the objective is to find three numbers in the array that add up to zero, which aligns with the three_sum problem in the registry.",
+    "expected": "three_sum",
+    "expected_type": "match",
+    "correct": true,
+    "verdict": "CORRECT",
+    "gate_fired": null,
+    "infer_confidence": "unknown",
+    "parse_retry_count": 0,
+    "matcher_retry_count": 1,
+    "decision_trace": {
+      "llm_match": "three_sum",
+      "contradiction": false,
+      "validation": true,
+      "fallback": false,
+      "final": "accept",
+      "retry_count": 1
+    }
+  },
+  {
+    "case": "SIMILAR_CLIMBING_WAYS_VS_COST_OBJ",
+    "statement": "Find the minimum cost to reach the top. (vs number of ways would be different)",
+    "perturbation_type": "objective_swap",
+    "status": "success",
+    "parsed_model": {
+      "input_type": "2D array of integers",
+      "output_type": "integer",
+      "objective": "Find the minimum cost to reach the top",
+      "constraints": [
+        "grid is not empty",
+        "all rows have same number of columns"
+      ],
+      "edge_conditions": [
+        "single row",
+        "single column",
+        "all costs are zero",
+        "all costs are negative"
+      ],
+      "infer_confidence": "low",
+      "_inferred": {
+        "input_type": true,
+        "output_type": true,
+        "constraints": true,
+        "edge_conditions": true
+      }
+    },
+    "matched": null,
+    "justification": "The provided problem does not match any problem in the registry. The input_type is a 2D array of integers, the output_type is an integer, but the objective 'Find the minimum cost to reach the top' does not align with any problem in the registry.",
+    "expected": null,
+    "expected_type": "reject",
+    "correct": true,
+    "verdict": "CORRECT_REJECT",
+    "gate_fired": null,
+    "infer_confidence": "unknown",
+    "parse_retry_count": 0,
+    "matcher_retry_count": 2,
+    "decision_trace": {
+      "llm_match": null,
+      "contradiction": false,
+      "validation": false,
+      "fallback": false,
+      "final": "reject",
+      "retry_count": 2
+    }
+  },
+  {
+    "case": "SIMILAR_LIS_VS_LCS_OBJ",
+    "statement": "Find the longest common subsequence between two arrays. (vs longest increasing - similar structure, different problem)",
+    "perturbation_type": "objective_swap",
+    "status": "success",
+    "parsed_model": {
+      "input_type": "two arrays of integers",
+      "output_type": "array of integers",
+      "objective": "Find the longest common subsequence between two arrays",
+      "constraints": [
+        "arrays are non-empty",
+        "arrays contain only integers"
+      ],
+      "edge_conditions": [
+        "one or both arrays are empty",
+        "arrays have no common elements",
+        "one array is a subsequence of the other"
+      ],
+      "infer_confidence": "low",
+      "_inferred": {
+        "input_type": false,
+        "output_type": false,
+        "constraints": true,
+        "edge_conditions": true
+      }
+    },
+    "matched": null,
+    "justification": "The provided problem does not match any problem in the registry. The input_type is two arrays of integers and the output_type is an array of integers, but the objective is to find the longest common subsequence, which does not match any problem in the registry. The closest match is [longest_common_prefix], but it has a different input_type (array of strings) and objective (find the longest common prefix).",
+    "expected": null,
+    "expected_type": "reject",
+    "correct": true,
+    "verdict": "CORRECT_REJECT",
+    "gate_fired": null,
+    "infer_confidence": "unknown",
+    "parse_retry_count": 0,
+    "matcher_retry_count": 2,
+    "decision_trace": {
+      "llm_match": null,
+      "contradiction": false,
+      "validation": false,
+      "fallback": false,
+      "final": "reject",
+      "retry_count": 2
+    }
+  },
+  {
+    "case": "SIMILAR_DFS_VS_BFS_TRAVERSAL_OBJ",
+    "statement": "Visit all nodes in the structure below using breadth-first order:\n    1\n   / \\\n  2   3",
+    "perturbation_type": "objective_swap",
+    "status": "parse_error",
+    "expected": [
+      null,
+      "reject"
+    ],
+    "gate_fired": null,
+    "infer_confidence": "unknown",
+    "parse_retry_count": 0,
+    "decision_trace": {}
+  },
+  {
+    "case": "AMBIG_SHORTEST_PATH_CONSTRAINT",
+    "statement": "Find the shortest path from start to end. You may move in any cardinal direction on an infinite grid.",
+    "perturbation_type": "constraint_ambiguity",
+    "status": "success",
+    "parsed_model": {
+      "input_type": "start point, end point, grid",
+      "output_type": "list of points",
+      "objective": "Find the shortest path from start to end on an infinite grid",
+      "constraints": [
+        "start and end points are valid coordinates",
+        "grid is infinite"
+      ],
+      "edge_conditions": [
+        "start equals end",
+        "no path exists"
+      ],
+      "infer_confidence": "low",
+      "_inferred": {
+        "input_type": true,
+        "output_type": true,
+        "constraints": true,
+        "edge_conditions": true
+      }
+    },
+    "matched": null,
+    "justification": "The input_type, output_type, and objective of the parsed model do not align with any problem in the registry. The parsed model is looking for a shortest path problem on an infinite grid, but none of the problems in the registry match this description.",
+    "expected": null,
+    "expected_type": "reject",
+    "correct": true,
+    "verdict": "CORRECT_REJECT",
+    "gate_fired": null,
+    "infer_confidence": "unknown",
+    "parse_retry_count": 0,
+    "matcher_retry_count": 3,
+    "decision_trace": {
+      "llm_match": null,
+      "contradiction": false,
+      "validation": false,
+      "fallback": false,
+      "final": "reject",
+      "retry_count": 3
+    }
+  },
+  {
+    "case": "AMBIG_MAX_ELEMENT_CONSTRAINT",
+    "statement": "Find the maximum element in the array.",
+    "perturbation_type": "constraint_ambiguity",
+    "status": "success",
+    "parsed_model": {
+      "input_type": "array of integers",
+      "output_type": "integer",
+      "objective": "Find the maximum element in the array",
+      "constraints": [
+        "array is non-empty"
+      ],
+      "edge_conditions": [
+        "single element",
+        "all elements are equal",
+        "array contains negative numbers"
+      ],
+      "infer_confidence": "high",
+      "_inferred": {
+        "input_type": false,
+        "output_type": false,
+        "constraints": true,
+        "edge_conditions": true
+      }
+    },
+    "matched": null,
+    "justification": "The provided problem does not match any problem in the registry. The input_type is an array of integers, the output_type is an integer, but the objective is to find the maximum element in the array, which does not align with any problem in the registry.",
+    "expected": null,
+    "expected_type": "reject",
+    "correct": true,
+    "verdict": "CORRECT_REJECT",
+    "gate_fired": null,
+    "infer_confidence": "unknown",
+    "parse_retry_count": 0,
+    "matcher_retry_count": 1,
+    "decision_trace": {
+      "llm_match": null,
+      "contradiction": false,
+      "validation": false,
+      "fallback": false,
+      "final": "reject",
+      "retry_count": 1
+    }
+  },
+  {
+    "case": "AMBIG_FIND_PAIRS_CONSTRAINT",
+    "statement": "Find all pairs of elements that satisfy the condition (elements must sum to an even number).",
+    "perturbation_type": "constraint_ambiguity",
+    "status": "success",
+    "parsed_model": {
+      "input_type": "array of integers",
+      "output_type": "list of pairs of integers",
+      "objective": "Find all pairs of elements that sum to an even number",
+      "constraints": [
+        "array contains at least two elements",
+        "all elements are integers"
+      ],
+      "edge_conditions": [
+        "empty array",
+        "single element",
+        "all pairs sum to even number",
+        "no pairs sum to even number"
+      ],
+      "infer_confidence": "low",
+      "_inferred": {
+        "input_type": true,
+        "output_type": true,
+        "constraints": true,
+        "edge_conditions": true
+      }
+    },
+    "matched": null,
+    "justification": "The objective of the parsed model is to find all pairs of elements that sum to an even number, which does not align with any problem in the registry. The closest match is 'two_sum' but its objective is to find pairs that sum to a specific target, not necessarily an even number.",
+    "expected": null,
+    "expected_type": "reject",
+    "correct": true,
+    "verdict": "CORRECT_REJECT",
+    "gate_fired": null,
+    "infer_confidence": "unknown",
+    "parse_retry_count": 0,
+    "matcher_retry_count": 2,
+    "decision_trace": {
+      "llm_match": null,
+      "contradiction": false,
+      "validation": true,
+      "fallback": false,
+      "final": "reject",
+      "retry_count": 2
+    }
+  },
+  {
+    "case": "AMBIG_SORTED_OUTPUT_CONSTRAINT",
+    "statement": "Return a sorted version of the input using merge sort.",
+    "perturbation_type": "constraint_ambiguity",
+    "status": "success",
+    "parsed_model": {
+      "input_type": "list of elements",
+      "output_type": "sorted list of elements",
+      "objective": "Sort the input list using merge sort",
+      "constraints": [
+        "input list is not empty",
+        "all elements are comparable"
+      ],
+      "edge_conditions": [
+        "empty list",
+        "single element list",
+        "already sorted list",
+        "list with duplicate elements"
+      ],
+      "infer_confidence": "high",
+      "_inferred": {
+        "input_type": true,
+        "output_type": true,
+        "constraints": true,
+        "edge_conditions": true
+      }
+    },
+    "matched": null,
+    "justification": "The provided registry does not contain a problem that exactly matches the given input_type (list of elements), output_type (sorted list of elements), and objective (Sort the input list using merge sort).",
+    "expected": null,
+    "expected_type": "reject",
+    "correct": true,
+    "verdict": "CORRECT_REJECT",
+    "gate_fired": null,
+    "infer_confidence": "unknown",
+    "parse_retry_count": 0,
+    "matcher_retry_count": 2,
+    "decision_trace": {
+      "llm_match": null,
+      "contradiction": false,
+      "validation": false,
+      "fallback": false,
+      "final": "reject",
+      "retry_count": 2
+    }
+  },
+  {
+    "case": "AMBIG_TRAVERSE_CONSTRAINT",
+    "statement": "Traverse the binary tree below in depth-first order:\n    1\n   / \\\n  2   3",
+    "perturbation_type": "constraint_ambiguity",
+    "status": "success",
+    "parsed_model": {
+      "input_type": "binary tree",
+      "output_type": "list of node values",
+      "objective": "Traverse the binary tree in depth-first order",
+      "constraints": [
+        "tree is not empty"
+      ],
+      "edge_conditions": [
+        "empty tree",
+        "tree with one node",
+        "unbalanced tree"
+      ],
+      "infer_confidence": "low",
+      "_inferred": {
+        "input_type": false,
+        "output_type": false,
+        "constraints": true,
+        "edge_conditions": true
+      }
+    },
+    "matched": null,
+    "justification": "The input_type is binary tree, but none of the registry problems have a binary tree as input_type. The closest match could be considered is [merge_two_sorted_lists], but its input_type is two sorted lists, not a binary tree. Therefore, no match is found.",
+    "expected": null,
+    "expected_type": "reject",
+    "correct": true,
+    "verdict": "CORRECT_REJECT",
+    "gate_fired": null,
+    "infer_confidence": "unknown",
+    "parse_retry_count": 0,
+    "matcher_retry_count": 2,
+    "decision_trace": {
+      "llm_match": null,
+      "contradiction": false,
+      "validation": false,
+      "fallback": false,
+      "final": "reject",
+      "retry_count": 2
+    }
+  },
+  {
+    "case": "DISGUISE_TWO_SUM_SHOPPING",
+    "statement": "Given a shopping list with item prices and a budget, identify which two items can be purchased together without exceeding the budget.",
+    "perturbation_type": "domain_disguise",
+    "status": "success",
+    "parsed_model": {
+      "input_type": "list of item prices, budget",
+      "output_type": "list of two item indices or identifiers",
+      "objective": "Find two items that can be purchased together without exceeding the budget",
+      "constraints": [
+        "item prices are non-negative",
+        "budget is non-negative",
+        "at least two items in the list"
+      ],
+      "edge_conditions": [
+        "empty list",
+        "single item",
+        "no pair of items within budget",
+        "all items within budget"
+      ],
+      "infer_confidence": "high",
+      "_inferred": {
+        "input_type": true,
+        "output_type": true,
+        "constraints": true,
+        "edge_conditions": true
+      }
+    },
+    "matched": null,
+    "justification": "The input_type, output_type, and objective of the parsed model do not align with any problem in the registry. The parsed model is looking for two items that can be purchased together without exceeding the budget, which is different from the objectives of the problems in the registry, such as finding two numbers that add up to a target (two_sum) or finding the longest common prefix (longest_common_prefix).",
+    "expected": "two_sum",
+    "expected_type": "match",
+    "correct": false,
+    "verdict": "WRONG",
+    "gate_fired": null,
+    "infer_confidence": "unknown",
+    "parse_retry_count": 0,
+    "matcher_retry_count": 2,
+    "decision_trace": {
+      "llm_match": null,
+      "contradiction": false,
+      "validation": false,
+      "fallback": false,
+      "final": "reject",
+      "retry_count": 2
+    }
+  },
+  {
+    "case": "DISGUISE_LIS_TIMESERIES",
+    "statement": "Given daily stock prices over a month, find the longest consecutive period where prices were consistently rising.",
+    "perturbation_type": "domain_disguise",
+    "status": "success",
+    "parsed_model": {
+      "input_type": "list of integers",
+      "output_type": "integer",
+      "objective": "Find the longest consecutive period of rising stock prices",
+      "constraints": [
+        "prices are non-negative integers",
+        "at least one day of prices"
+      ],
+      "edge_conditions": [
+        "single day",
+        "no rising period",
+        "all prices are the same"
+      ],
+      "infer_confidence": "high",
+      "_inferred": {
+        "input_type": false,
+        "output_type": false,
+        "constraints": true,
+        "edge_conditions": true
+      }
+    },
+    "matched": "longest_increasing_subsequence",
+    "justification": "Semantic fallback: longest_increasing_subsequence",
+    "expected": "longest_increasing_subsequence",
+    "expected_type": "match",
+    "correct": true,
+    "verdict": "CORRECT",
+    "gate_fired": null,
+    "infer_confidence": "unknown",
+    "parse_retry_count": 0,
+    "matcher_retry_count": 1,
+    "decision_trace": {
+      "llm_match": null,
+      "contradiction": false,
+      "validation": true,
+      "fallback": true,
+      "final": "accept",
+      "retry_count": 1
+    }
+  },
+  {
+    "case": "DISGUISE_MAX_SUM_BUDGET",
+    "statement": "Given daily expenses over a week, find the consecutive days with the highest total spending.",
+    "perturbation_type": "domain_disguise",
+    "status": "success",
+    "parsed_model": {
+      "input_type": "array of integers",
+      "output_type": "list of integers",
+      "objective": "Find consecutive days with the highest total spending",
+      "constraints": [
+        "7 <= len <= 7",
+        "all elements are non-negative integers"
+      ],
+      "edge_conditions": [
+        "empty array",
+        "single element",
+        "all elements are zero",
+        "all elements are equal"
+      ],
+      "infer_confidence": "high",
+      "_inferred": {
+        "input_type": false,
+        "output_type": false,
+        "constraints": true,
+        "edge_conditions": true
+      }
+    },
+    "matched": null,
+    "justification": "The provided problem does not match any problem in the registry. The input_type is an array of integers, the output_type is a list of integers, but the objective 'Find consecutive days with the highest total spending' does not align with any problem in the registry.",
+    "expected": "max_subarray",
+    "expected_type": "match",
+    "correct": false,
+    "verdict": "WRONG",
+    "gate_fired": null,
+    "infer_confidence": "unknown",
+    "parse_retry_count": 0,
+    "matcher_retry_count": 3,
+    "decision_trace": {
+      "llm_match": null,
+      "contradiction": false,
+      "validation": true,
+      "fallback": false,
+      "final": "reject",
+      "retry_count": 3
+    }
+  },
+  {
+    "case": "DISGUISE_VALID_PARENS_BRACKETS",
+    "statement": "Verify that all opening brackets [ and { have matching closing brackets ] and } in the correct sequence in an expression.",
+    "perturbation_type": "domain_disguise",
+    "status": "success",
+    "parsed_model": {
+      "input_type": "string",
+      "output_type": "boolean",
+      "objective": "Verify that all opening brackets have matching closing brackets in the correct sequence",
+      "constraints": [
+        "only contains brackets and other characters",
+        "sequence matters"
+      ],
+      "edge_conditions": [
+        "empty string",
+        "single bracket",
+        "no matching closing bracket",
+        "unbalanced brackets"
+      ],
+      "infer_confidence": "high",
+      "_inferred": {
+        "input_type": false,
+        "output_type": false,
+        "constraints": true,
+        "edge_conditions": true
+      }
+    },
+    "matched": "valid_parentheses",
+    "justification": "The input_type is string, the output_type is boolean, and the objective is to verify that all opening brackets have matching closing brackets in the correct sequence, which aligns with the 'valid_parentheses' problem in the registry.",
+    "expected": "valid_parentheses",
+    "expected_type": "match",
+    "correct": true,
+    "verdict": "CORRECT",
+    "gate_fired": null,
+    "infer_confidence": "unknown",
+    "parse_retry_count": 0,
+    "matcher_retry_count": 2,
+    "decision_trace": {
+      "llm_match": "valid_parentheses",
+      "contradiction": false,
+      "validation": true,
+      "fallback": false,
+      "final": "accept",
+      "retry_count": 2
+    }
+  },
+  {
+    "_summary": {
+      "timestamp": "20260425_060630",
+      "phase": "phase2",
+      "total": 19,
+      "parse_errors": 1,
+      "rejects": 0,
+      "accepted": 18,
+      "correct_accepts": 16,
+      "correct_rejects": 0,
+      "correctness_conditional_on_accept": 0.8888888888888888,
+      "correctness_unconditional": 0.8421052631578947,
+      "decision_trace_summary": {
+        "contradictions_triggered": 0,
+        "fallbacks_triggered": 1,
+        "validation_failures": 8
+      }
+    }
+  }
+]
