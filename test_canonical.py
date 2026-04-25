@@ -3,7 +3,7 @@ import shutil
 from pathlib import Path
 
 os.environ['LLM_PROVIDER'] = 'openrouter'
-os.environ['OPENROUTER_API_KEY'] = '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'
+os.environ['OPENROUTER_API_KEY'] = os.environ.get('OPENROUTER_API_KEY', '')
 
 statement = "A warehouse has daily profit/loss records. Find the period with highest total gain."
 

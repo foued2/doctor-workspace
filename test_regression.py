@@ -1,7 +1,7 @@
 """Targeted regression test for Phase 2 failure cases."""
 import os
 os.environ['LLM_PROVIDER'] = 'google'
-os.environ['GOOGLE_API_KEY'] = 'AIzaSyC0aQ1naUtDWNqmA0WaRkWmWawrPhFGAeI'
+os.environ['GOOGLE_API_KEY'] = os.environ.get('GOOGLE_API_KEY', '')
 
 from doctor.ingest.problem_parser import parse_problem
 from doctor.ingest.registry_matcher import match_to_registry
