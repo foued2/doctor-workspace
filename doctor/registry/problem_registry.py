@@ -18,6 +18,7 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional
 
 REGISTRY_PATH = Path(__file__).parent / "problem_registry.json"
+NEW_PROBLEMS_PATH = Path(__file__).parent / "new_problems.json"
 
 _PROBLEMS: Optional[Dict[str, dict]] = None
 
@@ -34,6 +35,13 @@ def _load_registry(validate: bool = True) -> Dict[str, dict]:
         return {}
     with open(REGISTRY_PATH, "r", encoding="utf-8") as f:
         data: Dict[str, dict] = json.load(f)
+    
+    # Also load new_problems
+    if NEW_PROBLEMS_PATH.exists():
+        with open(NEW_PROBLEMS_PATH, "r", encoding="utf-8") as f:
+            new_data = json.load(f)
+        data.update(new_data)
+    
     if validate:
         errors = _validate_registry_data(data)
         if errors:
