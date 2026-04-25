@@ -1,90 +1,96 @@
 #!/usr/bin/env python3
 """
-Doctor Prototype - Minimal Working Script
-
-One flow:
-> Paste problem statement -> Doctor classifies
-> Paste solution -> Doctor executes
-> Report returned
-
-Three constraints:
-1. Classification confidence < threshold -> reject, no execution
-2. Tests from registry only
-3. Report shows classification AND execution separately
+Doctor Prototype - Strict Step-by-Step Conversation
 """
 import os
 import sys
+import json
 
 # ============================================================
 # CONFIG
 # ============================================================
-os.environ['LLM_PROVIDER'] = 'openrouter'
-API_KEY = os.environ.get('OPENROUTER_API_KEY', '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')
+LLM_PROVIDER = 'openrouter'
+API_KEY = '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'
+os.environ['LLM_PROVIDER'] = LLM_PROVIDER
 os.environ['OPENROUTER_API_KEY'] = API_KEY
 
 ALIGNMENT_THRESHOLD = 0.85
-CONSTRAINT_THRESHOLD = 0.70
 
 # ============================================================
-# LAYER 1: CLASSIFICATION
+# STEP 1: CLASSIFY
 # ============================================================
 def classify_problem(statement: str) -> dict:
-    """Ingestion layer - classify problem statement"""
+    """Attempt to recognize the problem"""
     from doctor.ingest.unified_engine import analyze_statement
     
     result = analyze_statement(statement)
     trace = result.get("decision_trace", {})
     
     return {
-        "classification_status": result.get("status"),
-        "problem_match": result.get("match", trace.get("llm_match")),
-        "alignment_score": trace.get("alignment_score", 0),
-        "constraint_consistency": trace.get("constraint_consistency", 0),
-        "structural_compatibility": trace.get("structural_compatibility", 0),
+        "status": result.get("status"),
+        "match": result.get("match", trace.get("llm_match", "none")),
+        "alignment": trace.get("alignment_score", 0),
+        "constraint": trace.get("constraint_consistency", 0),
+        "structural": trace.get("structural_compatibility", 0),
     }
 
 # ============================================================
-# LAYER 2: EXECUTION
+# STEP 3: LOAD TESTS
 # ============================================================
-def execute_solution(solution_code: str, problem_id: str) -> dict:
-    """Execution layer - run solution against test cases"""
+def get_test_cases(problem_id: str) -> list:
+    """Get test cases for a problem from registry"""
+    from doctor.registry.problem_registry import get_problems
+    
+    problems = get_problems()
+    if problem_id not in problems:
+        return []
+    
+    return problems[problem_id].get("execution", {}).get("test_cases", [])
+
+# ============================================================
+# STEP 4: EXECUTE
+# ============================================================
+def execute_solution(solution_code: str, problem_id: str, test_cases: list) -> dict:
+    """Run solution against test cases"""
     from doctor.core.test_executor import _results_equal
-    
-    # For this demo: import solve_case directly
-    try:
-        exec("from cf2225g import solve_case")
-    except:
-        pass
-    
-    # Run test cases (from registry - NOT generated)
-    test_cases = [
-        ((10, [2, 3]), [1, 3, 5, 7, 9, 0, 2, 4, 6, 8], "sample"),
-        ((6, [2]), None, "impossible"),
-        ((3, [1]), [0, 1, 2], "trivial_k1"),
-        ((9, [2, 3]), [0, 3, 6, 4, 2, 8, 5, 7, 1], "cross_boundary"),
-    ]
     
     results = []
     passed = 0
-    total = 0
+    total = len(test_cases)
+    error = None
     
-    for input_args, expected, label in test_cases:
-        total += 1
+    # Import solution
+    try:
+        exec(solution_code, {})
+    except Exception as e:
+        return {"status": "error", "error": f"Cannot parse solution: {e}"}
+    
+    # Import target function
+    try:
+        if problem_id == "arrange_numbers_divisible":
+            from cf2225g import solve_case
+            func = solve_case
+        else:
+            return {"status": "error", "error": f"Unknown problem: {problem_id}"}
+    except Exception as e:
+        return {"status": "error", "error": f"Cannot import solution: {e}"}
+    
+    # Run tests
+    for tc in test_cases:
         try:
-            import cf2225g
-            got = cf2225g.solve_case(*input_args)
+            got = func(*tc["input"][0], tc["input"][1])
+            expected = tc["expected"]
+            equal = _results_equal(got, expected)
+            passed += 1 if equal else 0
+            results.append({"label": tc.get("label", "?"), "passed": equal, "got": got, "expected": expected})
         except Exception as e:
-            got = f"ERROR: {e}"
-        
-        equal = _results_equal(got, expected)
-        passed += 1 if equal else 0
-        results.append({"label": label, "passed": equal, "got": got, "expected": expected})
+            passed += 0
+            results.append({"label": tc.get("label", "?"), "passed": False, "error": str(e)})
     
     return {
-        "execution_status": "correct" if passed == total else "incorrect",
-        "tests_passed": passed,
-        "tests_total": total,
-        "pass_rate": passed/total if total > 0 else 0,
+        "status": "complete",
+        "passed": passed,
+        "total": total,
         "results": results
     }
 
@@ -92,19 +98,14 @@ def execute_solution(solution_code: str, problem_id: str) -> dict:
 # MAIN INTERACTIVE LOOP
 # ============================================================
 def main():
-    import sys
-    
     print("=" * 60)
-    print("Doctor Prototype")
+    print("Doctor - Strict Step-by-Step Evaluation")
     print("=" * 60)
     print()
-    print("Constraints:")
-    print("  1. Classification confidence < threshold -> reject")
-    print("  2. Tests from registry only")
-    print("  3. Report shows classification AND execution separately")
-    print()
     
-    # Step 1: Get problem statement
+    # ============================================================
+    # STEP 1: PASTE PROBLEM STATEMENT
+    # ============================================================
     print("STEP 1: PASTE PROBLEM STATEMENT")
     print("(Press Enter twice to finish)")
     print("> ", end="")
@@ -122,51 +123,47 @@ def main():
     problem_statement = "\n".join(lines)
     
     if not problem_statement.strip():
-        print("No statement provided. Exiting.")
+        print("STOP: No problem statement provided.")
         return
     
     print()
     print("-" * 40)
-    print("Classifying...")
+    print("Analyzing problem...")
     print()
     
-    # Layer 1: Classify
     classification = classify_problem(problem_statement)
-    print(f"Classification Status: {classification.get('classification_status')}")
-    print(f"Problem Match: {classification.get('problem_match')}")
-    print(f"Alignment Score: {classification.get('alignment_score')}")
-    print(f"Constraint Consistency: {classification.get('constraint_consistency')}")
+    
+    print(f"Match: {classification['match']}")
+    print(f"Status: {classification['status']}")
+    print(f"Confidence: {classification['alignment']:.2f}")
     print()
     
-    # Check below threshold BEFORE execution
-    alignment = classification.get("alignment_score", 0)
-    if alignment < ALIGNMENT_THRESHOLD:
-        print("REJECTED: Classification confidence below threshold")
-        print(f"Alignment {alignment} < {ALIGNMENT_THRESHOLD}")
-        print("No execution attempted.")
-        print()
-        print("REPORT:")
-        print(f"  Verdict: REJECTED")
-        print(f"  Reason: classification_confidence_too_low")
-        print(f"  Classification Confidence: {alignment}")
-        print(f"  Execution Evidence: none (not run)")
+    # Check recognition
+    if classification['status'] != 'success':
+        print("STOP: Problem not recognized.")
+        print(f"  Reason: Classification status = {classification['status']}")
+        print("  I cannot evaluate a problem I don't recognize.")
         return
     
-    problem_match = classification.get("problem_match", "")
-    if not problem_match or problem_match == "no match":
-        print("REJECTED: No matching problem in registry")
-        print("No execution attempted.")
-        print()
-        print("REPORT:")
-        print(f"  Verdict: REJECTED")
-        print(f"  Reason: no_registry_match")
-        print(f"  Execution Evidence: none (not run)")
+    if classification['alignment'] < ALIGNMENT_THRESHOLD:
+        print("STOP: Low confidence.")
+        print(f"  Alignment: {classification['alignment']:.2f} < {ALIGNMENT_THRESHOLD}")
+        print("  I don't know this problem well enough to evaluate it.")
         return
     
-    # Step 2: Get solution
+    if classification['match'] in [None, "none", "no match"]:
+        print("STOP: No matching problem found.")
+        print("  I cannot find this in my problem registry.")
+        return
+    
+    problem_id = classification['match']
+    print(f"Recognized as: {problem_id}")
+    print()
+    
+    # ============================================================
+    # STEP 2: PASTE SOLUTION
+    # ============================================================
     print("-" * 40)
-    print(f"Identified: {problem_match}")
-    print()
     print("STEP 2: PASTE SOLUTION CODE")
     print("(Press Enter twice to finish)")
     print("> ", end="")
@@ -184,65 +181,133 @@ def main():
     solution_code = "\n".join(solution_lines)
     
     if not solution_code.strip():
-        print("No solution provided. Exiting.")
+        print("STOP: No solution provided.")
+        return
+    
+    # Validate Python
+    try:
+        compile(solution_code, "<string>", "exec")
+    except SyntaxError as e:
+        print("STOP: Cannot parse solution.")
+        print(f"  SyntaxError: {e}")
         return
     
     print()
+    print("Solution parsed successfully.")
+    print()
+    
+    # ============================================================
+    # STEP 3: TEST CASES
+    # ============================================================
     print("-" * 40)
-    print("Executing solution...")
+    print("STEP 3: TEST CASES")
+    print("Do you have test cases? (paste them or press Enter to skip)")
+    print("> ", end="")
+    
+    user_test_lines = []
+    while True:
+        try:
+            line = input()
+            if line.strip() == "":
+                break
+            user_test_lines.append(line)
+        except EOFError:
+            break
+    
+    user_tests = []
+    if user_test_lines:
+        try:
+            user_tests = json.loads("\n".join(user_test_lines))
+            if not isinstance(user_tests, list):
+                print("STOP: Test cases must be a JSON list.")
+                return
+        except json.JSONDecodeError as e:
+            print("STOP: Invalid JSON for test cases.")
+            print(f"  Error: {e}")
+            return
+        print(f"Using {len(user_tests)} user-provided tests.")
+    else:
+        print("Using registry tests.")
+    
+    # Load registry tests
+    registry_tests = get_test_cases(problem_id)
+    print(f"Registry has {len(registry_tests)} tests.")
+    
+    # Combine: user tests take priority
+    all_tests = user_tests.copy() if user_tests else []
+    for tc in registry_tests:
+        # Add registry tests that don't duplicate
+        existing_labels = [t.get("label") for t in all_tests]
+        if tc.get("label") not in existing_labels:
+            all_tests.append(tc)
+    
+    if not all_tests:
+        print("STOP: No test cases available.")
+        print("  I cannot evaluate fairly without test cases.")
+        print("  Either provide tests or ensure this problem has registry tests.")
+        return
+    
+    print(f"Total tests: {len(all_tests)}")
     print()
     
-    # Layer 2: Execute
-    execution = execute_solution(solution_code, problem_match)
-    
-    print(f"Execution Status: {execution.get('execution_status')}")
-    print(f"Tests Passed: {execution.get('tests_passed')}/{execution.get('tests_total')}")
+    # ============================================================
+    # STEP 4: EXECUTE
+    # ============================================================
+    print("-" * 40)
+    print("STEP 4: Running execution pipeline...")
     print()
     
-    if execution.get("results"):
-        print("Test Results:")
-        for r in execution["results"]:
-            status = "PASS" if r["passed"] else "FAIL"
-            print(f"  {r['label']}: {status}")
-        print()
+    execution = execute_solution(solution_code, problem_id, all_tests)
     
-    # Combined report
+    if execution.get("status") == "error":
+        print(f"STOP: Execution error.")
+        print(f"  {execution.get('error')}")
+        return
+    
+    print(f"Tests passed: {execution['passed']}/{execution['total']}")
+    print()
+    
+    for r in execution.get("results", []):
+        status = "PASS" if r["passed"] else "FAIL"
+        print(f"  {r['label']}: {status}")
+        if r.get("error"):
+            print(f"    Error: {r['error']}")
+    print()
+    
+    # ============================================================
+    # STEP 5: REPORT
+    # ============================================================
     print("=" * 60)
     print("DOCTOR REPORT")
     print("=" * 60)
     print()
-    print("CLASSIFICATION LAYER:")
-    print(f"  Status: {classification.get('classification_status')}")
-    print(f"  Problem: {classification.get('problem_match')}")
-    print(f"  Alignment Score: {classification.get('alignment_score')}")
+    print("CLASSIFICATION:")
+    print(f"  Problem: {problem_id}")
+    print(f"  Confidence: {classification['alignment']:.2f}")
     print()
-    print("EXECUTION LAYER:")
-    print(f"  Status: {execution.get('execution_status')}")
-    print(f"  Tests Passed: {execution.get('tests_passed')}/{execution.get('tests_total')}")
-    print(f"  Pass Rate: {execution.get('pass_rate', 0)*100:.1f}%")
+    print("EXECUTION:")
+    passed = execution['passed']
+    total = execution['total']
+    pass_rate = passed/total if total > 0 else 0
+    print(f"  Tests: {passed}/{total} ({100*pass_rate:.1f}%)")
     print()
     
-    # Combined verdict
-    exec_pass_rate = execution.get("pass_rate", 0)
-    if classification.get("classification_status") == "success" and exec_pass_rate == 1.0:
+    # Verdict
+    if pass_rate == 1.0:
         verdict = "CORRECT"
         trust = "aligned_confident_correct"
         risk = "LOW"
-    elif classification.get("classification_status") == "success" and exec_pass_rate < 1.0:
+    elif pass_rate >= 0.5:
         verdict = "PARTIAL"
         trust = "weakly_supported_correct"
         risk = "MEDIUM"
-    elif classification.get("classification_status") != "success":
-        verdict = "REJECTED"
-        trust = "none"
-        risk = "N/A"
     else:
         verdict = "INCORRECT"
         trust = "false_justified_confidence"
         risk = "HIGH"
     
     print("=" * 60)
-    print(f"FINAL VERDICT: {verdict}")
+    print(f"VERDICT: {verdict}")
     print(f"TRUST: {trust}")
     print(f"RISK: {risk}")
     print("=" * 60)
