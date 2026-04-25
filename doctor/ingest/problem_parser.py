@@ -19,6 +19,11 @@ GROQ_API_KEY = os.environ.get("GROQ_API_KEY", "")
 GROQ_MODEL = os.environ.get("GROQ_MODEL", "llama-3.3-70b-versatile")
 GOOGLE_API_KEY = os.environ.get("GOOGLE_API_KEY", "")
 GOOGLE_MODEL = os.environ.get("GOOGLE_MODEL", "gemini-2.5-flash")
+OPENROUTER_API_KEY = os.environ.get("OPENROUTER_API_KEY", "")
+OPENROUTER_MODEL = os.environ.get(
+    "OPENROUTER_MODEL",
+    "google/gemma-4-31b-it:free",
+)
 PROVIDER = os.environ.get("LLM_PROVIDER", "groq")
 
 CACHE_DIR = pathlib.Path(__file__).parent / ".llm_cache"
@@ -89,9 +94,25 @@ def _call_llm_with_stats(prompt: str, retries: int = 0) -> Tuple[str, int]:
         }
         headers = None
         use_google = True
+    elif PROVIDER == "openrouter" and OPENROUTER_API_KEY:
+        url = "https://openrouter.ai/api/v1/chat/completions"
+        params = None
+        payload = {
+            "model": OPENROUTER_MODEL,
+            "messages": [{"role": "user", "content": prompt}],
+            "temperature": 0.1,
+            "max_tokens": 3000,
+        }
+        headers = {
+            "Authorization": f"Bearer {OPENROUTER_API_KEY}",
+            "Content-Type": "application/json",
+            "HTTP-Referer": "https://github.com/foued2/doctor-workspace",
+            "X-Title": "doctor-workspace",
+        }
+        use_google = False
     else:
         if not GROQ_API_KEY:
-            raise ValueError("GROQ_API_KEY not set")
+            raise ValueError(f"{PROVIDER.upper()} credentials not set")
         url = "https://api.groq.com/openai/v1/chat/completions"
         params = None
         payload = {
