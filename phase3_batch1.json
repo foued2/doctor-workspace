@@ -1,0 +1,62 @@
+[
+    {
+        "user_id": "user_1",
+        "statement": "I have a list of numbers and a target number. I need to find which two numbers in the list add up to the target. There's always exactly one answer.",
+        "expected_match": "two_sum",
+        "expected_type": "match"
+    },
+    {
+        "user_id": "user_2",
+        "statement": "How do I check if parentheses in a string are balanced? Like open close is fine but close open is not.",
+        "expected_match": "valid_parentheses",
+        "expected_type": "match"
+    },
+    {
+        "user_id": "user_3",
+        "statement": "I'm building a budget app. Given a list of item prices and a total budget, find two items whose prices together exactly equal the budget.",
+        "expected_match": "two_sum",
+        "expected_type": "match"
+    },
+    {
+        "user_id": "user_4",
+        "statement": "Given an array of integers, find the contiguous subarray which has the largest sum and return its sum.",
+        "expected_match": "max_subarray",
+        "expected_type": "match"
+    },
+    {
+        "user_id": "user_5",
+        "statement": "merge two sorted arrays into one sorted array",
+        "expected_match": "merge_two_sorted_lists",
+        "expected_type": "match"
+    },
+    {
+        "user_id": "user_6",
+        "statement": "find the longest subsequence in an array",
+        "expected_match": null,
+        "expected_type": "reject"
+    },
+    {
+        "user_id": "user_7",
+        "statement": "given a month of daily temperatures, find the length of the longest stretch where temps kept going up",
+        "expected_match": null,
+        "expected_type": "reject"
+    },
+    {
+        "user_id": "user_8",
+        "statement": "sort a string array and find what they all start with",
+        "expected_match": null,
+        "expected_type": "reject"
+    },
+    {
+        "user_id": "user_9",
+        "statement": "find the contiguous subarray with the maximum product",
+        "expected_match": null,
+        "expected_type": "reject"
+    },
+    {
+        "user_id": "user_10",
+        "statement": "I have two linked lists that are both already sorted. I want to combine them into a single sorted linked list.",
+        "expected_match": "merge_two_sorted_lists",
+        "expected_type": "match"
+    }
+]
