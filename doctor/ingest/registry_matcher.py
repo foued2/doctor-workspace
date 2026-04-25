@@ -280,18 +280,20 @@ def match_to_registry(model: Dict) -> Tuple[Optional[str], str, dict]:
     
     if match == "no match" or not match:
         trace["llm_match"] = None
-        # STEP 2: Validation
+        # Validation alone determines accept/reject
+        validated = False
         for pm in ["max_subarray", "longest_increasing_subsequence"]:
-            is_aligned, _ = _validate_objective_alignment(objective, pm)
-            if not is_aligned:
-                trace["validation"] = False
-        # STEP 3: Fallback only if validation passed
-        if trace["validation"]:
-            fb_match, fb_reason = _semantic_fallback(model)
-            if fb_match:
-                trace["fallback"] = True
-                trace["final"] = "accept"
-                return fb_match, fb_reason, trace
+            is_aligned, reason = _validate_objective_alignment(objective, pm)
+            if is_aligned:
+                validated = True
+                match = pm
+                justification = f"Validated against {pm}: {reason}"
+                break
+        trace["validation"] = validated
+        
+        if validated:
+            trace["final"] = "accept"
+            return match, justification, trace
         trace["final"] = "reject"
         return None, justification, trace
     
