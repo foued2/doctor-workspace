@@ -8,18 +8,22 @@
 - Phase 1: closed (8/8)
 - Phase 2: closed (94% conditional)
 - Phase 3: closed (28 cases, 1 false accept, adversarial 10/10)
-- Phase 4: in progress — batch 1 (12/12), batch 2 atomic (10/10)
+- Phase 4: in progress — batch 1 (12/12), batch 2 atomic (10/10), batch 3 (11/12)
 
-**Next session opens with:**
-Phase 4 batch 3 — adversarial generalization sweep. Cases to cover: unseen phrasing variants, long-tail semantic drift ("optimal", "best", "sequence"), multi-constraint conflicts. Then final decision contract — every branch explicit, no implicit behavior.
+**Batch 3 results:**
+- Long-tail semantic drift: 3/3 reject (optimal, best, efficient)
+- Unseen phrasing: 3/3 accept (valid_parentheses, coin_change, merge_two_sorted_lists)
+- Multi-constraint conflicts: 4/4 reject (jointly inconsistent constraints caught correctly)
+- Compositional ambiguity: 1/2 reject (p4b3_12), 1 FAIL (p4b3_10: "ignore spaces" accepted)
 
-**Key architectural decisions locked:**
-- Atomic evaluation only — batch mode retired as calibration tool
-- Objective canonicalization layer active
-- constraint_consistency_violation taxonomy (not contradiction)
-- json_repair → alignment ≥ 0.90 required or reject
-- Gates validated: LLM-first, gates authoritative on override
+**Score: 11/12 (91.7%)**
+
+**Key finding: Multi-constraint gap CONFIRMED but nuanced:**
+- constraint_consistency = 0.0 → reject (p4b3_07-09)
+- constraint_consistency = 0.2 → reject (p4b3_11)  
+- constraint_consistency = 0.8 → ACCEPT (p4b3_10) — FALSE POSITIVE
+- Gap: constraint_consistency needs min threshold for accept (e.g., ≥ 0.9)
+
+**Next session: Final decision contract + constraint threshold fix**
 
 **Provider:** OpenRouter, deepseek/deepseek-v4-flash
-
-**Open question for next session:** Does constraint enforcement generalize to multi-constraint conflicts, or only single-constraint violations?
