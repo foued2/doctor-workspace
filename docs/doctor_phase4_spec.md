@@ -51,6 +51,22 @@ Every decision trace must contain:
 - `decision_contract.repair_active`: boolean
 - `decision_contract.accept_condition` OR `decision_contract.rejection_reason`
 
+**Rejection policy (explicit):**
+- If any sub-score below its threshold → reject (no majority voting)
+- Rejection is the default safe state
+- False accept is the primary failure mode to minimize
+
+**Ambiguity policy (explicit):**
+- Underspecified statements → reject
+- Multiple plausible matches → reject
+- Domain disguise requires full structural + constraint alignment
+- Ambiguity is resolved by rejection, not by best-guess acceptance
+
+**Objective canonicalization:**
+- Domain terminology mapped to algorithmic equivalents before scoring
+- Maps: gain/profit/revenue → value; loss/cost/expense → cost; period/window/stretch → subarray
+- Canonical form logged in `objective_canonical` field
+
 ## Registry Boundary Definition
 
 **Belongs in registry:**
@@ -83,6 +99,23 @@ Before any sub-score is used as a decision threshold, it must pass validation:
 - Sub-score value should increase monotonically with P(correct match)
 - Distribution separation between true positives and false positives must be measurable
 - Score must not invert under adversarial formulation
+
+## System Status (Validated)
+
+**Current system definition:** Doctor is a semantically constrained decision engine with validated atomic correctness and enforced rejection discipline.
+
+**Validated properties:**
+- Atomic evaluation produces deterministic decisions (10/10 expected outcomes on batch 2)
+- Sub-scores are discriminative signals (not noise):
+  - Clean accepts: all three at 1.0
+  - Constraint rejects: alignment 1.0, constraint 0.5, structural 1.0
+  - No-match rejects: all zeros
+- Objective canonicalization collapses domain disguise variance
+- Batch mode creates inter-statement interference (invalid for calibration)
+
+## Batch 3: Adversarial Generalization Sweep (Next Task)
+
+Test distribution shift with unseen phrasing variants, long-tail semantic drift, multi-constraint conflicts.
 
 ## Calibration Status
 
