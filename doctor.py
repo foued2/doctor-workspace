@@ -82,11 +82,11 @@ def gate2_modifiers(problem_statement: str, problem_id: str) -> dict:
     
     statement_lower = problem_statement.lower()
     
-    for cls in ["Class 1", "Class 2", "Class 3"]:
-        for kw in class_modifiers.get(cls, []):
+    for cls_name, keywords in class_modifiers:
+        for kw in keywords:
             if kw in statement_lower:
                 found_modifiers.append(kw)
-                modifier_class = cls
+                modifier_class = cls_name
                 break
     
     # Check for variant in registry
