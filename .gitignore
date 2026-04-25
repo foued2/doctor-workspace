@@ -140,6 +140,7 @@ reports/
 scratch/
 *_results*.json
 cold_results_*.json
+doctor/ingest/.llm_cache/
 
 # Temporary files
 *.tmp
