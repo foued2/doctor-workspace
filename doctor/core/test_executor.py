@@ -100,6 +100,8 @@ def _build_test_suites() -> Dict[str, List[TestCase]]:
 
     suites: Dict[str, List[TestCase]] = {}
     for key, entry in get_problems().items():
+        if not isinstance(entry, dict):
+            continue
         test_cases = entry.get("execution", {}).get("test_cases", [])
         suites[key] = [
             TestCase(

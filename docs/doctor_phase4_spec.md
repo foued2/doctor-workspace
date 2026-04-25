@@ -1,16 +1,49 @@
 # Doctor Phase 4 Spec
 
+## Design Invariant
+
+**Doctor is a deterministic decision enforcement system over a structured semantic representation, with full causal traceability of failure modes.**
+
+Every architectural decision in Phase 4 must be tested against this property:
+1. **Deterministic** — same input always produces same output; no stochastic fallback
+2. **Semantic representation** — decisions are grounded in extracted problem structure, not surface keywords
+3. **Full causal traceability** — every failure mode has a traceable cause, not an unexplainable "close enough" accept
+
+This invariant rejects:
+- Learning components that introduce unexplainability before formal semantic model exists
+- Heuristic debt without formal grounding (consolidated or not)
+- OOD detection crowding out objective-level consistency enforcement
+
 ## Scope
 
 Phase 4 follows the single-call Phase 3 ingest flow. The goal is to reduce false accepts on ambiguous or out-of-distribution statements without reintroducing multi-step LLM chains.
 
-## Inputs from Phase 3
+## Phase 3 Empirical Findings
 
-- Single-call parser + matcher is live.
-- Phase 3 Batch 1 exposed one confirmed false accept:
-  - `user_8`: ambiguous statement accepted as `longest_common_prefix`
-  - root cause: `objective_overreach`
-- Domain disguise remains the weakest stress point from Phase 2.
+- `objective_overreach` confirmed as primary false-accept pattern — LLM accepts underspecified statements when a plausible registry match exists nearby. Mitigation: require explicit objective keyword match, not just structural alignment
+- `coverage_gap` was the dominant rejection cause across batch 2 — 3 problems missing from registry (now resolved). Ongoing risk as user language diversifies beyond current 37-problem coverage
+- `json_repair` triggered on user_16 — model output truncation is a real failure mode under rate pressure. Fix confirmed working
+- `rate_limit` is a first-class failure category, not `parser_fail` — update failure taxonomy schema to distinguish them
+- Confidence scores non-informative throughout — `alignment_score` marked `diagnostic_only`, suppressed from user-facing output
+
+### Failure Taxonomy (Updated)
+
+| Tag | Description | Status |
+|-----|-------------|--------|
+| `objective_overreach` | LLM accepts underspecified statement | Confirmed (user_8) |
+| `coverage_gap` | Statement not in registry | Confirmed, resolved |
+| `json_repair` | Model output truncation | Confirmed, fixed |
+| `rate_limit` | Infrastructure noise | First-class category |
+| `validation_leak` | Validation passed but match wrong | Ongoing risk |
+| `false_accept` | Matched when should reject | 1/12 valid cases |
+| `matcher_miss` | Correct rejection | Expected behavior |
+
+### Phase 3 Summary
+
+- Valid completed cases: 12 (users 1-16, excluding rate-limited 17-20)
+- False accept rate: 1/12 (8.3%)
+- Coverage gaps: 3 (now resolved)
+- Parser failures: 0 (json_repair working)
 
 ## Phase 4 Items
 
@@ -65,7 +98,3 @@ Open questions:
 - embedding provider and cost
 - threshold calibration on known match / reject sets
 - whether OOD should be a hard reject or an advisory signal during rollout
-
-## Phase 3 Note
-
-Phase 3 runs first. Phase 4 is a follow-on hardening pass, not a blocker for current production evaluation.

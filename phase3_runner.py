@@ -10,7 +10,8 @@ Protocol:
 5. Push results
 
 Failure tagging schema:
-- parser_fail: statement never produced a model
+- parser_fail: statement never produced a model (logic error)
+- rate_limit: infrastructure noise, statement never reached parser (excluded from analysis)
 - matcher_miss: parsed correctly, matched wrong or None when should match
 - false_accept: matched when should reject  
 - validation_leak: validation passed but match was wrong
@@ -24,16 +25,15 @@ from datetime import datetime
 os.environ['GROQ_API_KEY'] = os.environ.get('GROQ_API_KEY', '')
 os.environ['LLM_PROVIDER'] = os.environ.get('LLM_PROVIDER', 'groq')
 
-from doctor.ingest.problem_parser import parse_problem
-from doctor.ingest.registry_matcher import match_to_registry
+from doctor.ingest.unified_engine import run_phase3_unified
 
 
 def run_phase3(statement: str, user_id: str) -> dict:
-    """Run single statement through Doctor."""
+    """Run single statement through Doctor unified engine."""
     result = {
         "timestamp": datetime.now().isoformat(),
         "user_id": user_id,
-        "statement": statement,  # Raw for analysis
+        "statement": statement,
         "status": None,
         "failure_tag": None,
         "parsed_model": None,
@@ -41,39 +41,12 @@ def run_phase3(statement: str, user_id: str) -> dict:
         "decision_trace": {},
     }
     
-    # Parse
     try:
-        model = parse_problem(statement)
-        result["parsed_model"] = model
-        result["status"] = "parsed"
+        analysis = run_phase3_unified(statement, user_id)
+        result.update(analysis)
     except Exception as e:
-        result["status"] = "parse_error"
+        result["status"] = "error"
         result["failure_tag"] = "parser_fail"
-        # Store error for analysis
-        result["error"] = str(e)
-        return result
-    
-    # Match
-    try:
-        match_id, justification, trace = match_to_registry(model)
-        result["matched"] = match_id
-        result["decision_trace"] = trace
-        
-        # Determine failure tag
-        # If matched and we don't expect reject → potential false accept
-        # If None and expected match → matcher_miss  
-        # validation leak would be visible in trace
-        
-        if trace.get("final") == "accept":
-            result["status"] = "success"
-            result["failure_tag"] = None
-        else:
-            result["status"] = "rejected"
-            result["failure_tag"] = "matcher_miss"
-            
-    except Exception as e:
-        result["status"] = "match_error"
-        result["failure_tag"] = "unresolved"
         result["error"] = str(e)
     
     return result

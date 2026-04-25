@@ -1,0 +1,59 @@
+{
+  "climbing_stairs": {
+    "spec": {
+      "display_name": "Climbing Stairs",
+      "constraints": {"n": "1 <= n <= 45"},
+      "difficulty": "easy",
+      "tags": ["dynamic_programming", "math"],
+      "problem_id": "climbing_stairs"
+    },
+    "execution": {
+      "test_cases": [
+        {"input": [5], "expected": 8, "label": "n5", "source": "manual"},
+        {"input": [10], "expected": 89, "label": "n10", "source": "manual"},
+        {"input": [1], "expected": 1, "label": "n1", "source": "boundary"}
+      ]
+    },
+    "normalization": {
+      "function_names": ["climbStairs", "climb_stairs"]
+    }
+  },
+  "coin_change": {
+    "spec": {
+      "display_name": "Coin Change",
+      "constraints": {"amount": "0 <= amount <= 10^4", "coins": "1 <= len <= 12"},
+      "difficulty": "medium",
+      "tags": ["dynamic_programming", "breadth_first_search"],
+      "problem_id": "coin_change"
+    },
+    "execution": {
+      "test_cases": [
+        {"input": [[1,2,5], 11], "expected": 3, "label": "basic", "source": "manual"},
+        {"input": [[2], 3], "expected": -1, "label": "impossible", "source": "boundary"},
+        {"input": [[1], 0], "expected": 0, "label": "zero", "source": "boundary"}
+      ]
+    },
+    "normalization": {
+      "function_names": ["coinChange", "coin_change"]
+    }
+  },
+  "longest_substring_without_repeating_characters": {
+    "spec": {
+      "display_name": "Longest Substring Without Repeating Characters",
+      "constraints": {"s": "0 <= len <= 10^5"},
+      "difficulty": "medium",
+      "tags": ["sliding_window", "hash_table", "string"],
+      "problem_id": "longest_substring_without_repeating_characters"
+    },
+    "execution": {
+      "test_cases": [
+        {"input": ["abcabcbb"], "expected": 3, "label": "abcabcbb", "source": "manual"},
+        {"input": ["bbbbb"], "expected": 1, "label": "bbbbb", "source": "boundary"},
+        {"input": ["pwwkew"], "expected": 3, "label": "pwwkew", "source": "manual"}
+      ]
+    },
+    "normalization": {
+      "function_names": ["lengthOfLongestSubstring", "longest_substring"]
+    }
+  }
+}

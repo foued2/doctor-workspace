@@ -309,6 +309,8 @@ def _build_problem_function_map() -> Dict[str, str]:
     from doctor.registry.problem_registry import get_problems
     result: Dict[str, str] = {}
     for key, entry in get_problems().items():
+        if not isinstance(entry, dict):
+            continue
         display_name = entry.get("spec", {}).get("display_name", "")
         func_names = entry.get("normalization", {}).get("function_names", [])
         if display_name and func_names:

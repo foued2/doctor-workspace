@@ -47,6 +47,8 @@ def _load_registry(validate: bool = True) -> Dict[str, dict]:
 def _validate_registry_data(data: Dict[str, dict]) -> List[str]:
     errors = []
     for key, entry in data.items():
+        if not isinstance(entry, dict):
+            continue
         entry_errors = validate_entry(entry)
         for e in entry_errors:
             errors.append(f"[{key}] {e}")

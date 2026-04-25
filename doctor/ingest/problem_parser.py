@@ -169,11 +169,39 @@ def _call_llm(prompt: str, retries: int = 0) -> str:
     return response
 
 
-def _extract_json_object(response: str) -> Dict[str, Any]:
+def _extract_json_object(response: str, repair_info: dict = None) -> Dict[str, Any]:
+    if repair_info is None:
+        repair_info = {"repair_used": False, "repair_method": None}
+    
     start, end = response.find("{"), response.rfind("}")
     if start < 0 or end <= start:
         raise ValueError("Invalid JSON response")
-    return json.loads(response[start : end + 1])
+    
+    try:
+        return json.loads(response[start : end + 1])
+    except json.JSONDecodeError:
+        pass
+    
+    last_brace = response.rfind("}")
+    if last_brace > start:
+        try:
+            repair_info["repair_used"] = True
+            repair_info["repair_method"] = "truncate"
+            return json.loads(response[start : last_brace + 1])
+        except json.JSONDecodeError:
+            pass
+    
+    import re
+    match = re.search(r'\{[^{}]*\}', response[start:end + 1], re.DOTALL)
+    if match:
+        try:
+            repair_info["repair_used"] = True
+            repair_info["repair_method"] = "regex"
+            return json.loads(match.group(0))
+        except json.JSONDecodeError:
+            pass
+    
+    raise ValueError("Invalid JSON response")
 
 
 def _coerce_bool(value: Any, default: bool = False) -> bool:
@@ -261,7 +289,8 @@ def analyze_problem(statement: str) -> Dict[str, Any]:
     )
 
     response, retry_count = _call_llm_with_stats(prompt)
-    raw_result = _extract_json_object(response)
+    repair_info = {}
+    raw_result = _extract_json_object(response, repair_info)
 
     parsed_model = _normalize_parsed_model(raw_result.get("parsed_model"))
     normalized_match = normalize_match_candidate(
@@ -289,9 +318,11 @@ def analyze_problem(statement: str) -> Dict[str, Any]:
         "parsed_model": parsed_model,
         "match_candidate": match_candidate,
         "alignment_score": alignment_score,
+        "alignment_score_diagnostic_only": True,
         "decision": decision,
         "justification": justification,
         "retry_count": retry_count,
+        "json_repair": repair_info,
     }
 
 
@@ -301,9 +332,11 @@ def parse_problem(statement: str) -> Dict[str, Any]:
     model[SINGLE_CALL_ANALYSIS_KEY] = {
         "match_candidate": analysis["match_candidate"],
         "alignment_score": analysis["alignment_score"],
+        "alignment_score_diagnostic_only": True,
         "decision": analysis["decision"],
         "justification": analysis["justification"],
         "retry_count": analysis["retry_count"],
+        "json_repair": analysis.get("json_repair"),
     }
     return model
 
