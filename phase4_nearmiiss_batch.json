@@ -1,0 +1,107 @@
+[
+  {
+    "id": "nm_01",
+    "statement": "Given a list of integers and a target, find the right pair for that target.",
+    "expected_type": "reject",
+    "expected_match_candidate": "two_sum",
+    "near_miss_reason": "objective_overreach"
+  },
+  {
+    "id": "nm_02",
+    "statement": "Sort a list of words and return what they all begin with.",
+    "expected_type": "reject",
+    "expected_match_candidate": "longest_common_prefix",
+    "near_miss_reason": "objective_overreach"
+  },
+  {
+    "id": "nm_03",
+    "statement": "Given a string of brackets, decide whether the structure is well arranged.",
+    "expected_type": "reject",
+    "expected_match_candidate": "valid_parentheses",
+    "near_miss_reason": "objective_overreach"
+  },
+  {
+    "id": "nm_04",
+    "statement": "In a budget planner, choose two purchases whose prices reach the budget, and return the purchase names.",
+    "expected_type": "reject",
+    "expected_match_candidate": "two_sum",
+    "near_miss_reason": "domain_disguise_fail"
+  },
+  {
+    "id": "nm_05",
+    "statement": "Combine two pre-sorted hospital queues into one and merge patients with the same ID into a single record.",
+    "expected_type": "reject",
+    "expected_match_candidate": "merge_two_sorted_lists",
+    "near_miss_reason": "domain_disguise_fail"
+  },
+  {
+    "id": "nm_06",
+    "statement": "Given daily profit changes, identify the most profitable contiguous period and list every day inside it.",
+    "expected_type": "reject",
+    "expected_match_candidate": "max_subarray",
+    "near_miss_reason": "domain_disguise_fail"
+  },
+  {
+    "id": "nm_07",
+    "statement": "Given a target and a list of numbers, find two numbers that add to the target, but the two indices must be adjacent in the array.",
+    "expected_type": "reject",
+    "expected_match_candidate": "two_sum",
+    "near_miss_reason": "constraint_collision"
+  },
+  {
+    "id": "nm_08",
+    "statement": "Find the minimum number of coins needed to reach a target amount, but you may use each denomination at most once.",
+    "expected_type": "reject",
+    "expected_match_candidate": "coin_change",
+    "near_miss_reason": "constraint_collision"
+  },
+  {
+    "id": "nm_09",
+    "statement": "Given two strings, find the minimum edits to convert one into the other, but replacements are forbidden.",
+    "expected_type": "reject",
+    "expected_match_candidate": "min_distance",
+    "near_miss_reason": "constraint_collision"
+  },
+  {
+    "id": "nm_10",
+    "statement": "Find the longest substring without repeating characters, but ignore spaces when checking repetition.",
+    "expected_type": "reject",
+    "expected_match_candidate": "longest_substring_without_repeating_characters",
+    "near_miss_reason": "structural_modifier"
+  },
+  {
+    "id": "nm_11",
+    "statement": "Check whether a bracket string is valid, except characters inside quotes should be ignored entirely.",
+    "expected_type": "reject",
+    "expected_match_candidate": "valid_parentheses",
+    "near_miss_reason": "structural_modifier"
+  },
+  {
+    "id": "nm_12",
+    "statement": "Find the longest common prefix of a list of words, but only count alphabetic characters and ignore hyphens.",
+    "expected_type": "reject",
+    "expected_match_candidate": "longest_common_prefix",
+    "near_miss_reason": "structural_modifier"
+  },
+  {
+    "id": "nm_13",
+    "statement": "Locate the highest-value uninterrupted run in a ledger and return where it starts and ends.",
+    "expected_type": "reject",
+    "expected_match_candidate": "max_subarray",
+    "near_miss_reason": "score_boundary"
+  },
+  {
+    "id": "nm_14",
+    "statement": "Fuse two already ordered chains into one ordered chain, keeping the original node containers untouched.",
+    "expected_type": "reject",
+    "expected_match_candidate": "merge_two_sorted_lists",
+    "near_miss_reason": "score_boundary"
+  },
+  {
+    "id": "nm_15",
+    "statement": "Using known coin faces, hit a target with as little currency as possible and report one workable recipe.",
+    "expected_type": "reject",
+    "expected_match_candidate": "coin_change",
+    "near_miss_reason": "score_boundary"
+  }
+]
