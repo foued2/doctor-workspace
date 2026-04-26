@@ -33,6 +33,14 @@ CACHE_DIR.mkdir(exist_ok=True)
 MAX_RETRIES = 5
 INITIAL_BACKOFF = 2
 
+PROVIDER_INFO = {}
+
+
+def _call_llm(prompt: str, retries: int = 0) -> Tuple[str, dict]:
+    """Call LLM with retry tracking. Returns (response, telemetry)."""
+    h = _hash(prompt)
+    cache_file = CACHE_DIR / f"unified_{h}.json"
+
 CONTRADICTION_PAIRS = [
     (["product", "maximum product", "max product", "multiply", "multiplication"], ["sum", "maximum sum", "max sum", "total"]),
     (["increasing", "increasing subsequence", "rising"], ["common", "common subsequence", "lcs"]),
@@ -217,12 +225,17 @@ def _extract_json_array(response: str, repair_info: dict = None) -> list:
     raise ValueError("Invalid JSON array response")
 
 
-def _call_llm(prompt: str, retries: int = 0) -> str:
+def _call_llm(prompt: str, retries: int = 0) -> Tuple[str, dict]:
+    """
+    Call LLM with retry tracking. 
+    Returns (response, telemetry_dict) where telemetry contains retry_count, provider, first_attempt_success.
+    """
     h = _hash(prompt)
     cache_file = CACHE_DIR / f"unified_{h}.json"
     
     if cache_file.exists():
-        return json.loads(cache_file.read_text())["response"]
+        cached = json.loads(cache_file.read_text())
+        return cached["response"], {"retry_count": cached.get("retry_count", 0), "provider": cached.get("provider", "unknown"), "first_attempt_success": True}
     
     import requests
     
@@ -235,7 +248,7 @@ def _call_llm(prompt: str, retries: int = 0) -> str:
             "max_tokens": 3000
         }
         url = f"{OPENROUTER_BASE_URL}/chat/completions"
-        use_openrouter = True
+        provider = "openrouter"
     else:
         headers = {"Authorization": f"Bearer {GROQ_API_KEY}", "Content-Type": "application/json"}
         payload = {
@@ -245,7 +258,7 @@ def _call_llm(prompt: str, retries: int = 0) -> str:
             "max_tokens": 3000
         }
         url = "https://api.groq.com/openai/v1/chat/completions"
-        use_openrouter = False
+        provider = "groq"
     
     try:
         response = requests.post(url, headers=headers, json=payload, timeout=120)
@@ -253,14 +266,18 @@ def _call_llm(prompt: str, retries: int = 0) -> str:
         if retries < MAX_RETRIES:
             wait = INITIAL_BACKOFF ** retries
             time.sleep(wait)
-            return _call_llm(prompt, retries + 1)
+            resp, tel = _call_llm(prompt, retries + 1)
+            tel["retry_count"] += 1
+            return resp, tel
         raise RuntimeError(f"Request failed after {MAX_RETRIES} retries: {e}")
     
     if response.status_code == 429:
         if retries < MAX_RETRIES:
             wait = INITIAL_BACKOFF ** retries
             time.sleep(wait)
-            return _call_llm(prompt, retries + 1)
+            resp, tel = _call_llm(prompt, retries + 1)
+            tel["retry_count"] += 1
+            return resp, tel
         raise RuntimeError(f"Rate limit exceeded after {MAX_RETRIES} retries")
     
     if response.status_code != 200:
@@ -268,8 +285,14 @@ def _call_llm(prompt: str, retries: int = 0) -> str:
     
     resp = response.json()["choices"][0]["message"]["content"]
     
-    cache_file.write_text(json.dumps({"response": resp}, indent=2))
-    return resp
+    telemetry = {
+        "retry_count": retries,
+        "provider": provider,
+        "first_attempt_success": retries == 0
+    }
+    
+    cache_file.write_text(json.dumps({"response": resp, **telemetry}, indent=2))
+    return resp, telemetry
 
 
 def get_registry_problems() -> Dict[str, Dict]:
@@ -513,7 +536,7 @@ def analyze_statement(statement: str) -> dict:
         statement=statement
     )
     
-    response = _call_llm(prompt)
+    response, llm_telemetry = _call_llm(prompt)
     
     repair_info = {}
     try:
@@ -548,7 +571,10 @@ def analyze_statement(statement: str) -> dict:
         "constraint_consistency": constraint_consistency,
         "structural_compatibility": structural_compatibility,
         "contradiction": False,
-        "json_repair": repair_info
+        "json_repair": repair_info,
+        "retry_count": llm_telemetry.get("retry_count", 0),
+        "provider": llm_telemetry.get("provider", "unknown"),
+        "first_attempt_success": llm_telemetry.get("first_attempt_success", True)
     }
     
     return _evaluate_decision(
@@ -641,7 +667,7 @@ def analyze_batch(statements: list, case_ids: list = None) -> list:
         numbered_statements="\n".join(numbered)
     )
     
-    response = _call_llm(prompt)
+    response, llm_telemetry = _call_llm(prompt)
     
     repair_info = {}
     try:
