@@ -119,17 +119,19 @@ Test distribution shift with unseen phrasing variants, long-tail semantic drift,
 
 ## Calibration Status
 
-**NOT YET ACHIEVED.** Alignment scores are currently qualitative LLM outputs, not calibrated metrics.
+**COMPLETE.** Thresholds are calibrated against the Phase 4 adversarial and near-miss evidence base. See `docs/doctor_calibration_report.md`.
 
-**Pre-requisites before calibration:**
-1. Boundary formalization complete (domain definition stable)
-2. Signal validation passed (all three sub-scores show monotonic correlation)
-3. Adversarial baseline measured
+**Calibrated state:**
+1. `T1 = 0.85` for `objective_match`
+2. `T2 = 0.7` for `constraint_consistency` and treated as a hard floor
+3. `T3 = 0.7` for `structural_compatibility`
 
-**Calibration roadmap:**
-1. Tune T (currently 0.85) against false_accept and matcher_miss rates on validated signals
-2. Document calibrated thresholds as explicitly tunable parameters
-3. Measure score distributions for true positives vs false positives post-calibration
+**Evidence base:**
+1. 12 adversarial cases from `phase4_batch3_results.json`
+2. 15 near-miss cases from `phase4_nearmiss_results.json`
+3. Validated false accept rate: `0/27` after correcting the `nm_02`, `nm_03`, and `nm_14` fixture labels
+
+Thresholds are frozen until a new failure mode is observed.
 
 ## Scope
 
@@ -196,14 +198,15 @@ Requirements:
 - Drop or redesign scores that fail validation
 - Document validated vs non-validated signals
 
-### 4. Calibration (Post-validation)
+### 4. Calibration (Complete)
 
-After boundary formalization and signal validation complete:
+Calibration is complete and documented in `docs/doctor_calibration_report.md`.
 
-Requirements:
-- Tune thresholds against false_accept and matcher_miss rates
-- Document calibrated thresholds as explicitly tunable parameters
-- Measure separation between true positive and false positive distributions
+Validated outcomes:
+- `T1 = 0.85` catches underspecified phrasing (`nm_01` at `0.8`) while preserving legitimate paraphrases (`nm_02`, `nm_03` at `0.9`)
+- `T2 = 0.7` is the hard floor that blocks constraint collisions (`nm_08` at `1.0 / 0.0 / 1.0`)
+- `T3 = 0.7` blocks structural mismatches (`nm_06`, `nm_15` at `0.3`)
+- Thresholds are frozen until a new failure mode is observed
 
 ### 5. Unified Validation (Core)
 

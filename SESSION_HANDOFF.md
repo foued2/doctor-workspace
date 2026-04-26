@@ -83,7 +83,7 @@ Accept ⟺
 | 1 | Adversarial Baseline Measurement | 📋 Done |
 | 2 | Boundary Formalization | 📋 Done |
 | 3 | Alignment Signal Validation | 📋 Done |
-| 4 | Calibration | 📋 NOT YET |
+| 4 | Calibration | 📋 Done |
 | 5 | Unified Validation | 📋 Done |
 | 6 | OOD Detection via Embedding | 📋 NOT YET |
 | 7 | Retry Tracking | 📋 NOT YET |
