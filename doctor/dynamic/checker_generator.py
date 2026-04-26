@@ -324,7 +324,9 @@ Validation logic:
         if not isinstance(item, str):
             return None
         condition = item.strip()
-        if not condition or _is_vague_condition(condition):
+        if not condition:
+            return None
+        if _is_vague_condition(condition):
             return None
         conditions.append(condition)
 
@@ -1004,6 +1006,10 @@ def _is_vague_condition(condition: str) -> bool:
         return True
 
     concrete_markers = {
+        "==",
+        "!=",
+        "===",
+        "!==",
         "output",
         "length",
         "permutation",
