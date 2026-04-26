@@ -297,40 +297,49 @@ def _generate_invariant_violation(invariant: str, sample: dict) -> Any:
 
 
 def _parse_validation_conditions(validation_logic: str) -> list[str] | None:
-    """Decompose validation_logic into atomic, concrete conditions."""
+    """Decompose validation_logic into atomic, concrete conditions. Retries up to 3 times."""
     prompt = f"""Break the following validation logic into a JSON array of atomic, directly testable output conditions.
 
 Rules:
 - Each item must be a concrete predicate about the output or the output/input relationship
-- Do not produce vague items like "output is correct" or "answer is valid"
+- Each condition must reference specific properties: indices, values, lengths, sums, types, or relationships
+- Do not produce vague items like "output is correct", "answer is valid", or "satisfies the problem"
 - Each item must be specific enough that a separate system could create a targeted violating output for it
 - If the logic cannot be decomposed into concrete conditions, return []
-- Return ONLY a JSON array
+- Return ONLY a JSON array of strings
+
+Example of good conditions:
+["output is a list of exactly 2 integers", "the two integers are distinct indices into nums", "nums[output[0]] + nums[output[1]] equals target"]
 
 Validation logic:
 {validation_logic}
 """
-    try:
-        response = _call_llm(prompt)
-    except Exception:
-        return None
-
-    parsed = _extract_json_value(response)
-    if not isinstance(parsed, list) or not parsed:
-        return None
-
-    conditions = []
-    for item in parsed:
-        if not isinstance(item, str):
+    for attempt in range(3):
+        try:
+            response = _call_llm(prompt)
+        except Exception:
             return None
-        condition = item.strip()
-        if not condition:
-            return None
-        if _is_vague_condition(condition):
-            return None
-        conditions.append(condition)
 
-    return conditions or None
+        parsed = _extract_json_value(response)
+        if not isinstance(parsed, list) or not parsed:
+            continue
+
+        conditions = []
+        failed = False
+        for item in parsed:
+            if not isinstance(item, str):
+                failed = True
+                break
+            condition = item.strip()
+            if not condition or _is_vague_condition(condition):
+                failed = True
+                break
+            conditions.append(condition)
+
+        if not failed and conditions:
+            return conditions
+
+    return None
 
 
 def _generate_condition_violation(condition: str, sample: dict) -> Any:
