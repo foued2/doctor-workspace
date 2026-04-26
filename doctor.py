@@ -245,10 +245,10 @@ def gate5_execute(solution_code: str, problem_id: str, tests: list, timeout: int
             })
     
     auth_passed = authoritative_report.verdict == "correct"
-    final_passed = auth_passed and not user_failed
+    user_failed = any(not r.get("passed") for r in user_results)
     
     return {
-        "passed": final_passed,
+        "passed": authoritative_report.passed + len([r for r in user_results if r.get("passed")]),
         "total": authoritative_report.total + len(user_results),
         "results": results + user_results,
         "pass_rate": authoritative_report.pass_rate,
