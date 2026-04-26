@@ -35,8 +35,8 @@ Return ONLY a JSON object with these exact fields:
   "evaluation_mode": "provisional",
   "input_structure": {
     "type": "single_case | multi_case",
-    "test_case_count_var": "name of variable holding test count, or null for single_case",
-    "per_case_format": [{"name": "field name", "type": "field type", "description": "what this field contains"}]
+    "test_case_count_var": "name of variable holding test count (e.g., 't'), or null for single_case",
+    "per_case_format": [{"name": "field name", "type": "field type", "description": "what this field contains - FOR ONE TEST CASE ONLY, not the t line"}]
   },
   "output_format": {
     "type": "integer | list | string | boolean",
@@ -44,7 +44,17 @@ Return ONLY a JSON object with these exact fields:
   },
   "constraints": {
     "variable_name": {
-      "expression": "Python-evaluatable expression using input field names",
+      "expression": "Python-evaluatable expression with COMPLETE bounds (e.g., '3 <= n <= 5000')",
+      "depends_on": ["list of input field names this depends on"]
+    }
+  },
+  "output_format": {
+    "type": "integer | list | string | boolean",
+    "description": "one sentence describing output"
+  },
+  "constraints": {
+    "variable_name": {
+      "expression": "Python-evaluatable expression with COMPLETE bounds (e.g. '1 <= n <= 5000')",
       "depends_on": ["list of input field names this depends on"]
     }
   },
@@ -58,14 +68,17 @@ Rules:
 - problem_id: lowercase, underscores, no spaces
 - problem_class: must be one of construction, optimization, counting, decision, search
 - evaluation_mode: must be "provisional"
-- input_structure.type must be single_case or multi_case
-- per_case_format: list of {name, type, description} for each input line
+- CRITICAL: If ANY input field represents a test case count (t, T, test_cases, etc.), input_structure.type MUST be "multi_case" and test_case_count_var must be that field name
+- If first input field is a count (number of test cases), this is ALWAYS multi_case
+- test_case_count_var: the variable name holding the count for multi_case; null for single_case
+- per_case_format: list of {name, type, description} for each input line (for ONE test case, not the t line)
 - output_format.type must be integer, list, string, or boolean
-- constraints: each expression must be valid Python using input field names
+- constraints: must include COMPLETE numeric bounds from the problem (e.g., "3 <= n <= 5000", not just "n >= 1")
+- For array bounds like each element of k: create constraint using loop-like Python, e.g., "all(1 <= ki <= n // 3 for ki in k)"
 - depends_on must list all input variable names used in the expression
 - invariants: explicit testable properties, no implicit assumptions
 - validation_type: exact_match (one answer), arrangement (any valid ordering), checker (complex)
-- sample_cases: at least 2 example cases
+- sample_cases: at least 2 example cases with COMPLETE input/output as they appear in the problem
 
 Problem statement:
 {statement}
@@ -138,11 +151,14 @@ def _extract_json(text: str) -> dict | None:
         except json.JSONDecodeError:
             pass
     
-    # Try to find JSON object in text
-    match = re.search(r'\{[\s\S]*\}', text)
-    if match:
+    # Try to find the outermost JSON braces and parse recursively
+    # Match from first { to last }
+    first_brace = text.find('{')
+    last_brace = text.rfind('}')
+    if first_brace >= 0 and last_brace > first_brace:
+        json_str = text[first_brace:last_brace+1]
         try:
-            return json.loads(match.group(0))
+            return json.loads(json_str)
         except json.JSONDecodeError:
             pass
     
