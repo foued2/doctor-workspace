@@ -68,6 +68,7 @@ Rules:
 - problem_id: lowercase, underscores, no spaces
 - problem_class: must be one of construction, optimization, counting, decision, search
 - evaluation_mode: must be "provisional"
+- Extract ALL constraint bounds including upper bounds and constraints that depend on other variables. Express all bounds as Python-evaluatable expressions.
 - CRITICAL: If ANY input field represents a test case count (t, T, test_cases, etc.), input_structure.type MUST be "multi_case" and test_case_count_var must be that field name
 - If first input field is a count (number of test cases), this is ALWAYS multi_case
 - test_case_count_var: the variable name holding the count for multi_case; null for single_case
