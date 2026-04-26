@@ -1,53 +1,40 @@
-# Direction 2: Checker Protocol
-
-This document defines the protocol for validating LLM-generated checkers used in Direction 2 (Provisional Path).
-
-## 1. Checker scope restrictions
-
+**1. Checker scope restrictions:**
 - Checker is a validator only — it verifies output correctness, never computes the correct output
 - Checker signature: `def check(input_args: dict, output) -> tuple[bool, str]`
 - Returns `(True, "ok")` or `(False, "reason")`
 - Checker may not call external libraries beyond standard Python
 - Checker may not implement a solver
 
-## 2. Four required validation tests
+**2. Four required validation tests (all must pass):**
 
-All four tests must pass for a checker to be accepted.
-
-### Test 1 — Sample validation
-
+Test 1 — Sample validation:
 - Run checker on all sample cases from schema
 - All must return True
 - If any return False → checker rejected, reason logged
 
-### Test 2 — Invariant enforcement
-
+Test 2 — Invariant enforcement:
 - For each invariant in schema, generate a targeted test that violates exactly that invariant
 - Checker must return False on each violation
 - If checker accepts a violation → checker rejected, invariant logged
 
-### Test 3 — Negative testing
-
+Test 3 — Negative testing:
 - Generate 3-5 deliberately wrong outputs per sample case
 - Wrong output types: off-by-one, wrong length, wrong values, wrong order where order matters
 - Checker must reject all of them
 - If checker accepts any → checker rejected
 
-### Test 4 — Logic coverage
-
+Test 4 — Logic coverage:
 - Parse `validation_logic` into atomic conditions
 - Generate one targeted test per condition that satisfies all conditions except that one
 - Checker must reject each
 - If checker accepts any → checker rejected, condition logged
 
-## 3. Confidence scoring
-
+**3. Confidence scoring:**
 - All 4 tests pass → `checker_confidence: MEDIUM`
 - Never HIGH — provisional path can never claim HIGH checker confidence
 - Any test fails → checker rejected, no confidence assigned
 
-## 4. Failure mode taxonomy
-
+**4. Failure mode taxonomy:**
 - `extraction_failed` — LLM could not produce valid schema
 - `constraints_invalid` — constraint expressions not evaluatable or cyclic
 - `format_mismatch` — sample cases don't match extracted input structure
@@ -57,8 +44,7 @@ All four tests must pass for a checker to be accepted.
 - `checker_rejected_coverage` — checker missed a validation_logic condition
 - Each failure mode produces a distinct STOP message
 
-## 5. Output contract additions
-
+**5. Output contract additions:**
 ```
 EVALUATION MODE: provisional
 CHECKER CONFIDENCE: MEDIUM
@@ -67,8 +53,7 @@ WARNING: This verdict is not authoritative.
          Results may be incorrect if the checker is flawed.
 ```
 
-## 6. Trust ceiling
-
+**6. Trust ceiling:**
 - Provisional path maximum trust: `weakly_supported_correct`
 - Never `aligned_confident_correct` on provisional path
 - Never RISK: LOW on provisional path — minimum RISK: MEDIUM
