@@ -13,6 +13,9 @@ from typing import Any, Callable, Optional
 
 GROQ_API_KEY = os.environ.get("GROQ_API_KEY", "")
 GROQ_MODEL = os.environ.get("GROQ_MODEL", "llama-3.3-70b-versatile")
+OPENROUTER_API_KEY = os.environ.get("OPENROUTER_API_KEY", "")
+OPENROUTER_MODEL = os.environ.get("OPENROUTER_MODEL", "deepseek/deepseek-chat-v3-0324")
+LLM_PROVIDER = os.environ.get("LLM_PROVIDER", "openrouter")
 
 
 class _TokenCursor:
@@ -138,13 +141,18 @@ Reference sample cases:
 """
 
 
+def _call_llm(prompt: str) -> str:
+    """Route to the configured LLM provider."""
+    if LLM_PROVIDER == "groq" and GROQ_API_KEY:
+        return _call_groq(prompt)
+    elif OPENROUTER_API_KEY:
+        return _call_openrouter(prompt)
+    else:
+        raise ValueError("No LLM provider configured. Set OPENROUTER_API_KEY or GROQ_API_KEY.")
+
+
 def _call_groq(prompt: str) -> str:
-    """Call Groq and return the raw response text."""
-    if not GROQ_API_KEY:
-        raise ValueError("No Groq API key configured")
-
     import requests
-
     response = requests.post(
         "https://api.groq.com/openai/v1/chat/completions",
         headers={
@@ -153,6 +161,25 @@ def _call_groq(prompt: str) -> str:
         },
         json={
             "model": GROQ_MODEL,
+            "messages": [{"role": "user", "content": prompt}],
+            "temperature": 0.0,
+        },
+        timeout=60,
+    )
+    response.raise_for_status()
+    return response.json()["choices"][0]["message"]["content"]
+
+
+def _call_openrouter(prompt: str) -> str:
+    import requests
+    response = requests.post(
+        "https://openrouter.ai/api/v1/chat/completions",
+        headers={
+            "Authorization": f"Bearer {OPENROUTER_API_KEY}",
+            "Content-Type": "application/json",
+        },
+        json={
+            "model": OPENROUTER_MODEL,
             "messages": [{"role": "user", "content": prompt}],
             "temperature": 0.0,
         },
@@ -284,7 +311,7 @@ Validation logic:
 {validation_logic}
 """
     try:
-        response = _call_groq(prompt)
+        response = _call_llm(prompt)
     except Exception:
         return None
 
@@ -319,7 +346,7 @@ def generate_checker(schema: dict) -> str | None:
     """Generate a checker, validate it against the protocol, and return source on success."""
     try:
         prompt = _build_checker_prompt(schema)
-        response = _call_groq(prompt)
+        response = _call_llm(prompt)
         checker_source = _extract_check_function(response)
         if checker_source is None:
             print("failure_mode: extraction_failed")
@@ -356,7 +383,7 @@ def generate_checker(schema: dict) -> str | None:
         for invariant in schema.get("invariants", []):
             violation = _find_violation_for_samples(
                 parsed_samples,
-                lambda sample: _generate_invariant_violation(invariant, sample),
+                lambda sample, inv=invariant: _generate_invariant_violation(inv, sample),
             )
             if violation is None:
                 print(f"invariant_failure: {invariant}")
@@ -370,7 +397,7 @@ def generate_checker(schema: dict) -> str | None:
                 return None
 
         for index, sample in enumerate(parsed_samples, start=1):
-            negatives = _generate_negative_outputs(sample)
+            negatives = _generate_negative_outputs(sample, check_fn=check_fn)
             if len(negatives) < 3:
                 print(f"negative_failure: sample_{index}: only generated {len(negatives)} negatives")
                 print("failure_mode: checker_rejected_negatives")
@@ -390,7 +417,7 @@ def generate_checker(schema: dict) -> str | None:
         for condition in conditions:
             violation = _find_violation_for_samples(
                 parsed_samples,
-                lambda sample: _generate_condition_violation(condition, sample),
+                lambda sample, cond=condition: _generate_condition_violation(cond, sample),
             )
             if violation is None:
                 print(f"coverage_failure: {condition}")
@@ -598,7 +625,7 @@ def _find_violation_for_samples(parsed_samples: list[dict], generator: Callable[
     return None
 
 
-def _generate_negative_outputs(sample: dict) -> list[Any]:
+def _generate_negative_outputs(sample: dict, check_fn: Callable | None = None) -> list[Any]:
     variants = []
     seen = set()
     candidate_generators = [
@@ -619,6 +646,10 @@ def _generate_negative_outputs(sample: dict) -> list[Any]:
         key = _stable_key(candidate)
         if key in seen:
             continue
+        if check_fn is not None:
+            accepted, _ = _call_checker(check_fn, sample["input_args"], candidate)
+            if accepted:
+                continue
         seen.add(key)
         variants.append(candidate)
         if len(variants) >= 5:
@@ -914,7 +945,7 @@ Reference valid output:
 {json.dumps(sample["output"], indent=2, ensure_ascii=False)}
 """
     try:
-        response = _call_groq(prompt)
+        response = _call_llm(prompt)
     except Exception:
         return None
 

@@ -1,0 +1,33 @@
+{
+  "problem_id": "two_sum",
+  "problem_class": "search",
+  "has_multiple_valid_outputs": false,
+  "evaluation_mode": "provisional",
+  "input_structure": {
+    "type": "single_case",
+    "test_case_count_var": null,
+    "per_case_format": [
+      {"name": "n", "type": "integer", "description": "number of elements"},
+      {"name": "nums", "type": "list of integers", "description": "array of n integers"},
+      {"name": "target", "type": "integer", "description": "target sum"}
+    ]
+  },
+  "output_format": {
+    "type": "list",
+    "description": "two indices i j such that nums[i] + nums[j] == target"
+  },
+  "constraints": {
+    "n": {"expression": "2 <= n <= 10000", "depends_on": []},
+    "target": {"expression": "-10**9 <= target <= 10**9", "depends_on": []}
+  },
+  "invariants": [
+    "output contains exactly 2 distinct indices",
+    "nums[output[0]] + nums[output[1]] equals target"
+  ],
+  "validation_logic": "output is a list of exactly two distinct valid indices i and j such that nums[i] + nums[j] == target",
+  "validation_type": "checker",
+  "sample_cases": [
+    {"input": "4\n2 7 11 15\n9", "output": "0 1"},
+    {"input": "3\n3 2 4\n6", "output": "1 2"}
+  ]
+}
