@@ -180,7 +180,20 @@ def validate_output(problem_key: str, output: Any, params: Optional[Dict[str, An
     Returns (valid, reason) tuple.
     If no validator exists for the problem, returns (True, "no validator — test suite only").
     """
-    validator = VALIDATORS.get(problem_key)
+    from doctor.registry.problem_registry import get_all_display_names
+    
+    display_map = get_all_display_names()
+    
+    resolved_key = problem_key
+    if problem_key in display_map:
+        resolved_key = display_map[problem_key]
+    elif problem_key not in VALIDATORS:
+        for display_name, problem_id in display_map.items():
+            if display_name == problem_key:
+                resolved_key = problem_id
+                break
+    
+    validator = VALIDATORS.get(resolved_key)
     if validator is None:
         return True, "no_validator"
     return validator(output, params or {})

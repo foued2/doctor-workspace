@@ -11,9 +11,13 @@ from __future__ import annotations
 import argparse
 import json
 import sys
+import logging
 import traceback
 from pathlib import Path
 from typing import Any, Dict, List, Optional
+
+logging.basicConfig(level=logging.WARNING, format='%(levelname)s: %(message)s')
+logger = logging.getLogger(__name__)
 
 from doctor.registry.problem_registry import (
     REGISTRY_PATH,
@@ -50,7 +54,8 @@ def _run_dry_run(entry: dict) -> tuple[bool, float, str]:
         func = extract_function(normalized)
         if func is None:
             return False, 0.0, "could not extract function from reference_solution"
-    except Exception:
+    except Exception as e:
+        logger.warning(f"reference_solution crashed: {e}")
         return False, 0.0, f"reference_solution crashed: {traceback.format_exc(limit=3)}"
 
     try:
@@ -67,7 +72,8 @@ def _run_dry_run(entry: dict) -> tuple[bool, float, str]:
                     passed += 1
                 else:
                     failed_labels.append(tc["label"])
-            except Exception:
+            except Exception as e:
+                logger.warning(f"test case '{tc.get('label')}' threw exception: {e}")
                 failed_labels.append(tc["label"])
 
         total = len(test_cases)
@@ -81,7 +87,8 @@ def _run_dry_run(entry: dict) -> tuple[bool, float, str]:
             if len(failed_labels) > 5:
                 failed += f" (+{len(failed_labels) - 5} more)"
             return False, rate, f"E={rate:.3f}, {pct} passed — failed: {failed}"
-    except Exception:
+    except Exception as e:
+        logger.warning(f"dry-run error: {e}")
         return False, 0.0, f"dry-run error: {traceback.format_exc(limit=3)}"
 
 
@@ -115,11 +122,13 @@ def _run_deterministic_check(entry: dict) -> tuple[bool, str]:
                 out1, out2 = t1.get("output"), t2.get("output")
                 if str(out1) != str(out2):
                     return False, f"REJECT: non-deterministic output on '{tc['label']}' — run1={out1} vs run2={out2}"
-            except Exception:
+            except Exception as e:
+                logger.warning(f"determinism check test case '{tc.get('label')}' error: {e}")
                 pass
 
         return True, "passed"
-    except Exception:
+    except Exception as e:
+        logger.warning(f"determinism check inconclusive: {e}")
         return True, f"determinism check inconclusive: {traceback.format_exc(limit=2)}"
 
 
@@ -183,7 +192,8 @@ def _apply_perturbation_check(entry: dict) -> tuple[bool, str]:
 
         return True, "passed"
 
-    except Exception:
+    except Exception as e:
+        logger.warning(f"perturbation check inconclusive: {e}")
         return True, f"perturbation check inconclusive: {traceback.format_exc(limit=2)}"
 
 

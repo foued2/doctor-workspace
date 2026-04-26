@@ -534,13 +534,16 @@ def analyze_statement(statement: str) -> dict:
     constraint_consistency = float(result.get("constraint_consistency", 0.0))
     structural_compatibility = float(result.get("structural_compatibility", 0.0))
     
+    alignment_rewritten = False
     if match and match != "no match" and structural_compatibility == 1.0 and constraint_consistency == 1.0:
         if original_objective != canonical_objective:
             alignment_score = 1.0
+            alignment_rewritten = True
     
     trace = {
         "llm_match": match,
         "alignment_score": alignment_score,
+        "alignment_rewritten": alignment_rewritten,
         "objective_canonical": canonical_objective,
         "constraint_consistency": constraint_consistency,
         "structural_compatibility": structural_compatibility,

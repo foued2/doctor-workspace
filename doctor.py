@@ -36,7 +36,7 @@ def gate1_recognize(problem_statement: str) -> dict:
     alignment = trace.get("alignment_score", 0)
     
     status = result.get("status", "unknown")
-    match = result.get("match", trace.get("llm_match", "none"))
+    match = result.get("matched", result.get("match", trace.get("llm_match", "none")))
     
     if alignment >= HIGH_CONFIDENCE:
         tentative = False
@@ -209,10 +209,11 @@ def gate5_execute(solution_code: str, problem_id: str, tests: list, timeout: int
     from doctor.core.test_executor import TestExecutor
     
     executor = TestExecutor()
-    report = executor.verify(problem_id, solution_code)
+    user_provided_tests = tests if tests else []
+    authoritative_report = executor.verify(problem_id, solution_code)
     
-    if report.error:
-        return {"passed": False, "stop_reason": f"Execution error: {report.error}"}
+    if authoritative_report.error:
+        return {"passed": False, "stop_reason": f"Execution error: {authoritative_report.error}"}
     
     results = [
         {
@@ -223,15 +224,37 @@ def gate5_execute(solution_code: str, problem_id: str, tests: list, timeout: int
             "error": r.error,
             "validation_type": getattr(r, "validator_kind", None),
         }
-        for r in report.results
+        for r in authoritative_report.results
     ]
-
+    
+    user_results = []
+    user_failed = False
+    if user_provided_tests:
+        for tc in user_provided_tests:
+            trace = executor._run_single_test(solution_code, problem_id, tc)
+            passed = trace.get("passed", False) if trace.get("error") is None else False
+            if not passed:
+                user_failed = True
+            user_results.append({
+                "label": tc.get("label", "user_test"),
+                "passed": passed,
+                "got": trace.get("output"),
+                "expected": tc.get("expected"),
+                "error": trace.get("error"),
+                "source": "user_provided"
+            })
+    
+    auth_passed = authoritative_report.verdict == "correct"
+    final_passed = auth_passed and not user_failed
+    
     return {
-        "passed": report.passed,
-        "total": report.total,
-        "results": results,
-        "pass_rate": report.pass_rate,
-        "error": report.error
+        "passed": final_passed,
+        "total": authoritative_report.total + len(user_results),
+        "results": results + user_results,
+        "pass_rate": authoritative_report.pass_rate,
+        "authoritative_passed": auth_passed,
+        "user_tests_failed": user_failed,
+        "error": authoritative_report.error
     }
 
 

@@ -300,6 +300,23 @@ def _safe_exec(code: str, problem_name: str = None) -> Optional[callable]:
 
 class TestExecutor:
 
+    def _run_single_test(self, problem_identifier: str, solution_code: str, test_case: dict) -> dict:
+        """Run a single test case and return trace dict."""
+        from doctor.normalize.solution_normalizer import normalize_solution, extract_function
+        
+        suite_key = _resolve_suite_key(problem_identifier)
+        if suite_key is None:
+            return {"passed": False, "output": None, "error": "No problem found"}
+        
+        func = _safe_exec(solution_code, suite_key)
+        if func is None:
+            return {"passed": False, "output": None, "error": "Failed to parse solution"}
+        
+        test_input = test_case.get("input", [])
+        expected = test_case.get("expected")
+        
+        return run_test_with_trace(func, tuple(test_input), expected)
+
     def verify(self, problem_identifier: str, solution_code: str) -> ExecutionReport:
         """Execute solution against test cases and return verdict.
 
