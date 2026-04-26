@@ -3141,5 +3141,29 @@
       ]
     }
   },
+  "alternating_string": {
+    "spec": {
+      "problem_id": "alternating_string",
+      "display_name": "Alternating String",
+      "description": "Given a string of 'a' and 'b' characters, find the minimum number of character changes to make it alternating (no two adjacent characters equal).",
+      "constraints": {},
+      "difficulty": "easy",
+      "tags": ["strings", "greedy"],
+      "reference_solution": "\ndef alternating_string(s):\n    n = len(s)\n    count = 0\n    for i, c in enumerate(s):\n        if i % 2 == 0:\n            if c != 'a':\n                count += 1\n        else:\n            if c != 'b':\n                count += 1\n    return min(count, n - count)\n"
+    },
+    "execution": {
+      "test_cases": [
+        {"input": ["aab"], "expected": 1, "label": "basic", "source": "manual"},
+        {"input": ["ababab"], "expected": 0, "label": "already_alternating", "source": "manual"},
+        {"input": ["aaaaaa"], "expected": 3, "label": "all_same", "source": "manual"},
+        {"input": ["ba"], "expected": 0, "label": "two_chars", "source": "manual"},
+        {"input": ["abba"], "expected": 2, "label": "palindrome", "source": "manual"},
+        {"input": ["b"], "expected": 0, "label": "single_char", "source": "manual"}
+      ]
+    },
+    "normalization": {
+      "function_names": ["alternating_string", "solve", "min_changes"]
+    }
+  },
   "registry_version": "1.0"
 }
