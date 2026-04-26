@@ -60,9 +60,9 @@ Nine stabilization priorities implemented.
 
 ---
 
-## Era 4: Phase 4 — Decision Contract (SPEC COMPLETE)
+## Era 4: Phase 4 — Decision Contract (IMPLEMENTED)
 
-Full formal decision contract with 8 items.
+Full formal decision contract with 8 items now mostly complete.
 
 ### The Decision Contract
 ```
@@ -79,15 +79,20 @@ Accept ⟺
 ### Phase 4 Items
 
 | Item | Description | Status |
-|------|-----------|--------|
-| 1 | Adversarial Baseline Measurement | 📋 Done |
-| 2 | Boundary Formalization | 📋 Done |
-| 3 | Alignment Signal Validation | 📋 Done |
-| 4 | Calibration | 📋 Done |
-| 5 | Unified Validation | 📋 Done |
-| 6 | OOD Detection via Embedding | 📋 NOT YET |
-| 7 | Retry Tracking | 📋 NOT YET |
-| 8 | Reject Rate Monitoring | 📋 NOT YET |
+|------|-------------|--------|
+| 1 | Adversarial Baseline Measurement | ✅ Done |
+| 2 | Boundary Formalization | ✅ Done |
+| 3 | Alignment Signal Validation | ✅ Done |
+| 4 | Calibration | ✅ Done |
+| 5 | Unified Validation | ✅ Done |
+| 6 | OOD Detection via Embedding | NOT YET |
+| 7 | Retry Tracking | ✅ Done |
+| 8 | Reject Rate Monitoring | ✅ Done |
+
+**Calibration Thresholds (frozen):**
+- T₁ = 0.85 (alignment)
+- T₂ = 0.7 (constraint_consistency)
+- T₃ = 0.7 (structural_compatibility)
 
 **Boundary Policy**: `docs/doctor_boundary_policy.md`
 - Explicit inclusion/exclusion lists
@@ -95,23 +100,13 @@ Accept ⟺
 - Domain disguise rules
 
 **Key files:**
-- `docs/doctor_phase4_spec.md` — Full spec (306 lines)
-- `docs/doctor_boundary_policy.md` — Policy rules (220 lines)
+- `docs/doctor_phase4_spec.md` — Full spec
+- `docs/doctor_boundary_policy.md` — Policy rules
+- `phase4_batch3_results.json` — Adversarial batch (12/12 correct)
 
 ---
 
-## External Stress Layer (OBSERVATIONS)
-
-**Stage 4 Results** (`external_stress_layer/STAGE4_RESULTS.md`):
-- ESL accuracy: 63.64%
-- Partial F1: 74%
-- Undefined recall: 39%
-
-**Critical Finding**: Generator data quality issue — ground truth labels don't match signal content in some cases. Baseline accuracy of 25% is artificially low due to this, not Doctor quality.
-
----
-
-## Era 5: Direction 2 — Dynamic Extraction (THIS SESSION)
+## Era 5: Direction 2 — Dynamic Extraction (COMPLETE)
 
 Dynamic problem extraction pipeline (NO REGISTRY NEEDED).
 
@@ -128,18 +123,18 @@ Evaluation with provisional confidence
 
 ### Components
 
-| Component | Commit | Lines | Status |
-|-----------|--------|-------|--------|
-| Extraction schema spec | 3983580 | — | ✅ |
-| `doctor/dynamic/extractor.py` | abbafa6→e56ecdc | 378 | ✅ |
-| Checker protocol spec | — | — | ✅ |
-| `doctor/dynamic/checker_generator.py` | 33cc073 | 1009 | ✅ |
-| Spec alignment | 71f8d59 | — | ✅ |
+| Component | Path | Status |
+|-----------|------|--------|
+| Extraction | `doctor/dynamic/extractor.py` | ✅ |
+| Checker Generator | `doctor/dynamic/checker_generator.py` | ✅ |
+| Pipeline | `doctor/dynamic/pipeline.py` | ✅ |
+| Candidate Executor | `doctor/dynamic/candidate_executor.py` | ✅ |
+| Test Schema | `doctor/dynamic/test_schemas/two_sum_schema.json` | ✅ |
 
 ### Checker Protocol (4 tests required)
 
 1. **Sample validation** — All samples must pass
-2. **Invariant enforcement** — Must reject known violations  
+2. **Invariant enforcement** — Must reject known violations
 3. **Negative testing** — Must reject wrong outputs
 4. **Logic coverage** — Must reject each condition
 
@@ -151,11 +146,26 @@ Evaluation with provisional confidence
 
 ---
 
-## Registry Status
+## Architecture (CURRENT)
 
-- **40 problems** in `doctor/registry/problem_registry.json`
-- Core matchers: class_modifiers, function_modifiers, return_type, parameter types
-- Enriched with description, reference_solution, arrangement_validator
+### Entry Point
+- `doctor/run_doctor.py` → `run_doctor(statement, solution_code) -> dict`
+
+### Authoritative Path
+- `unified_engine → solution_normalizer → test_executor → confidence_calibrator → trust`
+- Uses registry test suites
+- Full trust computation with evidence
+
+### Experimental/Provisional Path
+- `experimental/dynamic/pipeline.py` — provisional evaluator
+- No registry needed, generates checker from schema
+- Separate verdict namespace (`verdict: pending_execution`)
+
+### Offline
+- `offline/reject_monitor.py` — batch analytics
+
+### Archive
+- `archive/doctor_legacy.py` — old gate orchestrator (deprecated)
 
 ---
 
@@ -167,30 +177,32 @@ Evaluation with provisional confidence
 | Phase A/B Report | `docs/production_report_phase_ab.md` |
 | Phase 4 Spec | `docs/doctor_phase4_spec.md` |
 | Boundary Policy | `docs/doctor_boundary_policy.md` |
-| Stress Results | `external_stress_layer/STAGE4_RESULTS.md` |
-| Extraction | `doctor/dynamic/extractor.py` |
-| Checker Gen | `doctor/dynamic/checker_generator.py` |
-| Schema Spec | `docs/direction2_extraction_schema.md` |
-| Checker Protocol | `docs/direction2_checker_protocol.md` |
-| Problem Registry | `doctor/registry/problem_registry.json` |
+| Run Doctor | `doctor/run_doctor.py` |
+| Unified Engine | `doctor/ingest/unified_engine.py` |
+| Trust | `doctor/grading/trust.py` |
+| Calibration | `doctor/grading/confidence_calibrator.py` |
+| Dynamic Pipeline | `experimental/dynamic/pipeline.py` |
+| Dynamic Extractor | `doctor/dynamic/extractor.py` |
+| Dynamic Checker Gen | `doctor/dynamic/checker_generator.py` |
 
 ---
 
-## CURRENT TASK
+## What Was Done This Session
 
-### Task 3: Test checker_generator end-to-end
+- Direction 2 provisional path built and tested end-to-end (Tasks 3, 4, 5)
+- Phase 4 Items 7 and 8 shipped (retry tracking, reject rate monitoring)
+- Adversarial batch run (12/12 correct)
+- Calibration thresholds validated and frozen
+- `unified_engine.py` patched to log sub-scores on all reject paths
+- `doctor/run_doctor.py` built as single authoritative entry point
+- `reject_monitor.py` moved to `offline/`
 
-**Checklist:**
-- [ ] Run checker_generator on validated schema (e.g., 2225G output)
-- [ ] Verify generated checker passes all 4 protocol tests
-- [ ] Fix any failures in checker_generator
-- [ ] Commit working version
+---
 
-### After Task 3
+## What Is Next
 
-Full Direction 2 loop: Statement → Extractor → Schema → Checker Gen → Checker → Evaluation
-
-Then: Use as new evaluator for Phase 2 Perturbation (adversarial generation)
+- Item 6 — OOD Detection via Embedding is the only remaining Phase 4 item
+- `strong_underconfidence` trust type appearing on correct solutions is expected behavior with `c=0.5` neutral prior — not a bug
 
 ---
 
