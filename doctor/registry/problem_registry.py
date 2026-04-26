@@ -275,7 +275,7 @@ def get_all_display_names() -> Dict[str, str]:
     return {
         v.get("spec", {}).get("display_name", ""): k
         for k, v in problems.items()
-        if v.get("spec", {}).get("display_name")
+        if isinstance(v, dict) and v.get("spec", {}).get("display_name")
     }
 
 
