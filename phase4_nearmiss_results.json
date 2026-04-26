@@ -1,0 +1,729 @@
+[
+  {
+    "id": "nm_01",
+    "statement": "Given a list of integers and a target, find the right pair for that target.",
+    "expected_type": "reject",
+    "expected_match_candidate": "two_sum",
+    "near_miss_reason": "objective_overreach",
+    "status": "rejected",
+    "failure_tag": "validation_leak",
+    "matched": null,
+    "parsed_model": {
+      "input_type": "list_of_integers, integer",
+      "output_type": "list_of_integers (indices)",
+      "objective": "find pair of indices whose values sum to target",
+      "constraints": [],
+      "edge_conditions": [],
+      "types_explicit": false,
+      "objective_canonical": "find pair of indices whose values sum to target"
+    },
+    "alignment_score": 0.8,
+    "constraint_consistency": 1.0,
+    "structural_compatibility": 1.0,
+    "decision_trace": {
+      "llm_match": "two_sum",
+      "alignment_score": 0.8,
+      "alignment_rewritten": false,
+      "objective_canonical": "find pair of indices whose values sum to target",
+      "constraint_consistency": 1.0,
+      "structural_compatibility": 1.0,
+      "contradiction": false,
+      "json_repair": {},
+      "retry_count": 0,
+      "provider": "openrouter",
+      "first_attempt_success": true,
+      "decision_contract": {
+        "conditions": {
+          "no_contradiction": true,
+          "alignment_threshold_met": false,
+          "constraints_consistent": true,
+          "structural_compatible": true
+        },
+        "threshold_used": 0.85,
+        "repair_active": false,
+        "rejection_reason": "decision_contract_conditions_not_met"
+      },
+      "final": "reject"
+    },
+    "justification": "Accept blocked: alignment=0.8 (need 0.85), constraint=1.0 (need 0.7), structural=1.0 (need 0.7)"
+  },
+  {
+    "id": "nm_02",
+    "statement": "Sort a list of words and return what they all begin with.",
+    "expected_type": "reject",
+    "expected_match_candidate": "longest_common_prefix",
+    "near_miss_reason": "objective_overreach",
+    "status": "success",
+    "failure_tag": null,
+    "matched": "longest_common_prefix",
+    "parsed_model": {
+      "input_type": "list of strings",
+      "output_type": "string",
+      "objective": "find the longest common prefix",
+      "constraints": [],
+      "edge_conditions": [],
+      "types_explicit": true,
+      "objective_canonical": "find the longest common prefix"
+    },
+    "alignment_score": 0.9,
+    "constraint_consistency": 1.0,
+    "structural_compatibility": 1.0,
+    "decision_trace": {
+      "llm_match": "longest_common_prefix",
+      "alignment_score": 0.9,
+      "alignment_rewritten": false,
+      "objective_canonical": "find the longest common prefix",
+      "constraint_consistency": 1.0,
+      "structural_compatibility": 1.0,
+      "contradiction": false,
+      "json_repair": {},
+      "retry_count": 0,
+      "provider": "openrouter",
+      "first_attempt_success": true,
+      "decision_contract": {
+        "conditions": {
+          "no_contradiction": true,
+          "alignment_threshold_met": true,
+          "constraints_consistent": true,
+          "structural_compatible": true
+        },
+        "threshold_used": 0.85,
+        "repair_active": false,
+        "accept_condition": "all_conditions_met"
+      },
+      "final": "accept"
+    }
+  },
+  {
+    "id": "nm_03",
+    "statement": "Given a string of brackets, decide whether the structure is well arranged.",
+    "expected_type": "reject",
+    "expected_match_candidate": "valid_parentheses",
+    "near_miss_reason": "objective_overreach",
+    "status": "success",
+    "failure_tag": null,
+    "matched": "valid_parentheses",
+    "parsed_model": {
+      "input_type": "string",
+      "output_type": "boolean",
+      "objective": "determine if brackets are well arranged",
+      "constraints": [],
+      "edge_conditions": [],
+      "types_explicit": false,
+      "objective_canonical": "determine if brackets are well arranged"
+    },
+    "alignment_score": 0.9,
+    "constraint_consistency": 1.0,
+    "structural_compatibility": 1.0,
+    "decision_trace": {
+      "llm_match": "valid_parentheses",
+      "alignment_score": 0.9,
+      "alignment_rewritten": false,
+      "objective_canonical": "determine if brackets are well arranged",
+      "constraint_consistency": 1.0,
+      "structural_compatibility": 1.0,
+      "contradiction": false,
+      "json_repair": {},
+      "retry_count": 0,
+      "provider": "openrouter",
+      "first_attempt_success": true,
+      "decision_contract": {
+        "conditions": {
+          "no_contradiction": true,
+          "alignment_threshold_met": true,
+          "constraints_consistent": true,
+          "structural_compatible": true
+        },
+        "threshold_used": 0.85,
+        "repair_active": false,
+        "accept_condition": "all_conditions_met"
+      },
+      "final": "accept"
+    }
+  },
+  {
+    "id": "nm_04",
+    "statement": "In a budget planner, choose two purchases whose prices reach the budget, and return the purchase names.",
+    "expected_type": "reject",
+    "expected_match_candidate": "two_sum",
+    "near_miss_reason": "domain_disguise_fail",
+    "status": "rejected",
+    "failure_tag": "matcher_miss",
+    "matched": "no match",
+    "parsed_model": {
+      "input_type": "array of objects (purchase with name and price)",
+      "output_type": "list of strings",
+      "objective": "find two purchases whose prices sum to budget",
+      "constraints": [],
+      "edge_conditions": [],
+      "types_explicit": false,
+      "objective_canonical": "find two purchases whose prices sum to budget"
+    },
+    "alignment_score": 0.2,
+    "constraint_consistency": 1.0,
+    "structural_compatibility": 0.2,
+    "decision_trace": {
+      "llm_match": "no match",
+      "alignment_score": 0.2,
+      "alignment_rewritten": false,
+      "objective_canonical": "find two purchases whose prices sum to budget",
+      "constraint_consistency": 1.0,
+      "structural_compatibility": 0.2,
+      "contradiction": false,
+      "json_repair": {},
+      "retry_count": 0,
+      "provider": "openrouter",
+      "first_attempt_success": true,
+      "decision_contract": {
+        "conditions": {
+          "no_contradiction": true,
+          "alignment_threshold_met": false,
+          "constraints_consistent": true,
+          "structural_compatible": false
+        },
+        "threshold_used": 0.85,
+        "repair_active": false,
+        "rejection_reason": "no_valid_match"
+      },
+      "final": "reject"
+    }
+  },
+  {
+    "id": "nm_05",
+    "statement": "Combine two pre-sorted hospital queues into one and merge patients with the same ID into a single record.",
+    "expected_type": "reject",
+    "expected_match_candidate": "merge_two_sorted_lists",
+    "near_miss_reason": "domain_disguise_fail",
+    "status": "rejected",
+    "failure_tag": "matcher_miss",
+    "matched": "no match",
+    "parsed_model": {
+      "input_type": "array, array",
+      "output_type": "array",
+      "objective": "combine two sorted arrays and merge duplicate IDs",
+      "constraints": [
+        "pre-sorted queues",
+        "merge patients with same ID"
+      ],
+      "edge_conditions": [],
+      "types_explicit": false,
+      "objective_canonical": "combine two sorted arrays and merge duplicate ids"
+    },
+    "alignment_score": 0.7,
+    "constraint_consistency": 0.3,
+    "structural_compatibility": 0.9,
+    "decision_trace": {
+      "llm_match": "no match",
+      "alignment_score": 0.7,
+      "alignment_rewritten": false,
+      "objective_canonical": "combine two sorted arrays and merge duplicate ids",
+      "constraint_consistency": 0.3,
+      "structural_compatibility": 0.9,
+      "contradiction": false,
+      "json_repair": {},
+      "retry_count": 0,
+      "provider": "openrouter",
+      "first_attempt_success": true,
+      "decision_contract": {
+        "conditions": {
+          "no_contradiction": true,
+          "alignment_threshold_met": false,
+          "constraints_consistent": false,
+          "structural_compatible": true
+        },
+        "threshold_used": 0.85,
+        "repair_active": false,
+        "rejection_reason": "no_valid_match"
+      },
+      "final": "reject"
+    }
+  },
+  {
+    "id": "nm_06",
+    "statement": "Given daily profit changes, identify the most profitable contiguous period and list every day inside it.",
+    "expected_type": "reject",
+    "expected_match_candidate": "max_subarray",
+    "near_miss_reason": "domain_disguise_fail",
+    "status": "rejected",
+    "failure_tag": "matcher_miss",
+    "matched": "no match",
+    "parsed_model": {
+      "input_type": "array",
+      "output_type": "array",
+      "objective": "maximum sum contiguous subarray",
+      "constraints": [],
+      "edge_conditions": [],
+      "types_explicit": false,
+      "objective_canonical": "maximum sum contiguous subarray"
+    },
+    "alignment_score": 0.8,
+    "constraint_consistency": 1.0,
+    "structural_compatibility": 0.3,
+    "decision_trace": {
+      "llm_match": "no match",
+      "alignment_score": 0.8,
+      "alignment_rewritten": false,
+      "objective_canonical": "maximum sum contiguous subarray",
+      "constraint_consistency": 1.0,
+      "structural_compatibility": 0.3,
+      "contradiction": false,
+      "json_repair": {},
+      "retry_count": 0,
+      "provider": "openrouter",
+      "first_attempt_success": true,
+      "decision_contract": {
+        "conditions": {
+          "no_contradiction": true,
+          "alignment_threshold_met": false,
+          "constraints_consistent": true,
+          "structural_compatible": false
+        },
+        "threshold_used": 0.85,
+        "repair_active": false,
+        "rejection_reason": "no_valid_match"
+      },
+      "final": "reject"
+    }
+  },
+  {
+    "id": "nm_07",
+    "statement": "Given a target and a list of numbers, find two numbers that add to the target, but the two indices must be adjacent in the array.",
+    "expected_type": "reject",
+    "expected_match_candidate": "two_sum",
+    "near_miss_reason": "constraint_collision",
+    "status": "rejected",
+    "failure_tag": "matcher_miss",
+    "matched": "no match",
+    "parsed_model": {
+      "input_type": "integer target and array of integers",
+      "output_type": "array of two integers",
+      "objective": "find two adjacent indices whose numbers sum to target",
+      "constraints": [
+        "indices must be adjacent"
+      ],
+      "edge_conditions": [],
+      "types_explicit": false,
+      "objective_canonical": "find two adjacent indices whose numbers sum to target"
+    },
+    "alignment_score": 0.7,
+    "constraint_consistency": 0.0,
+    "structural_compatibility": 1.0,
+    "decision_trace": {
+      "llm_match": "no match",
+      "alignment_score": 0.7,
+      "alignment_rewritten": false,
+      "objective_canonical": "find two adjacent indices whose numbers sum to target",
+      "constraint_consistency": 0.0,
+      "structural_compatibility": 1.0,
+      "contradiction": false,
+      "json_repair": {},
+      "retry_count": 0,
+      "provider": "openrouter",
+      "first_attempt_success": true,
+      "decision_contract": {
+        "conditions": {
+          "no_contradiction": true,
+          "alignment_threshold_met": false,
+          "constraints_consistent": false,
+          "structural_compatible": true
+        },
+        "threshold_used": 0.85,
+        "repair_active": false,
+        "rejection_reason": "no_valid_match"
+      },
+      "final": "reject"
+    }
+  },
+  {
+    "id": "nm_08",
+    "statement": "Find the minimum number of coins needed to reach a target amount, but you may use each denomination at most once.",
+    "expected_type": "reject",
+    "expected_match_candidate": "coin_change",
+    "near_miss_reason": "constraint_collision",
+    "status": "rejected",
+    "failure_tag": "matcher_miss",
+    "matched": "no match",
+    "parsed_model": {
+      "input_type": "list of integers (denominations) and target integer",
+      "output_type": "integer (minimum number of coins or -1)",
+      "objective": "minimum number of coins to reach target amount",
+      "constraints": [
+        "each denomination may be used at most once"
+      ],
+      "edge_conditions": [],
+      "types_explicit": false,
+      "objective_canonical": "minimum number of coins to reach target amount"
+    },
+    "alignment_score": 1.0,
+    "constraint_consistency": 0.0,
+    "structural_compatibility": 1.0,
+    "decision_trace": {
+      "llm_match": "no match",
+      "alignment_score": 1.0,
+      "alignment_rewritten": false,
+      "objective_canonical": "minimum number of coins to reach target amount",
+      "constraint_consistency": 0.0,
+      "structural_compatibility": 1.0,
+      "contradiction": false,
+      "json_repair": {},
+      "retry_count": 0,
+      "provider": "openrouter",
+      "first_attempt_success": true,
+      "decision_contract": {
+        "conditions": {
+          "no_contradiction": true,
+          "alignment_threshold_met": true,
+          "constraints_consistent": false,
+          "structural_compatible": true
+        },
+        "threshold_used": 0.85,
+        "repair_active": false,
+        "rejection_reason": "no_valid_match"
+      },
+      "final": "reject"
+    }
+  },
+  {
+    "id": "nm_09",
+    "statement": "Given two strings, find the minimum edits to convert one into the other, but replacements are forbidden.",
+    "expected_type": "reject",
+    "expected_match_candidate": "min_distance",
+    "near_miss_reason": "constraint_collision",
+    "status": "rejected",
+    "failure_tag": "matcher_miss",
+    "matched": "no match",
+    "parsed_model": {
+      "input_type": "string",
+      "output_type": "integer",
+      "objective": "minimum edits to convert one string into another with replacements forbidden",
+      "constraints": [
+        "replacements are forbidden"
+      ],
+      "edge_conditions": [],
+      "types_explicit": true,
+      "objective_canonical": "minimum edits to convert one string into another with replacements forbidden"
+    },
+    "alignment_score": 0.4,
+    "constraint_consistency": 0.2,
+    "structural_compatibility": 1.0,
+    "decision_trace": {
+      "llm_match": "no match",
+      "alignment_score": 0.4,
+      "alignment_rewritten": false,
+      "objective_canonical": "minimum edits to convert one string into another with replacements forbidden",
+      "constraint_consistency": 0.2,
+      "structural_compatibility": 1.0,
+      "contradiction": false,
+      "json_repair": {},
+      "retry_count": 0,
+      "provider": "openrouter",
+      "first_attempt_success": true,
+      "decision_contract": {
+        "conditions": {
+          "no_contradiction": true,
+          "alignment_threshold_met": false,
+          "constraints_consistent": false,
+          "structural_compatible": true
+        },
+        "threshold_used": 0.85,
+        "repair_active": false,
+        "rejection_reason": "no_valid_match"
+      },
+      "final": "reject"
+    }
+  },
+  {
+    "id": "nm_10",
+    "statement": "Find the longest substring without repeating characters, but ignore spaces when checking repetition.",
+    "expected_type": "reject",
+    "expected_match_candidate": "longest_substring_without_repeating_characters",
+    "near_miss_reason": "structural_modifier",
+    "status": "rejected",
+    "failure_tag": "matcher_miss",
+    "matched": "longest_substring_without_repeating_characters",
+    "parsed_model": {
+      "input_type": "string",
+      "output_type": "integer",
+      "objective": "longest substring without repeating characters, ignoring spaces when checking repetition",
+      "constraints": [
+        "ignore spaces when checking repetition"
+      ],
+      "edge_conditions": [],
+      "types_explicit": false,
+      "objective_canonical": "longest substring without repeating characters, ignoring spaces when checking repetition"
+    },
+    "alignment_score": 0.9,
+    "constraint_consistency": 0.5,
+    "structural_compatibility": 1.0,
+    "decision_trace": {
+      "llm_match": "longest_substring_without_repeating_characters",
+      "alignment_score": 0.9,
+      "alignment_rewritten": false,
+      "objective_canonical": "longest substring without repeating characters, ignoring spaces when checking repetition",
+      "constraint_consistency": 0.5,
+      "structural_compatibility": 1.0,
+      "contradiction": false,
+      "json_repair": {},
+      "retry_count": 0,
+      "provider": "openrouter",
+      "first_attempt_success": true,
+      "decision_contract": {
+        "conditions": {
+          "no_contradiction": true,
+          "alignment_threshold_met": true,
+          "constraints_consistent": false,
+          "structural_compatible": true
+        },
+        "threshold_used": 0.85,
+        "repair_active": false,
+        "rejection_reason": "no_valid_match"
+      },
+      "final": "reject"
+    }
+  },
+  {
+    "id": "nm_11",
+    "statement": "Check whether a bracket string is valid, except characters inside quotes should be ignored entirely.",
+    "expected_type": "reject",
+    "expected_match_candidate": "valid_parentheses",
+    "near_miss_reason": "structural_modifier",
+    "status": "rejected",
+    "failure_tag": "matcher_miss",
+    "matched": "no match",
+    "parsed_model": {
+      "input_type": "string",
+      "output_type": "boolean",
+      "objective": "check validity of brackets ignoring quotes",
+      "constraints": [
+        "characters inside quotes should be ignored"
+      ],
+      "edge_conditions": [
+        "quotes may be present"
+      ],
+      "types_explicit": false,
+      "objective_canonical": "check validity of brackets ignoring quotes"
+    },
+    "alignment_score": 0.0,
+    "constraint_consistency": 0.0,
+    "structural_compatibility": 1.0,
+    "decision_trace": {
+      "llm_match": "no match",
+      "alignment_score": 0.0,
+      "alignment_rewritten": false,
+      "objective_canonical": "check validity of brackets ignoring quotes",
+      "constraint_consistency": 0.0,
+      "structural_compatibility": 1.0,
+      "contradiction": false,
+      "json_repair": {},
+      "retry_count": 0,
+      "provider": "openrouter",
+      "first_attempt_success": true,
+      "decision_contract": {
+        "conditions": {
+          "no_contradiction": true,
+          "alignment_threshold_met": false,
+          "constraints_consistent": false,
+          "structural_compatible": true
+        },
+        "threshold_used": 0.85,
+        "repair_active": false,
+        "rejection_reason": "no_valid_match"
+      },
+      "final": "reject"
+    }
+  },
+  {
+    "id": "nm_12",
+    "statement": "Find the longest common prefix of a list of words, but only count alphabetic characters and ignore hyphens.",
+    "expected_type": "reject",
+    "expected_match_candidate": "longest_common_prefix",
+    "near_miss_reason": "structural_modifier",
+    "status": "rejected",
+    "failure_tag": "validation_leak",
+    "matched": null,
+    "parsed_model": {
+      "input_type": "list of strings",
+      "output_type": "string",
+      "objective": "longest common prefix",
+      "constraints": [
+        "ignore hyphens, only count alphabetic characters"
+      ],
+      "edge_conditions": [],
+      "types_explicit": true,
+      "objective_canonical": "longest common prefix"
+    },
+    "alignment_score": 1.0,
+    "constraint_consistency": 0.5,
+    "structural_compatibility": 1.0,
+    "decision_trace": {
+      "llm_match": "longest_common_prefix",
+      "alignment_score": 1.0,
+      "alignment_rewritten": false,
+      "objective_canonical": "longest common prefix",
+      "constraint_consistency": 0.5,
+      "structural_compatibility": 1.0,
+      "contradiction": false,
+      "json_repair": {},
+      "retry_count": 0,
+      "provider": "openrouter",
+      "first_attempt_success": true,
+      "decision_contract": {
+        "conditions": {
+          "no_contradiction": true,
+          "alignment_threshold_met": true,
+          "constraints_consistent": false,
+          "structural_compatible": true
+        },
+        "threshold_used": 0.85,
+        "repair_active": false,
+        "rejection_reason": "structural_modifier"
+      },
+      "structural_modifier": true,
+      "final": "reject"
+    },
+    "error": "Structural modifier 'ignore' changes problem definition"
+  },
+  {
+    "id": "nm_13",
+    "statement": "Locate the highest-value uninterrupted run in a ledger and return where it starts and ends.",
+    "expected_type": "reject",
+    "expected_match_candidate": "max_subarray",
+    "near_miss_reason": "score_boundary",
+    "status": "rejected",
+    "failure_tag": "matcher_miss",
+    "matched": "no match",
+    "parsed_model": {
+      "input_type": "array of numbers",
+      "output_type": "array of two integers",
+      "objective": "maximize sum of contiguous subarray",
+      "constraints": [],
+      "edge_conditions": [],
+      "types_explicit": false,
+      "objective_canonical": "maximize sum of contiguous subarray"
+    },
+    "alignment_score": 0.0,
+    "constraint_consistency": 0.0,
+    "structural_compatibility": 0.0,
+    "decision_trace": {
+      "llm_match": "no match",
+      "alignment_score": 0.0,
+      "alignment_rewritten": false,
+      "objective_canonical": "maximize sum of contiguous subarray",
+      "constraint_consistency": 0.0,
+      "structural_compatibility": 0.0,
+      "contradiction": false,
+      "json_repair": {},
+      "retry_count": 0,
+      "provider": "openrouter",
+      "first_attempt_success": true,
+      "decision_contract": {
+        "conditions": {
+          "no_contradiction": true,
+          "alignment_threshold_met": false,
+          "constraints_consistent": false,
+          "structural_compatible": false
+        },
+        "threshold_used": 0.85,
+        "repair_active": false,
+        "rejection_reason": "no_valid_match"
+      },
+      "final": "reject"
+    }
+  },
+  {
+    "id": "nm_14",
+    "statement": "Fuse two already ordered chains into one ordered chain, keeping the original node containers untouched.",
+    "expected_type": "reject",
+    "expected_match_candidate": "merge_two_sorted_lists",
+    "near_miss_reason": "score_boundary",
+    "status": "success",
+    "failure_tag": null,
+    "matched": "merge_two_sorted_lists",
+    "parsed_model": {
+      "input_type": "list",
+      "output_type": "list",
+      "objective": "merge sorted lists",
+      "constraints": [
+        "keep original nodes untouched"
+      ],
+      "edge_conditions": [],
+      "types_explicit": false,
+      "objective_canonical": "merge sorted lists"
+    },
+    "alignment_score": 1.0,
+    "constraint_consistency": 1.0,
+    "structural_compatibility": 1.0,
+    "decision_trace": {
+      "llm_match": "merge_two_sorted_lists",
+      "alignment_score": 1.0,
+      "alignment_rewritten": false,
+      "objective_canonical": "merge sorted lists",
+      "constraint_consistency": 1.0,
+      "structural_compatibility": 1.0,
+      "contradiction": false,
+      "json_repair": {},
+      "retry_count": 0,
+      "provider": "openrouter",
+      "first_attempt_success": true,
+      "decision_contract": {
+        "conditions": {
+          "no_contradiction": true,
+          "alignment_threshold_met": true,
+          "constraints_consistent": true,
+          "structural_compatible": true
+        },
+        "threshold_used": 0.85,
+        "repair_active": false,
+        "accept_condition": "all_conditions_met"
+      },
+      "final": "accept"
+    }
+  },
+  {
+    "id": "nm_15",
+    "statement": "Using known coin faces, hit a target with as little currency as possible and report one workable recipe.",
+    "expected_type": "reject",
+    "expected_match_candidate": "coin_change",
+    "near_miss_reason": "score_boundary",
+    "status": "rejected",
+    "failure_tag": "matcher_miss",
+    "matched": "no match",
+    "parsed_model": {
+      "input_type": "list of integers and integer",
+      "output_type": "list of integers",
+      "objective": "minimize number of coins to reach target",
+      "constraints": [],
+      "edge_conditions": [],
+      "types_explicit": false,
+      "objective_canonical": "minimize number of coins to reach target"
+    },
+    "alignment_score": 0.9,
+    "constraint_consistency": 1.0,
+    "structural_compatibility": 0.3,
+    "decision_trace": {
+      "llm_match": "no match",
+      "alignment_score": 0.9,
+      "alignment_rewritten": false,
+      "objective_canonical": "minimize number of coins to reach target",
+      "constraint_consistency": 1.0,
+      "structural_compatibility": 0.3,
+      "contradiction": false,
+      "json_repair": {},
+      "retry_count": 0,
+      "provider": "openrouter",
+      "first_attempt_success": true,
+      "decision_contract": {
+        "conditions": {
+          "no_contradiction": true,
+          "alignment_threshold_met": true,
+          "constraints_consistent": true,
+          "structural_compatible": false
+        },
+        "threshold_used": 0.85,
+        "repair_active": false,
+        "rejection_reason": "no_valid_match"
+      },
+      "final": "reject"
+    }
+  }
+]
