@@ -10,9 +10,9 @@ import sys
 import io
 from typing import Any
 
-from doctor.dynamic.extractor import extract_problem
-from doctor.dynamic.checker_generator import generate_checker
-from doctor.dynamic.candidate_executor import run_candidate
+from experimental.dynamic.extractor import extract_problem
+from experimental.dynamic.checker_generator import generate_checker
+from experimental.dynamic.candidate_executor import run_candidate
 
 
 def extract_schema(problem_statement: str) -> dict | None:

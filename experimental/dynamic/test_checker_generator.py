@@ -32,7 +32,7 @@ def main():
     print(f"Invariants: {len(schema.get('invariants', []))}")
     print()
 
-    from doctor.dynamic.checker_generator import generate_checker
+    from experimental.dynamic.checker_generator import generate_checker
 
     print("--- Running generate_checker() ---")
     result = generate_checker(schema)
