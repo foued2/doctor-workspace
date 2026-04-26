@@ -412,6 +412,9 @@ def _evaluate_decision(
                 "failure_tag": "validation_leak",
                 "matched": None,
                 "parsed_model": model,
+                "alignment_score": alignment_score,
+                "constraint_consistency": constraint_consistency,
+                "structural_compatibility": structural_compatibility,
                 "decision_trace": trace,
                 "error": con_reason
             }
@@ -431,6 +434,9 @@ def _evaluate_decision(
                 "failure_tag": "validation_leak",
                 "matched": None,
                 "parsed_model": model,
+                "alignment_score": alignment_score,
+                "constraint_consistency": constraint_consistency,
+                "structural_compatibility": structural_compatibility,
                 "decision_trace": trace,
                 "error": restriction_reason
             }
@@ -450,6 +456,9 @@ def _evaluate_decision(
                 "failure_tag": "validation_leak",
                 "matched": None,
                 "parsed_model": model,
+                "alignment_score": alignment_score,
+                "constraint_consistency": constraint_consistency,
+                "structural_compatibility": structural_compatibility,
                 "decision_trace": trace,
                 "error": modifier_reason
             }
@@ -468,6 +477,9 @@ def _evaluate_decision(
                     "failure_tag": "matcher_miss",
                     "matched": None,
                     "parsed_model": model,
+                    "alignment_score": alignment_score,
+                    "constraint_consistency": constraint_consistency,
+                    "structural_compatibility": structural_compatibility,
                     "decision_trace": trace,
                     "justification": f"Accept blocked: json_repair used, requires {repair_threshold} on all sub-scores. Got alignment={alignment_score}, constraint={constraint_consistency}, structural={structural_compatibility}"
                 }
@@ -505,6 +517,9 @@ def _evaluate_decision(
                 "failure_tag": "validation_leak",
                 "matched": None,
                 "parsed_model": model,
+                "alignment_score": alignment_score,
+                "constraint_consistency": constraint_consistency,
+                "structural_compatibility": structural_compatibility,
                 "decision_trace": trace,
                 "justification": f"Accept blocked: alignment={alignment_score} (need {ALIGNMENT_THRESHOLD}), constraint={constraint_consistency} (need 0.7), structural={structural_compatibility} (need 0.7)"
             }
@@ -516,6 +531,9 @@ def _evaluate_decision(
         "failure_tag": "matcher_miss" if match else "parser_fail",
         "matched": match,
         "parsed_model": model,
+        "alignment_score": alignment_score,
+        "constraint_consistency": constraint_consistency,
+        "structural_compatibility": structural_compatibility,
         "decision_trace": trace
     }
 
