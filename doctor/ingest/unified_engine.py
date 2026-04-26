@@ -36,18 +36,12 @@ INITIAL_BACKOFF = 2
 PROVIDER_INFO = {}
 
 
-def _call_llm(prompt: str, retries: int = 0) -> Tuple[str, dict]:
-    """Call LLM with retry tracking. Returns (response, telemetry)."""
-    h = _hash(prompt)
-    cache_file = CACHE_DIR / f"unified_{h}.json"
-
 CONTRADICTION_PAIRS = [
     (["product", "maximum product", "max product", "multiply", "multiplication"], ["sum", "maximum sum", "max sum", "total"]),
     (["increasing", "increasing subsequence", "rising"], ["common", "common subsequence", "lcs"]),
     (["cost", "minimum cost", "expense"], ["ways", "number of ways", "count ways"]),
     (["budget", "expense", "spending", "price"], ["subarray", "contiguous"]),
 ]
-
 
 OPERATION_RESTRICTIONS = {
     "min_distance": {
@@ -505,7 +499,7 @@ def _evaluate_decision(
             trace["decision_contract"]["conditions"]["constraints_consistent"] = constraint_consistency >= 0.7
             trace["decision_contract"]["conditions"]["structural_compatible"] = structural_compatibility >= 0.7
             trace["final"] = "reject"
-            trace["decision_contract"]["rejection_reason"] = "决策_contract_conditions_not_met"
+            trace["decision_contract"]["rejection_reason"] = "decision_contract_conditions_not_met"
             return {
                 "status": "rejected",
                 "failure_tag": "validation_leak",
