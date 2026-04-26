@@ -22,6 +22,33 @@ PROBLEM_CLASSES = ["construction", "optimization", "counting", "decision", "sear
 VALIDATION_TYPES = ["exact_match", "arrangement", "checker"]
 INPUT_TYPES = ["single_case", "multi_case"]
 OUTPUT_TYPES = ["integer", "list", "string", "boolean"]
+SAFE_EVAL_GLOBALS = {
+    "__builtins__": {},
+    "len": len,
+    "range": range,
+    "sum": sum,
+    "min": min,
+    "max": max,
+    "abs": abs,
+    "all": all,
+    "any": any,
+    "sorted": sorted,
+    "list": list,
+    "set": set,
+    "tuple": tuple,
+    "dict": dict,
+    "int": int,
+    "float": float,
+    "str": str,
+    "bool": bool,
+    "enumerate": enumerate,
+    "zip": zip,
+    "map": map,
+    "filter": filter,
+    "True": True,
+    "False": False,
+    "None": None,
+}
 
 
 EXTRACTION_PROMPT = """Analyze the following problem statement and extract a structured schema.
@@ -58,7 +85,7 @@ Return ONLY a JSON object with these exact fields:
       "depends_on": ["list of input field names this depends on"]
     }
   },
-  "invariants": ["testable condition in English"],
+  "invariants": ["testable OUTPUT condition in English"],
   "validation_logic": "what makes output correct - human readable",
   "validation_type": "exact_match | arrangement | checker",
   "sample_cases": [{"input": "raw input lines as they appear", "output": "raw expected output"}]
@@ -77,6 +104,8 @@ Rules:
 - constraints: must include COMPLETE numeric bounds from the problem (e.g., "3 <= n <= 5000", not just "n >= 1")
 - For array bounds like each element of k: create constraint using loop-like Python, e.g., "all(1 <= ki <= n // 3 for ki in k)"
 - depends_on must list all input variable names used in the expression
+- invariants describe properties of the OUTPUT that must be verified, not properties of the input. Input bounds go in constraints. Output properties go in invariants.
+- invariants should be output-only checks such as output length, permutation validity, adjacency validity, or when -1 is allowed
 - invariants: explicit testable properties, no implicit assumptions
 - validation_type: exact_match (one answer), arrangement (any valid ordering), checker (complex)
 - sample_cases: at least 2 example cases with COMPLETE input/output as they appear in the problem
@@ -166,57 +195,75 @@ def _extract_json(text: str) -> dict | None:
     return None
 
 
-def _validate_constraint_expression(expr: str, variables: List[str]) -> Tuple[bool, str]:
-    """Validate a constraint expression is valid Python."""
+def _sample_value_for_type(field_type: str) -> Any:
+    """Return a harmless sample value for a declared field type."""
+    field_type = (field_type or "").lower()
+    if "list" in field_type or "array" in field_type:
+        return [1, 2, 3]
+    if "string" in field_type:
+        return "sample"
+    if "bool" in field_type:
+        return True
+    return 3
+
+
+def _sample_value_for_name(name: str, schema: dict) -> Any:
+    """Return a sample value for a variable based on input_structure metadata."""
+    test_case_var = schema.get("input_structure", {}).get("test_case_count_var")
+    if name == test_case_var:
+        return 1
+
+    for field in schema.get("input_structure", {}).get("per_case_format", []):
+        if field.get("name") == name:
+            return _sample_value_for_type(field.get("type", ""))
+
+    return 3
+
+
+def _validate_constraint_expression(expr: str, context: Dict[str, Any]) -> Tuple[bool, str]:
+    """Validate a constraint expression can be evaluated with the provided context."""
     try:
-        # Create a namespace with the variables and common builtins
-        namespace = {v: 1 for v in variables}
-        namespace.update({
-            'len': len, 'range': range, 'sum': sum, 'min': min, 'max': max,
-            'abs': abs, 'all': all, 'any': any, 'sorted': sorted,
-            'list': list, 'set': set, 'tuple': tuple, 'dict': dict,
-            'int': int, 'float': float, 'str': str, 'bool': bool,
-            'enumerate': enumerate, 'zip': zip, 'map': map, 'filter': filter,
-            'True': True, 'False': False, 'None': None,
-        })
-        # Try to evaluate - just check syntax, not runtime
-        compile(expr, '<expr>', 'eval')
+        compiled = compile(expr, '<expr>', 'eval')
+        eval_globals = dict(SAFE_EVAL_GLOBALS)
+        eval_globals.update(context)
+        eval(compiled, eval_globals, {})
         return True, ""
     except Exception as e:
         return False, str(e)
 
 
-def _check_cyclic_dependencies(constraints: dict) -> Tuple[bool, str]:
-    """Check for cyclic dependencies in constraint depends_on."""
-    # Build dependency graph
-    graph = {}
-    for name, spec in constraints.items():
-        graph[name] = spec.get("depends_on", [])
-    
-    # DFS for cycles (excluding self-references)
+def _resolve_constraint_order(constraints: dict, allowed_vars: set[str]) -> Tuple[Optional[List[str]], str]:
+    """Return constraints in dependency order, or an error."""
+    graph = {name: spec.get("depends_on", []) for name, spec in constraints.items()}
+    visiting = set()
     visited = set()
-    rec_stack = set()
-    
-    def has_cycle(node: str) -> bool:
-        visited.add(node)
-        rec_stack.add(node)
+    order: List[str] = []
+
+    def visit(node: str) -> Optional[str]:
+        if node in visited:
+            return None
+        if node in visiting:
+            return f"cyclic dependency involving {node}"
+
+        visiting.add(node)
         for dep in graph.get(node, []):
-            if dep == node:
-                continue  # skip self-reference
-            if dep not in visited:
-                if has_cycle(dep):
-                    return True
-            elif dep in rec_stack:
-                return True
-        rec_stack.remove(node)
-        return False
-    
+            if dep not in allowed_vars:
+                return f"constraint '{node}' references undefined variable: {dep}"
+            if dep in graph:
+                err = visit(dep)
+                if err:
+                    return err
+        visiting.remove(node)
+        visited.add(node)
+        order.append(node)
+        return None
+
     for name in graph:
-        if name not in visited:
-            if has_cycle(name):
-                return True, f"cyclic dependency involving {name}"
-    
-    return False, ""
+        err = visit(name)
+        if err:
+            return None, err
+
+    return order, ""
 
 
 def _validate_schema(schema: dict) -> Tuple[bool, str]:
@@ -258,29 +305,33 @@ def _validate_schema(schema: dict) -> Tuple[bool, str]:
     if not isinstance(schema.get("sample_cases"), list) or len(schema.get("sample_cases", [])) < 1:
         return False, "sample_cases must be a non-empty list"
     
-    # Validate constraints (expressions must be valid)
+    # Validate constraints (expressions must be valid and evaluatable in dependency order)
     input_vars = set()
     for field in schema.get("input_structure", {}).get("per_case_format", []):
         input_vars.add(field.get("name"))
-    
-    for name, spec in schema.get("constraints", {}).items():
-        # Check that all referenced variables exist in input_vars
-        deps = spec.get("depends_on", [])
-        for dep in deps:
-            if dep not in input_vars:
-                return False, f"constraint '{name}' references undefined variable: {dep}"
-        
-        # Then validate the expression
+
+    test_case_var = schema.get("input_structure", {}).get("test_case_count_var")
+    if test_case_var:
+        input_vars.add(test_case_var)
+
+    constraints = schema.get("constraints", {})
+    allowed_vars = input_vars | set(constraints.keys())
+    order, err = _resolve_constraint_order(constraints, allowed_vars)
+    if order is None:
+        return False, err
+
+    resolved_context = {name: _sample_value_for_name(name, schema) for name in input_vars}
+
+    for name in order:
+        spec = constraints.get(name, {})
+        if name not in resolved_context:
+            resolved_context[name] = _sample_value_for_name(name, schema)
+
         expr = spec.get("expression", "")
-        valid, err = _validate_constraint_expression(expr, list(input_vars))
+        valid, err = _validate_constraint_expression(expr, resolved_context)
         if not valid:
             return False, f"constraint '{name}' invalid: {err}"
-    
-    # Check for cyclic dependencies
-    cyclic, err = _check_cyclic_dependencies(schema.get("constraints", {}))
-    if cyclic:
-        return False, f"cyclic constraint dependency: {err}"
-    
+
     return True, ""
 
 
