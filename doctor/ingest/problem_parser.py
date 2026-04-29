@@ -357,10 +357,14 @@ def _check_structural_sufficiency(statement: str) -> tuple[bool, str]:
         "equality_check": ["string", "array", "word", "brackets", "balanced", "parentheses", "anagram", "braces", "opening", "closing", "number", "integer", "digit"],
         "counting": ["integer", "number", "array", "ways", "stairs", "combinations", "paths", "grid", "change", "heights", "bars", "elevation"],
         "transformation": ["array", "string", "integer", "number", "digits", "lists", "sorted", "strings", "elements", "prefix", "common", "values", "subsequence", "pairs", "parentheses", "n"],
-        "selection": ["array", "number", "integer", "strings", "lists", "elements", "indices", "kth"],
+        "selection": ["array", "number", "integer", "strings", "lists", "elements", "indices", "kth", "substring"],
     }
     derived_types = derived_input_types.get(obj_class, [])
-    has_input_type = any(t in s for t in derived_types)
+    def _norm(word):
+        return word[:-1] if word.endswith('s') else word
+    statement_words = [w.strip('.,!?;:') for w in statement.split()]
+    norm_statement_words = [_norm(w) for w in statement_words]
+    has_input_type = any(_norm(t) in norm_statement_words for t in derived_types)
     
     # Fragment filter: reject ultra-short statements that are likely fragments
     tokens = statement.split()
