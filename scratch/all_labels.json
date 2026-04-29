@@ -1,0 +1,770 @@
+{
+  "metadata": {
+    "description": "Complete manual labels for all 38 registry problems with schema annotations",
+    "distribution": {
+      "single_technique_easy": 3,
+      "medium_2techniques": 4,
+      "hard_3plus_techniques": 2,
+      "math_number_theory": 1
+    },
+    "total_problems": 39
+  },
+  "labels": {
+    "two_sum": {
+      "statement_summary": "Given an array of integers nums and an integer target, return indices of the two numbers such that they add up to target",
+      "schema": {
+        "domain": "array",
+        "paradigm": "hashing",
+        "traversal": "hash_map_lookup",
+        "data_structures": [
+          "array",
+          "hash_map"
+        ],
+        "tags": [
+          "easy",
+          "single_technique",
+          "search"
+        ],
+        "dp_type": "",
+        "confidence": "high"
+      }
+    },
+    "palindrome_number": {
+      "statement_summary": "Given an integer x, return true if x reads the same forward and backward, and false otherwise",
+      "schema": {
+        "domain": "math",
+        "paradigm": "reversal",
+        "traversal": "reversal",
+        "data_structures": [
+          "integer"
+        ],
+        "tags": [
+          "easy",
+          "single_technique",
+          "number_theory"
+        ],
+        "dp_type": "",
+        "confidence": "high"
+      }
+    },
+    "remove_duplicates": {
+      "statement_summary": "Given a sorted integer array nums, remove the duplicates in-place such that each unique element appears only once",
+      "schema": {
+        "domain": "array",
+        "paradigm": "two_pointer",
+        "traversal": "two_pointer",
+        "data_structures": [
+          "array"
+        ],
+        "tags": [
+          "easy",
+          "single_technique",
+          "in_place"
+        ],
+        "dp_type": "",
+        "confidence": "high"
+      }
+    },
+    "three_sum": {
+      "statement_summary": "Given an integer array nums, return all unique triplets [nums[i], nums[j], nums[k]] such that i != j != k and nums[i] + nums[j] + nums[k] == 0",
+      "schema": {
+        "domain": "array",
+        "paradigm": "imperative",
+        "traversal": "sorting_plus_two_pointer",
+        "data_structures": [
+          "array"
+        ],
+        "tags": [
+          "medium",
+          "two_techniques",
+          "combination"
+        ],
+        "dp_type": "",
+        "confidence": "high"
+      }
+    },
+    "longest_palindrome": {
+      "statement_summary": "Given a string s, return the longest palindromic substring in s",
+      "schema": {
+        "domain": "string",
+        "paradigm": "dynamic_programming",
+        "traversal": "expand_around_center",
+        "data_structures": [
+          "string"
+        ],
+        "tags": [
+          "medium",
+          "two_techniques",
+          "palindrome",
+          "substring"
+        ],
+        "dp_type": "1D",
+        "confidence": "high"
+      }
+    },
+    "letter_combinations": {
+      "statement_summary": "Given a string containing digits from 2 to 9 inclusive, return all possible letter combinations that the number could represent",
+      "schema": {
+        "domain": "string",
+        "paradigm": "recursive",
+        "traversal": "backtracking",
+        "data_structures": [
+          "string",
+          "hash_map"
+        ],
+        "tags": [
+          "medium",
+          "two_techniques",
+          "combination",
+          "phone_pad"
+        ],
+        "dp_type": "",
+        "confidence": "high"
+      }
+    },
+    "coin_change": {
+      "statement_summary": "Given coin denominations and a target amount, return the minimum number of coins needed to make up that amount",
+      "schema": {
+        "domain": "array",
+        "paradigm": "dynamic_programming",
+        "traversal": "bottom_up",
+        "data_structures": [
+          "array"
+        ],
+        "tags": [
+          "medium",
+          "two_techniques",
+          "minimization",
+          "unbounded_knapsack",
+          "optimization"
+        ],
+        "dp_type": "1D",
+        "confidence": "high"
+      }
+    },
+    "solve_n_queens": {
+      "statement_summary": "Given an integer n, return all distinct solutions to the n-queens puzzle where queens are placed on an n×n board with no two attacking each other",
+      "schema": {
+        "domain": "matrix",
+        "paradigm": "backtracking",
+        "traversal": "backtracking_with_pruning",
+        "data_structures": [
+          "array",
+          "board"
+        ],
+        "tags": [
+          "hard",
+          "three_plus_techniques",
+          "constraint_satisfaction",
+          "chess",
+          "permutation"
+        ],
+        "dp_type": "",
+        "confidence": "high"
+      }
+    },
+    "regular_expression_matching": {
+      "statement_summary": "Given an input string s and a pattern p, implement regular expression matching with support for '.' and '*'",
+      "schema": {
+        "domain": "string",
+        "paradigm": "dynamic_programming",
+        "traversal": "top_down_memoization",
+        "data_structures": [
+          "string",
+          "2D_array"
+        ],
+        "tags": [
+          "hard",
+          "three_plus_techniques",
+          "pattern_matching",
+          "recursion"
+        ],
+        "dp_type": "2D",
+        "confidence": "medium"
+      }
+    },
+    "euler_3": {
+      "statement_summary": "Return the largest prime factor of n",
+      "schema": {
+        "domain": "math",
+        "paradigm": "trial_division",
+        "traversal": "trial_division",
+        "data_structures": [
+          "integer"
+        ],
+        "tags": [
+          "medium",
+          "number_theory",
+          "prime_factorization",
+          "single_technique"
+        ],
+        "dp_type": "",
+        "confidence": "high"
+      }
+    },
+    "roman_to_integer": {
+      "statement_summary": "Given a Roman numeral string, convert it to its integer value",
+      "schema": {
+        "domain": "string",
+        "paradigm": "accumulation",
+        "traversal": "left_to_right",
+        "data_structures": [
+          "string",
+          "hash_map"
+        ],
+        "tags": [
+          "easy",
+          "single_technique",
+          "conversion",
+          "roman"
+        ],
+        "dp_type": "",
+        "confidence": "high"
+      }
+    },
+    "longest_common_prefix": {
+      "statement_summary": "Given a list of strings, return the longest common prefix shared by all strings",
+      "schema": {
+        "domain": "string",
+        "paradigm": "iterative",
+        "traversal": "character_comparison",
+        "data_structures": [
+          "string",
+          "array"
+        ],
+        "tags": [
+          "easy",
+          "single_technique",
+          "prefix",
+          "array_operation"
+        ],
+        "dp_type": "",
+        "confidence": "high"
+      }
+    },
+    "valid_parentheses": {
+      "statement_summary": "Given a string s containing only parentheses characters, determine if the string is valid (brackets close in correct order)",
+      "schema": {
+        "domain": "string",
+        "paradigm": "stack_based",
+        "traversal": "linear_scan",
+        "data_structures": [
+          "string",
+          "stack"
+        ],
+        "tags": [
+          "easy",
+          "single_technique",
+          "parsing",
+          "balance_check"
+        ],
+        "dp_type": "",
+        "confidence": "high"
+      }
+    },
+    "merge_two_sorted_lists": {
+      "statement_summary": "Merge two sorted linked lists and return the merged list as a sorted linked list",
+      "schema": {
+        "domain": "linked_list",
+        "paradigm": "iterative",
+        "traversal": "two_pointer_merge",
+        "data_structures": [
+          "linked_list"
+        ],
+        "tags": [
+          "easy",
+          "single_technique",
+          "merge",
+          "sorted"
+        ],
+        "dp_type": "",
+        "confidence": "high"
+      }
+    },
+    "strStr": {
+      "statement_summary": "Given two strings haystack and needle, return the index of the first occurrence of needle in haystack",
+      "schema": {
+        "domain": "string",
+        "paradigm": "string_matching",
+        "traversal": "substring_search",
+        "data_structures": [
+          "string"
+        ],
+        "tags": [
+          "easy",
+          "single_technique",
+          "search",
+          "substring"
+        ],
+        "dp_type": "",
+        "confidence": "high"
+      }
+    },
+    "search_insert": {
+      "statement_summary": "Given a sorted array of distinct integers and a target value, return the index if target is found, else return the index where it would be if inserted in order",
+      "schema": {
+        "domain": "array",
+        "paradigm": "binary_search",
+        "traversal": "divide_and_conquer",
+        "data_structures": [
+          "array"
+        ],
+        "tags": [
+          "easy",
+          "single_technique",
+          "search",
+          "sorted"
+        ],
+        "dp_type": "",
+        "confidence": "high"
+      }
+    },
+    "zigzag_conversion": {
+      "statement_summary": "Given a string s and an integer numRows, write the characters of s in a zigzag pattern on numRows and return the resulting string",
+      "schema": {
+        "domain": "string",
+        "paradigm": "simulation",
+        "traversal": "row_by_row",
+        "data_structures": [
+          "string",
+          "array"
+        ],
+        "tags": [
+          "medium",
+          "single_technique",
+          "pattern_generation",
+          "simulation"
+        ],
+        "dp_type": "",
+        "confidence": "medium"
+      }
+    },
+    "reverse_integer": {
+      "statement_summary": "Given a signed 32-bit integer x, return x with its digits reversed, or 0 if the reversed integer overflows",
+      "schema": {
+        "domain": "math",
+        "paradigm": "reversal",
+        "traversal": "digit_extraction",
+        "data_structures": [
+          "integer"
+        ],
+        "tags": [
+          "medium",
+          "single_technique",
+          "reversal",
+          "overflow_handling"
+        ],
+        "dp_type": "",
+        "confidence": "high"
+      }
+    },
+    "string_to_integer": {
+      "statement_summary": "Implement the myAtoi(string s) function, which converts a string to a 32-bit signed integer",
+      "schema": {
+        "domain": "string",
+        "paradigm": "finite_state_machine",
+        "traversal": "character_by_character",
+        "data_structures": [
+          "string"
+        ],
+        "tags": [
+          "medium",
+          "two_techniques",
+          "parsing",
+          "state_machine"
+        ],
+        "dp_type": "",
+        "confidence": "medium"
+      }
+    },
+    "max_area": {
+      "statement_summary": "Given an integer array height, return the maximum amount of water a container can store with lines at each index",
+      "schema": {
+        "domain": "array",
+        "paradigm": "two_pointer",
+        "traversal": "shrink_from_ends",
+        "data_structures": [
+          "array"
+        ],
+        "tags": [
+          "medium",
+          "single_technique",
+          "optimization",
+          "area_calculation"
+        ],
+        "dp_type": "",
+        "confidence": "high"
+      }
+    },
+    "int_to_roman": {
+      "statement_summary": "Given an integer, convert it to a Roman numeral",
+      "schema": {
+        "domain": "math",
+        "paradigm": "greedy",
+        "traversal": "largest_denomination_first",
+        "data_structures": [
+          "integer",
+          "array"
+        ],
+        "tags": [
+          "medium",
+          "single_technique",
+          "conversion",
+          "greedy"
+        ],
+        "dp_type": "",
+        "confidence": "high"
+      }
+    },
+    "four_sum": {
+      "statement_summary": "Given an integer array nums and an integer target, return all unique quadruplets [nums[i], nums[j], nums[k], nums[l]] where i < j < k < l and sum equals target",
+      "schema": {
+        "domain": "array",
+        "paradigm": "nested_iteration",
+        "traversal": "sorting_plus_two_pointer",
+        "data_structures": [
+          "array"
+        ],
+        "tags": [
+          "medium",
+          "two_techniques",
+          "combination",
+          "k_sum"
+        ],
+        "dp_type": "",
+        "confidence": "high"
+      }
+    },
+    "generate_parenthesis": {
+      "statement_summary": "Given n pairs of parentheses, generate all combinations of well-formed parentheses",
+      "schema": {
+        "domain": "string",
+        "paradigm": "backtracking",
+        "traversal": "recursive_generation",
+        "data_structures": [
+          "string",
+          "stack"
+        ],
+        "tags": [
+          "medium",
+          "two_techniques",
+          "generation",
+          "catalan"
+        ],
+        "dp_type": "",
+        "confidence": "high"
+      }
+    },
+    "find_median_sorted_arrays": {
+      "statement_summary": "Given two sorted arrays nums1 and nums2 of sizes m and n, return the median of the two sorted arrays",
+      "schema": {
+        "domain": "array",
+        "paradigm": "binary_search",
+        "traversal": "partition_search",
+        "data_structures": [
+          "array"
+        ],
+        "tags": [
+          "hard",
+          "two_techniques",
+          "search",
+          "median"
+        ],
+        "dp_type": "",
+        "confidence": "medium"
+      }
+    },
+    "trap": {
+      "statement_summary": "Given n non-negative integers representing an elevation map where the width of each bar is 1, compute how much water it can trap after raining",
+      "schema": {
+        "domain": "array",
+        "paradigm": "two_pointer",
+        "traversal": "left_right_max_tracking",
+        "data_structures": [
+          "array"
+        ],
+        "tags": [
+          "hard",
+          "two_techniques",
+          "accumulation",
+          "two_pointers"
+        ],
+        "dp_type": "",
+        "confidence": "high"
+      }
+    },
+    "first_missing_positive": {
+      "statement_summary": "Given an unsorted integer array nums, return the smallest missing positive integer",
+      "schema": {
+        "domain": "array",
+        "paradigm": "in_place_hashing",
+        "traversal": "index_based_placement",
+        "data_structures": [
+          "array"
+        ],
+        "tags": [
+          "hard",
+          "two_techniques",
+          "search",
+          "in_place"
+        ],
+        "dp_type": "",
+        "confidence": "medium"
+      }
+    },
+    "wildcard_matching": {
+      "statement_summary": "Given an input string s and a pattern p, implement wildcard matching with support for '?' and '*'",
+      "schema": {
+        "domain": "string",
+        "paradigm": "dynamic_programming",
+        "traversal": "top_down_memoization",
+        "data_structures": [
+          "string",
+          "2D_array"
+        ],
+        "tags": [
+          "hard",
+          "three_plus_techniques",
+          "pattern_matching",
+          "wildcard"
+        ],
+        "dp_type": "2D",
+        "confidence": "medium"
+      }
+    },
+    "min_distance": {
+      "statement_summary": "Given two strings word1 and word2, return the minimum number of operations required to convert word1 to word2",
+      "schema": {
+        "domain": "string",
+        "paradigm": "dynamic_programming",
+        "traversal": "bottom_up",
+        "data_structures": [
+          "string",
+          "2D_array"
+        ],
+        "tags": [
+          "hard",
+          "two_techniques",
+          "edit_distance",
+          "transformation"
+        ],
+        "dp_type": "2D",
+        "confidence": "high"
+      }
+    },
+    "min_window": {
+      "statement_summary": "Given two strings s and t, return the minimum window substring of s such that every character in t (including duplicates) is included in the window",
+      "schema": {
+        "domain": "string",
+        "paradigm": "sliding_window",
+        "traversal": "expand_and_contract",
+        "data_structures": [
+          "string",
+          "hash_map"
+        ],
+        "tags": [
+          "hard",
+          "two_techniques",
+          "substring",
+          "frequency_count"
+        ],
+        "dp_type": "",
+        "confidence": "high"
+      }
+    },
+    "largest_rectangle_area": {
+      "statement_summary": "Given an array of integers heights representing histogram bar heights, return the area of the largest rectangle in the histogram",
+      "schema": {
+        "domain": "array",
+        "paradigm": "monotonic_stack",
+        "traversal": "stack_based_boundaries",
+        "data_structures": [
+          "array",
+          "stack"
+        ],
+        "tags": [
+          "hard",
+          "two_techniques",
+          "geometry",
+          "stack"
+        ],
+        "dp_type": "",
+        "confidence": "medium"
+      }
+    },
+    "max_sliding_window": {
+      "statement_summary": "Given an array of integers nums and an integer k, return the maximum value in each sliding window of size k",
+      "schema": {
+        "domain": "array",
+        "paradigm": "deque_based",
+        "traversal": "sliding_window",
+        "data_structures": [
+          "array",
+          "deque"
+        ],
+        "tags": [
+          "hard",
+          "two_techniques",
+          "window",
+          "monotonic"
+        ],
+        "dp_type": "",
+        "confidence": "medium"
+      }
+    },
+    "euler_1": {
+      "statement_summary": "Find the sum of all natural numbers below n that are multiples of 3 or 5",
+      "schema": {
+        "domain": "math",
+        "paradigm": "iterative",
+        "traversal": "modulo_check",
+        "data_structures": [
+          "integer"
+        ],
+        "tags": [
+          "easy",
+          "single_technique",
+          "number_theory",
+          "summation"
+        ],
+        "dp_type": "",
+        "confidence": "high"
+      }
+    },
+    "euler_2": {
+      "statement_summary": "Return the sum of the even-valued Fibonacci terms that do not exceed n",
+      "schema": {
+        "domain": "math",
+        "paradigm": "iterative",
+        "traversal": "sequence_generation",
+        "data_structures": [
+          "integer"
+        ],
+        "tags": [
+          "medium",
+          "two_techniques",
+          "number_theory",
+          "fibonacci",
+          "filtering"
+        ],
+        "dp_type": "",
+        "confidence": "high"
+      }
+    },
+    "longest_increasing_subsequence": {
+      "statement_summary": "Given an integer array nums, return the length of the longest strictly increasing subsequence",
+      "schema": {
+        "domain": "array",
+        "paradigm": "dynamic_programming",
+        "traversal": "bottom_up",
+        "data_structures": [
+          "array"
+        ],
+        "tags": [
+          "medium",
+          "two_techniques",
+          "subsequence",
+          "LIS"
+        ],
+        "dp_type": "1D",
+        "confidence": "high"
+      }
+    },
+    "max_subarray": {
+      "statement_summary": "Given an integer array nums, return the contiguous subarray with the largest sum",
+      "schema": {
+        "domain": "array",
+        "paradigm": "dynamic_programming",
+        "traversal": "kadane_algorithm",
+        "data_structures": [
+          "array"
+        ],
+        "tags": [
+          "medium",
+          "single_technique",
+          "optimization",
+          "contiguous"
+        ],
+        "dp_type": "1D",
+        "confidence": "high"
+      }
+    },
+    "climbing_stairs": {
+      "statement_summary": "Given n steps and the ability to climb 1 or 2 steps at a time, return the number of distinct ways to climb to the top",
+      "schema": {
+        "domain": "math",
+        "paradigm": "dynamic_programming",
+        "traversal": "bottom_up",
+        "data_structures": [
+          "array"
+        ],
+        "tags": [
+          "easy",
+          "single_technique",
+          "combinatorics",
+          "fibonacci"
+        ],
+        "dp_type": "1D",
+        "confidence": "high"
+      }
+    },
+    "longest_substring_without_repeating_characters": {
+      "statement_summary": "Given a string, return the length of the longest substring without repeating characters",
+      "schema": {
+        "domain": "string",
+        "paradigm": "sliding_window",
+        "traversal": "expand_and_contract",
+        "data_structures": [
+          "string",
+          "hash_map"
+        ],
+        "tags": [
+          "medium",
+          "two_techniques",
+          "substring",
+          "unique_elements"
+        ],
+        "dp_type": "",
+        "confidence": "high"
+      }
+    },
+    "alternating_string": {
+      "statement_summary": "Given a string of 'a' and 'b' characters, find the minimum number of character changes to make it alternating",
+      "schema": {
+        "domain": "string",
+        "paradigm": "greedy",
+        "traversal": "character_by_character",
+        "data_structures": [
+          "string"
+        ],
+        "tags": [
+          "easy",
+          "single_technique",
+          "greedy",
+          "alternating"
+        ],
+        "dp_type": "",
+        "confidence": "high"
+      }
+    },
+    "arrange_numbers_divisible": {
+      "statement_summary": "Arrange numbers 0 to n-1 so that the absolute difference between each adjacent pair is divisible by d",
+      "schema": {
+        "domain": "array",
+        "paradigm": "backtracking",
+        "traversal": "permutation_with_constraint",
+        "data_structures": [
+          "array"
+        ],
+        "tags": [
+          "medium",
+          "three_plus_techniques",
+          "permutation",
+          "constraint_satisfaction"
+        ],
+        "dp_type": "",
+        "confidence": "medium"
+      }
+    }
+  }
+}
