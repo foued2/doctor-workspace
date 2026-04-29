@@ -1,0 +1,133 @@
+{
+  "metadata": {
+    "description": "Manual labels for 10 selected registry problems",
+    "distribution": {
+      "single_technique_easy": 3,
+      "medium_2techniques": 4,
+      "hard_3plus_techniques": 2,
+      "math_number_theory": 1
+    }
+  },
+  "labels": {
+    "two_sum": {
+      "statement_summary": "Given an array of integers nums and an integer target, return indices of the two numbers such that they add up to target",
+      "schema": {
+        "domain": "array",
+        "paradigm": "imperative",
+        "traversal": "hash_map_lookup",
+        "data_structures": ["array", "hash_map"],
+        "tags": ["easy", "single_technique", "search"],
+        "dp_type": "",
+        "confidence": "high"
+      }
+    },
+    "palindrome_number": {
+      "statement_summary": "Given an integer x, return true if x reads the same forward and backward, and false otherwise",
+      "schema": {
+        "domain": "math",
+        "paradigm": "imperative",
+        "traversal": "reversal",
+        "data_structures": ["integer"],
+        "tags": ["easy", "single_technique", "number_theory"],
+        "dp_type": "",
+        "confidence": "high"
+      }
+    },
+    "remove_duplicates": {
+      "statement_summary": "Given a sorted integer array nums, remove the duplicates in-place such that each unique element appears only once",
+      "schema": {
+        "domain": "array",
+        "paradigm": "imperative",
+        "traversal": "two_pointer",
+        "data_structures": ["array"],
+        "tags": ["easy", "single_technique", "in_place"],
+        "dp_type": "",
+        "confidence": "high"
+      }
+    },
+    "three_sum": {
+      "statement_summary": "Given an integer array nums, return all unique triplets [nums[i], nums[j], nums[k]] such that i != j != k and nums[i] + nums[j] + nums[k] == 0",
+      "schema": {
+        "domain": "array",
+        "paradigm": "imperative",
+        "traversal": "sorting_plus_two_pointer",
+        "data_structures": ["array"],
+        "tags": ["medium", "two_techniques", "combination"],
+        "dp_type": "",
+        "confidence": "high"
+      }
+    },
+    "longest_palindrome": {
+      "statement_summary": "Given a string s, return the longest palindromic substring in s",
+      "schema": {
+        "domain": "string",
+        "paradigm": "dynamic_programming",
+        "traversal": "expand_around_center",
+        "data_structures": ["string"],
+        "tags": ["medium", "two_techniques", "palindrome", "substring"],
+        "dp_type": "1D",
+        "confidence": "high"
+      }
+    },
+    "letter_combinations": {
+      "statement_summary": "Given a string containing digits from 2 to 9 inclusive, return all possible letter combinations that the number could represent",
+      "schema": {
+        "domain": "string",
+        "paradigm": "recursive",
+        "traversal": "backtracking",
+        "data_structures": ["string", "hash_map"],
+        "tags": ["medium", "two_techniques", "combination", "phone_pad"],
+        "dp_type": "",
+        "confidence": "high"
+      }
+    },
+    "coin_change": {
+      "statement_summary": "Given coin denominations and a target amount, return the minimum number of coins needed to make up that amount",
+      "schema": {
+        "domain": "optimization",
+        "paradigm": "dynamic_programming",
+        "traversal": "bottom_up",
+        "data_structures": ["array"],
+        "tags": ["medium", "two_techniques", "minimization", "unbounded_knapsack"],
+        "dp_type": "1D",
+        "confidence": "high"
+      }
+    },
+    "solve_n_queens": {
+      "statement_summary": "Given an integer n, return all distinct solutions to the n-queens puzzle where queens are placed on an n×n board with no two attacking each other",
+      "schema": {
+        "domain": "constraint_satisfaction",
+        "paradigm": "recursive",
+        "traversal": "backtracking_with_pruning",
+        "data_structures": ["array", "board"],
+        "tags": ["hard", "three_plus_techniques", "backtracking", "chess", "permutation"],
+        "dp_type": "",
+        "confidence": "high"
+      }
+    },
+    "regular_expression_matching": {
+      "statement_summary": "Given an input string s and a pattern p, implement regular expression matching with support for '.' and '*'",
+      "schema": {
+        "domain": "string",
+        "paradigm": "dynamic_programming",
+        "traversal": "top_down_memoization",
+        "data_structures": ["string", "2D_array"],
+        "tags": ["hard", "three_plus_techniques", "pattern_matching", "recursion"],
+        "dp_type": "2D",
+        "confidence": "medium"
+      }
+    },
+    "euler_3": {
+      "statement_summary": "Return the largest prime factor of n",
+      "schema": {
+        "domain": "math",
+        "paradigm": "imperative",
+        "traversal": "trial_division",
+        "data_structures": ["integer"],
+        "tags": ["medium", "number_theory", "prime_factorization", "single_technique"],
+        "dp_type": "",
+        "confidence": "high"
+      }
+    }
+  }
+}
