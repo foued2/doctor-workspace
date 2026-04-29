@@ -3,72 +3,82 @@
     {
       "input": "Given an array of integers, find the maximum difference between two elements such that the larger element appears after the smaller one",
       "expected": null,
-      "result": null,
+      "result": "max_subarray",
       "bucket": "reject",
-      "failure_stage": "gate"
+      "failure_stage": "classifier",
+      "justification": "The problem asks for maximum difference where larger element appears after smaller, which is structurally similar to maximum subarray (Kadane) but with a different operation (difference vs sum). However, the statement does not match any registry problem exactly; the closest is max_subarray but the objective differs (max difference vs max sum). Domain disguise rule does not apply because 'difference' is not a domain term for max subarray. Reject due to mismatch in objective."
     },
     {
       "input": "Write a function to check if a given number is a power of two",
       "expected": null,
       "result": null,
       "bucket": "reject",
-      "failure_stage": "gate"
+      "failure_stage": "gate",
+      "justification": "no input type (derived from equality_check)"
     },
     {
       "input": "How do I merge two sorted arrays into one sorted array",
       "expected": null,
-      "result": null,
-      "bucket": "reject",
-      "failure_stage": "gate"
+      "result": "merge_two_sorted_lists",
+      "bucket": "wrong",
+      "failure_stage": "matcher",
+      "justification": "The statement describes merging two sorted arrays into one sorted array, which matches the computational structure of merge_two_sorted_lists (merging two sorted sequences). Domain disguise (arrays vs linked lists) is valid. No extraneous operations or constraints."
     },
     {
       "input": "Find the kth largest element in an unsorted array",
       "expected": null,
-      "result": null,
+      "result": "no match",
       "bucket": "reject",
-      "failure_stage": "gate"
+      "failure_stage": "classifier",
+      "justification": "The problem 'Find the kth largest element in an unsorted array' does not correspond to any problem in the registry. The registry lacks a problem for kth largest element."
     },
     {
       "input": "Given a binary tree, return the inorder traversal of its nodes values",
       "expected": null,
-      "result": null,
+      "result": "no match",
       "bucket": "reject",
-      "failure_stage": "gate"
+      "failure_stage": "classifier",
+      "justification": "The problem statement describes a standard binary tree inorder traversal, but no matching problem_id exists in the registry. The registry does not contain a problem for inorder traversal."
     },
     {
       "input": "Detect if a linked list has a cycle in it",
       "expected": null,
       "result": null,
       "bucket": "reject",
-      "failure_stage": "gate"
+      "failure_stage": "gate",
+      "justification": "no objective class (classification failed)"
     },
     {
       "input": "Calculate the factorial of a non-negative integer n",
       "expected": null,
       "result": null,
       "bucket": "reject",
-      "failure_stage": "gate"
+      "failure_stage": "gate",
+      "justification": "no objective class (classification failed)"
     },
     {
       "input": "Find all duplicate elements in an array where each element appears at most twice",
       "expected": null,
-      "result": null,
+      "result": "no match",
       "bucket": "reject",
-      "failure_stage": "gate"
+      "failure_stage": "classifier",
+      "justification": "The statement is ambiguous and underspecified. It does not clearly define input/output types or the exact condition for duplicates. No registry problem matches this description."
     },
     {
       "input": "Given a string, find the first non-repeating character and return its index",
       "expected": null,
       "result": null,
       "bucket": "reject",
-      "failure_stage": "gate"
+      "failure_stage": "gate",
+      "justification": "no input type (derived from selection)"
     },
     {
       "input": "Implement a function to reverse a linked list iteratively",
       "expected": null,
       "result": null,
       "bucket": "reject",
-      "failure_stage": "gate"
+      "failure_stage": "gate",
+      "justification": "no input type (derived from transformation)"
     }
   ],
   "invalid": [
@@ -77,345 +87,394 @@
       "expected": null,
       "result": null,
       "bucket": "reject",
-      "failure_stage": "gate"
+      "failure_stage": "gate",
+      "justification": "no input type (derived from optimization)"
     },
     {
       "input": "Optimize my function for large inputs",
       "expected": null,
       "result": null,
       "bucket": "reject",
-      "failure_stage": "gate"
+      "failure_stage": "gate",
+      "justification": "no input type (derived from optimization)"
     },
     {
       "input": "Given numbers, make it work",
       "expected": null,
       "result": null,
       "bucket": "reject",
-      "failure_stage": "gate"
+      "failure_stage": "gate",
+      "justification": "no objective class (classification failed)"
     },
     {
       "input": "Check if the array is good",
       "expected": null,
-      "result": null,
+      "result": "no match",
       "bucket": "reject",
-      "failure_stage": "gate"
+      "failure_stage": "classifier",
+      "justification": "The statement is too vague and underspecified. 'Good' is not defined, no operations or constraints are given, and no registry problem matches this ambiguous description."
     },
     {
       "input": "I need to process the data efficiently",
       "expected": null,
       "result": null,
       "bucket": "reject",
-      "failure_stage": "gate"
+      "failure_stage": "gate",
+      "justification": "no objective class (classification failed)"
     },
     {
       "input": "Find something in the list",
       "expected": null,
       "result": null,
       "bucket": "reject",
-      "failure_stage": "gate"
+      "failure_stage": "gate",
+      "justification": "no input type (derived from selection)"
     },
     {
       "input": "The algorithm should handle edge cases",
       "expected": null,
       "result": null,
       "bucket": "reject",
-      "failure_stage": "gate"
+      "failure_stage": "gate",
+      "justification": "no objective class (classification failed)"
     },
     {
       "input": "Given a sequence, compute the result",
       "expected": null,
       "result": null,
       "bucket": "reject",
-      "failure_stage": "gate"
+      "failure_stage": "gate",
+      "justification": "no objective class (classification failed)"
     },
     {
       "input": "Write code that solves the problem",
       "expected": null,
       "result": null,
       "bucket": "reject",
-      "failure_stage": "gate"
+      "failure_stage": "gate",
+      "justification": "no objective class (classification failed)"
     },
     {
       "input": "Find the answer for n elements",
       "expected": null,
       "result": null,
       "bucket": "reject",
-      "failure_stage": "gate"
+      "failure_stage": "gate",
+      "justification": "no objective class (classification failed)"
     }
   ],
   "in_registry": [
     {
       "input": "given a list of numbers and a target, i need to find the two indices where the values add up to the target",
       "expected": "two_sum",
-      "result": null,
-      "bucket": "wrong",
-      "failure_stage": "gate"
+      "result": "two_sum",
+      "bucket": "correct",
+      "failure_stage": "matcher",
+      "justification": "The statement explicitly describes finding two indices that sum to a target, which matches the canonical Two Sum problem. No extra operations or constraints are mentioned that would deviate from the standard definition."
     },
     {
       "input": "how do i check if a number is a palindrome",
       "expected": "palindrome_number",
       "result": null,
       "bucket": "wrong",
-      "failure_stage": "gate"
+      "failure_stage": "gate",
+      "justification": "no input type (derived from equality_check)"
     },
     {
       "input": "i have a roman numeral like IX and want to convert it to its number value",
       "expected": "roman_to_integer",
-      "result": null,
-      "bucket": "wrong",
-      "failure_stage": "gate"
+      "result": "roman_to_integer",
+      "bucket": "correct",
+      "failure_stage": "matcher",
+      "justification": "Statement explicitly asks to convert a Roman numeral (e.g., IX) to its numeric value, directly matching the roman_to_integer problem definition."
     },
     {
       "input": "given a bunch of strings, whats the longest prefix they all share",
       "expected": "longest_common_prefix",
-      "result": null,
-      "bucket": "wrong",
-      "failure_stage": "gate"
+      "result": "longest_common_prefix",
+      "bucket": "correct",
+      "failure_stage": "matcher",
+      "justification": "The statement directly describes the longest common prefix problem: given a list of strings, find the longest prefix shared by all. This matches the registry entry 'longest_common_prefix' exactly, with no extraneous operations or constraints."
     },
     {
       "input": "i need to check if a string with parentheses brackets and braces is valid",
       "expected": "valid_parentheses",
-      "result": null,
-      "bucket": "wrong",
-      "failure_stage": "gate"
+      "result": "valid_parentheses",
+      "bucket": "correct",
+      "failure_stage": "matcher",
+      "justification": "The statement exactly describes the Valid Parentheses problem: checking if a string with parentheses, brackets, and braces is valid. No extraneous operations or constraints. Domain matches the canonical problem."
     },
     {
       "input": "how can i merge two sorted linked lists into one sorted list",
       "expected": "merge_two_sorted_lists",
-      "result": null,
-      "bucket": "wrong",
-      "failure_stage": "gate"
+      "result": "merge_two_sorted_lists",
+      "bucket": "correct",
+      "failure_stage": "matcher",
+      "justification": "The statement asks to merge two sorted linked lists into one sorted list, which directly matches the canonical definition of merge_two_sorted_lists. No extraneous operations or additional constraints are present."
     },
     {
       "input": "given a sorted array, remove the duplicates in place and return how many unique elements there are",
       "expected": "remove_duplicates",
-      "result": null,
-      "bucket": "wrong",
-      "failure_stage": "gate"
+      "result": "remove_duplicates",
+      "bucket": "correct",
+      "failure_stage": "matcher",
+      "justification": "The statement exactly describes the Remove Duplicates from Sorted Array problem: given a sorted array, remove duplicates in-place and return the number of unique elements. No extraneous operations or constraints."
     },
     {
       "input": "i want to find the first occurrence of a substring in a string and return its index, or -1 if not found",
       "expected": "strStr",
       "result": null,
       "bucket": "wrong",
-      "failure_stage": "gate"
+      "failure_stage": "gate",
+      "justification": "no objective class (classification failed)"
     },
     {
       "input": "given a sorted array and a target, return the index if found, otherwise return where it should be inserted",
       "expected": "search_insert",
-      "result": null,
-      "bucket": "wrong",
-      "failure_stage": "gate"
+      "result": "search_insert",
+      "bucket": "correct",
+      "failure_stage": "matcher",
+      "justification": "The statement exactly describes the Search Insert Position problem: given a sorted array and a target, return the index if found, otherwise the insertion index. No extraneous operations or constraints."
     },
     {
       "input": "i need to find the longest substring that reads the same forwards and backwards",
       "expected": "longest_palindrome",
-      "result": null,
-      "bucket": "wrong",
-      "failure_stage": "gate"
+      "result": "longest_palindrome",
+      "bucket": "correct",
+      "failure_stage": "matcher",
+      "justification": "The problem statement directly asks for the longest substring that reads the same forwards and backwards, which is exactly the definition of the longest palindromic substring problem, matching the registry entry 'longest_palindrome'."
     },
     {
       "input": "write a function that takes a string and number of rows, then writes the characters in a zigzag pattern and reads them row by row",
       "expected": "zigzag_conversion",
-      "result": null,
-      "bucket": "wrong",
-      "failure_stage": "gate"
+      "result": "zigzag_conversion",
+      "bucket": "correct",
+      "failure_stage": "matcher",
+      "justification": "The statement directly matches the Zigzag Conversion problem: input is a string and number of rows, output is the row-wise reading after zigzag placement. No extra operations or constraints are present."
     },
     {
       "input": "how do i reverse an integer, like turning 123 into 321, but handle overflow and negative numbers",
       "expected": "reverse_integer",
-      "result": null,
-      "bucket": "wrong",
-      "failure_stage": "gate"
+      "result": "reverse_integer",
+      "bucket": "correct",
+      "failure_stage": "matcher",
+      "justification": "The statement explicitly asks to reverse an integer (e.g., 123 to 321) with overflow and negative number handling, which exactly matches the reverse_integer problem in the registry."
     },
     {
       "input": "i need to convert a string to an integer, handling whitespace, optional sign, and stopping at non-digit characters",
       "expected": "string_to_integer",
-      "result": null,
-      "bucket": "wrong",
-      "failure_stage": "gate"
+      "result": "string_to_integer",
+      "bucket": "correct",
+      "failure_stage": "matcher",
+      "justification": "The statement exactly describes the String to Integer (atoi) problem: convert a string to an integer with whitespace handling, optional sign, and stopping at non-digit characters. No extraneous operations or constraints are added."
     },
     {
       "input": "given an array of heights, find two lines that together with the x-axis form a container holding the most water",
       "expected": "max_area",
-      "result": null,
-      "bucket": "wrong",
-      "failure_stage": "gate"
+      "result": "max_area",
+      "bucket": "correct",
+      "failure_stage": "matcher",
+      "justification": "Statement directly describes the Container With Most Water problem, which matches the max_area problem in registry. Input is an array of heights, output is the maximum water area, no extraneous operations or constraints."
     },
     {
       "input": "how do i convert a regular number to a roman numeral string",
       "expected": "int_to_roman",
-      "result": null,
-      "bucket": "wrong",
-      "failure_stage": "gate"
+      "result": "int_to_roman",
+      "bucket": "correct",
+      "failure_stage": "matcher",
+      "justification": "The statement asks for converting a regular number to a Roman numeral string, which exactly matches the 'Integer to Roman' problem (int_to_roman). No extra operations or constraints are mentioned, so alignment is perfect."
     },
     {
       "input": "given an array of numbers, i need to find all sets of three numbers that add up to zero, without duplicates",
       "expected": "three_sum",
-      "result": null,
-      "bucket": "wrong",
-      "failure_stage": "gate"
+      "result": "three_sum",
+      "bucket": "correct",
+      "failure_stage": "matcher",
+      "justification": "The statement directly describes the 3Sum problem: find all unique triplets in an array that sum to zero. No extraneous operations or constraints are present."
     },
     {
       "input": "if i have a phone number with digits 2-9, what are all the possible letter combinations it could represent",
       "expected": "letter_combinations",
-      "result": null,
-      "bucket": "wrong",
-      "failure_stage": "gate"
+      "result": "letter_combinations",
+      "bucket": "correct",
+      "failure_stage": "matcher",
+      "justification": "Statement matches Letter Combinations of a Phone Number problem: input digit string, output all possible letter combinations, no extra operations."
     },
     {
       "input": "similar to 3sum but i need to find all groups of 4 numbers that add up to a target value",
       "expected": "four_sum",
-      "result": null,
-      "bucket": "wrong",
-      "failure_stage": "gate"
+      "result": "four_sum",
+      "bucket": "correct",
+      "failure_stage": "matcher",
+      "justification": "The statement explicitly describes the 4Sum problem: finding all groups of 4 numbers that sum to a target, directly matching the registry entry for 'four_sum'. No extraneous operations or constraints are added."
     },
     {
       "input": "given n pairs of parentheses, generate all the ways to write them out validly",
       "expected": "generate_parenthesis",
       "result": null,
       "bucket": "wrong",
-      "failure_stage": "gate"
+      "failure_stage": "gate",
+      "justification": "no input type (derived from transformation)"
     },
     {
       "input": "i have two sorted arrays and need to find the median of the combined sorted array, optimally",
       "expected": "find_median_sorted_arrays",
-      "result": null,
-      "bucket": "wrong",
-      "failure_stage": "gate"
+      "result": "find_median_sorted_arrays",
+      "bucket": "correct",
+      "failure_stage": "matcher",
+      "justification": "The statement exactly describes the Median of Two Sorted Arrays problem: given two sorted arrays, find the median of the combined sorted array optimally. No extraneous operations or constraints."
     },
     {
       "input": "how do i check if a string matches a pattern where . matches any char and * means zero or more of the previous char",
       "expected": "regular_expression_matching",
-      "result": null,
-      "bucket": "wrong",
-      "failure_stage": "gate"
+      "result": "regular_expression_matching",
+      "bucket": "correct",
+      "failure_stage": "matcher",
+      "justification": "The statement directly describes the regular expression matching problem with '.' and '*', which matches the registry entry 'regular_expression_matching' exactly. No extraneous operations or constraints are present."
     },
     {
       "input": "given an elevation map with bar heights, how much water can be trapped between them after it rains",
       "expected": "trap",
       "result": null,
       "bucket": "wrong",
-      "failure_stage": "gate"
+      "failure_stage": "gate",
+      "justification": "no input type (derived from counting)"
     },
     {
       "input": "in an unsorted array, whats the smallest positive integer thats missing",
       "expected": "first_missing_positive",
-      "result": null,
-      "bucket": "wrong",
-      "failure_stage": "gate"
+      "result": "first_missing_positive",
+      "bucket": "correct",
+      "failure_stage": "matcher",
+      "justification": "The statement directly describes the First Missing Positive problem: find the smallest missing positive integer in an unsorted array. Input type, output type, and objective match exactly. No extraneous operations or constraints; domain is neutral."
     },
     {
       "input": "given n, i need to place n queens on an n×n chessboard so no two attack each other, and return all solutions",
       "expected": "solve_n_queens",
       "result": null,
       "bucket": "wrong",
-      "failure_stage": "gate"
+      "failure_stage": "gate",
+      "justification": "no input type (derived from selection)"
     },
     {
       "input": "check if a string matches a pattern where ? matches any single char and * matches any sequence",
       "expected": "wildcard_matching",
-      "result": null,
-      "bucket": "wrong",
-      "failure_stage": "gate"
+      "result": "wildcard_matching",
+      "bucket": "correct",
+      "failure_stage": "matcher",
+      "justification": "The problem statement exactly matches the Wildcard Matching problem: given a string and a pattern with ? and * wildcards, determine if there is a match. No extraneous operations or constraints."
     },
     {
       "input": "whats the minimum number of operations (insert, delete, replace) to turn one string into another",
       "expected": "min_distance",
-      "result": null,
-      "bucket": "wrong",
-      "failure_stage": "gate"
+      "result": "min_distance",
+      "bucket": "correct",
+      "failure_stage": "matcher",
+      "justification": "The problem statement asks for the minimum number of insert, delete, replace operations to transform one string into another, which is exactly the definition of the Edit Distance problem (registry problem 'min_distance'). No extra operations or constraints deviate from the canonical algorithm."
     },
     {
       "input": "given strings s and t, find the smallest substring of s that has all the characters from t",
       "expected": "min_window",
-      "result": null,
-      "bucket": "wrong",
-      "failure_stage": "gate"
+      "result": "min_window",
+      "bucket": "correct",
+      "failure_stage": "matcher",
+      "justification": "The problem statement exactly describes Minimum Window Substring, which is registered as min_window. The input is two strings, output is a substring, objective is to find the smallest substring containing all characters of t. No extraneous operations or constraints are added."
     },
     {
       "input": "given histogram bar heights, whats the area of the largest rectangle you can form",
       "expected": "largest_rectangle_area",
-      "result": null,
-      "bucket": "wrong",
-      "failure_stage": "gate"
+      "result": "largest_rectangle_area",
+      "bucket": "correct",
+      "failure_stage": "matcher",
+      "justification": "Statement directly describes the largest rectangle in histogram problem (largest_rectangle_area). Input type (array of bar heights), output type (area integer), and objective (max rectangle area) align exactly with registry entry. No extraneous operations or added constraints."
     },
     {
       "input": "for an array and window size k, i need to find the maximum value in each sliding window",
       "expected": "max_sliding_window",
-      "result": null,
-      "bucket": "wrong",
-      "failure_stage": "gate"
+      "result": "max_sliding_window",
+      "bucket": "correct",
+      "failure_stage": "matcher",
+      "justification": "The statement directly matches the Sliding Window Maximum problem (max_sliding_window) with array and window size k as input, outputting maximum values per window. No extraneous operations or constraints."
     },
     {
       "input": "find the sum of all numbers below n that are divisible by 3 or 5",
       "expected": "euler_1",
-      "result": null,
-      "bucket": "wrong",
-      "failure_stage": "gate"
+      "result": "euler_1",
+      "bucket": "correct",
+      "failure_stage": "matcher",
+      "justification": "The statement exactly matches the Euler problem 'Multiples of 3 and 5' (euler_1): given n, sum numbers below n divisible by 3 or 5. No extraneous operations or constraints."
     },
     {
       "input": "sum all the even-valued fibonacci numbers that dont exceed n",
       "expected": "euler_2",
       "result": null,
       "bucket": "wrong",
-      "failure_stage": "gate"
+      "failure_stage": "gate",
+      "justification": "no objective class (classification failed)"
     },
     {
       "input": "whats the largest prime factor of a given number",
       "expected": "euler_3",
-      "result": null,
-      "bucket": "wrong",
-      "failure_stage": "gate"
+      "result": "euler_3",
+      "bucket": "correct",
+      "failure_stage": "matcher",
+      "justification": "The statement asks for the largest prime factor of a number, which directly matches the Euler 3 problem (Largest Prime Factor). No extra operations or constraints are present, and the domain is identical."
     },
     {
       "input": "given an array, find the length of the longest subsequence where elements are in strictly increasing order",
       "expected": "longest_increasing_subsequence",
-      "result": null,
-      "bucket": "wrong",
-      "failure_stage": "gate"
+      "result": "longest_increasing_subsequence",
+      "bucket": "correct",
+      "failure_stage": "matcher",
+      "justification": "The problem statement exactly describes the Longest Increasing Subsequence problem: given an array, find the length of the longest subsequence with strictly increasing order."
     },
     {
       "input": "i need to find the contiguous subarray with the largest sum",
       "expected": "max_subarray",
-      "result": null,
-      "bucket": "wrong",
-      "failure_stage": "gate"
+      "result": "max_subarray",
+      "bucket": "correct",
+      "failure_stage": "matcher",
+      "justification": "The statement directly describes the maximum subarray problem (Kadane's algorithm). Input is an array of integers, output is the largest sum of a contiguous subarray. No extraneous operations or constraints are present, so alignment is perfect."
     },
     {
       "input": "if i can climb 1 or 2 steps at a time, how many ways can i climb n stairs",
       "expected": "climbing_stairs",
-      "result": null,
-      "bucket": "wrong",
-      "failure_stage": "gate"
+      "result": "climbing_stairs",
+      "bucket": "correct",
+      "failure_stage": "matcher",
+      "justification": "The statement directly describes the Climbing Stairs problem: count ways to climb n stairs with steps of 1 or 2. No extraneous operations or constraints present."
     },
     {
       "input": "given coin denominations and a target amount, whats the fewest coins needed to make that amount",
       "expected": "coin_change",
       "result": null,
       "bucket": "wrong",
-      "failure_stage": "gate"
+      "failure_stage": "gate",
+      "justification": "no input type (derived from optimization)"
     },
     {
       "input": "given a string, find the length of the longest substring without repeating characters",
       "expected": "longest_substring_without_repeating_characters",
-      "result": null,
-      "bucket": "wrong",
-      "failure_stage": "gate"
+      "result": "longest_substring_without_repeating_characters",
+      "bucket": "correct",
+      "failure_stage": "matcher",
+      "justification": "The problem statement directly matches the registry problem 'longest_substring_without_repeating_characters'. Input type is string, output type is integer, and the objective is to find the length of the longest substring without repeating characters. No extra operations or constraints are present."
     },
     {
       "input": "given a string of a and b, whats the minimum changes to make it alternating with no two adjacent chars the same",
       "expected": "alternating_string",
-      "result": null,
-      "bucket": "wrong",
-      "failure_stage": "gate"
+      "result": "alternating_string",
+      "bucket": "correct",
+      "failure_stage": "matcher",
+      "justification": "The problem statement exactly matches the 'Alternating String' problem: given a string of 'a' and 'b', find minimum changes to make it alternating with no adjacent same characters. Input type (string), output type (integer), and objective align perfectly. No extraneous operations or constraints."
     },
     {
       "input": "arrange numbers 0 to n-1 so that the absolute difference between adjacent numbers is divisible by at least one value in list k",
       "expected": "arrange_numbers_divisible",
       "result": null,
       "bucket": "wrong",
-      "failure_stage": "gate"
+      "failure_stage": "gate",
+      "justification": "no operation"
     }
   ]
 }
