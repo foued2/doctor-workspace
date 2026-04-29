@@ -62,6 +62,7 @@ Rules:
 - Domain disguises are valid only if the computational structure still matches.
 - Output JSON only. No markdown. No prose outside the JSON object.
 - Domain disguise rule: When domain术语 ("gain"/"profit"/"return") matches algorithmic structure (contiguous max sum), score alignment at 1.0 — terminology distance should NOT reduce alignment.
+- Operation consistency rule: If the problem statement contains explicit operations (sort, rotate, reverse, swap, shuffle, merge without combining, split without separating) OR additional constraints on indices, lengths, positions, counting direction, or ranges that are absent from the matched algorithm's canonical definition, reduce alignment_score by at least 0.3. Extraneous operations and added constraints that alter valid solution criteria are REJECTION signals, not edge conditions to ignore.
 
 REGISTRY:
 {registry}
@@ -277,8 +278,135 @@ def _normalize_parsed_model(raw_model: Any) -> Dict[str, Any]:
     return normalized
 
 
+def classify_objective(statement: str) -> tuple[str, str, str]:
+    """Classify problem statement into objective class using LLM.
+    
+    Returns: (objective_class, confidence, parse_error)
+    """
+    import json
+    
+    prompt = f"""Classify this problem statement into exactly one objective class.
+Classes: optimization, equality_check, counting, transformation, selection, none
+
+Return only valid JSON:
+{{"objective_class": "<class>", "confidence": "high|low"}}
+
+Use none only when no objective class is identifiable.
+Use low confidence when class is present but phrasing is indirect.
+No explanation. No free text. No class outside this list.
+
+Statement: {statement}
+
+Output JSON:"""
+    
+    try:
+        response, _ = _call_llm_with_stats(prompt)
+        data = json.loads(response.strip())
+        obj_class = data.get("objective_class", "none")
+        confidence = data.get("confidence", "low")
+        # Validate class is in allowed list
+        allowed = {"optimization", "equality_check", "counting", "transformation", "selection", "none"}
+        if obj_class not in allowed:
+            return "none", "low", f"invalid class: {obj_class}"
+        return obj_class, confidence, ""
+    except json.JSONDecodeError as e:
+        return "none", "low", f"json parse error: {e}"
+    except Exception as e:
+        return "none", "low", f"call error: {e}"
+
+
+def _check_structural_sufficiency(statement: str) -> tuple[bool, str]:
+    """Check if statement has sufficient structural signal before attempting match.
+    
+    Returns: (is_sufficient, reason_if_not)
+    """
+    s = statement.lower()
+    
+    # 2. Explicit operation (expanded)
+    operation_patterns = [
+        "find", "locate", "identify", "check", "validate", "determine",
+        "return", "compute", "count", "remove", "reverse", "merge", "sort",
+        "minimize", "maximize", "add", "combine", "convert", "output",
+        "revers", "match", "take", "get", "need", "use", "what", "how",
+        "calculate", "figure", "tell", "give"
+    ]
+    has_operation = any(pat in s for pat in operation_patterns)
+    
+    # 3. Objective class via LLM (replaces pattern-based objective check)
+    obj_class, obj_confidence, obj_error = classify_objective(statement)
+    
+    # Handle parse errors - log separately, treat as low confidence
+    if obj_error:
+        obj_confidence = "low"
+    
+    # Decision rules:
+    # - objective_class == none -> reject
+    # - objective_class != none + confidence == high -> pass
+    # - objective_class != none + confidence == low -> tentative pass (flag for matcher)
+    if obj_class == "none":
+        return False, f"no objective class (classification failed)"
+    
+    is_tentative = (obj_confidence == "low")
+    
+    # Derive input_type from objective class
+    # optimization -> numeric/array, equality_check -> string/array, counting -> integer
+    # transformation -> array/string/integer (includes aggregation: merge, combine, prefix)
+    # selection -> array/numeric
+    derived_input_types = {
+        "optimization": ["array", "number", "integer", "nums", "string", "characters", "rectangle", "contiguous", "cost", "area", "profit", "values", "elements", "subarray", "denominations", "coins", "amount"],
+        "equality_check": ["string", "array", "word", "brackets", "balanced", "parentheses", "anagram", "braces", "opening", "closing", "number", "integer", "digit"],
+        "counting": ["integer", "number", "array", "ways", "stairs", "combinations", "paths", "grid", "change", "heights", "bars", "elevation"],
+        "transformation": ["array", "string", "integer", "number", "digits", "lists", "sorted", "strings", "elements", "prefix", "common", "values", "subsequence", "pairs", "parentheses", "n"],
+        "selection": ["array", "number", "integer", "strings", "lists", "elements", "indices", "kth"],
+    }
+    derived_types = derived_input_types.get(obj_class, [])
+    has_input_type = any(t in s for t in derived_types)
+    
+    # Fragment filter: reject ultra-short statements that are likely fragments
+    tokens = statement.split()
+    if len(tokens) < 5:
+        tight_verbs = ["find", "check", "validate", "determine", "compute", "return", "remove", "reverse", "merge", "combine", "minimize", "maximize", "identify"]
+        has_tight_verb = any(tok.lower() in tight_verbs for tok in tokens)
+        if not has_tight_verb:
+            return False, "fragment: too short, no verb"
+    
+    # Hard schema validation gate: reject if ANY required field is missing
+    if not has_input_type:
+        return False, f"no input type (derived from {obj_class})"
+    if not has_operation:
+        return False, "no operation"
+    if len(statement) < 12:
+        return False, "too short"
+    
+    # Pass with tentative flag if low confidence
+    if is_tentative:
+        return True, f"tentative (low confidence class: {obj_class})"
+    
+    return True, f"class: {obj_class}"
+
+
 def analyze_problem(statement: str) -> Dict[str, Any]:
     """Single LLM call: parse + match + alignment decision."""
+    
+    # Structural sufficiency gate - reject before LLM
+    is_sufficient, gate_reason = _check_structural_sufficiency(statement)
+    if not is_sufficient:
+        return {
+            "parsed_model": {
+                "input_type": "",
+                "output_type": "",
+                "objective": "",
+                "constraints": [],
+                "edge_conditions": [],
+            },
+            "match_candidate": None,
+            "alignment_score": 0.0,
+            "decision": "reject",
+            "justification": gate_reason,
+            "retry_count": 0,
+            "structural_gate_rejection": True,
+        }
+    
     problems = get_registry_problems()
     if not problems:
         raise ValueError("Registry empty")

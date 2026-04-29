@@ -11,10 +11,10 @@
     {
       "input": "Write a function to check if a given number is a power of two",
       "expected": null,
-      "result": null,
+      "result": "no match",
       "bucket": "reject",
-      "failure_stage": "gate",
-      "justification": "no input type (derived from equality_check)"
+      "failure_stage": "classifier",
+      "justification": "The problem statement 'check if a given number is a power of two' does not match any problem in the registry. The registry contains problems like palindrome number, reverse integer, etc., but no power-of-two check. Input type, output type, and objective do not align with any known entry."
     },
     {
       "input": "How do I merge two sorted arrays into one sorted array",
@@ -75,10 +75,10 @@
     {
       "input": "Implement a function to reverse a linked list iteratively",
       "expected": null,
-      "result": null,
+      "result": "no match",
       "bucket": "reject",
-      "failure_stage": "gate",
-      "justification": "no input type (derived from transformation)"
+      "failure_stage": "classifier",
+      "justification": "No problem in the registry corresponds to reversing a linked list. The statement is clear but no matching problem_id exists."
     }
   ],
   "invalid": [
@@ -175,10 +175,10 @@
     {
       "input": "how do i check if a number is a palindrome",
       "expected": "palindrome_number",
-      "result": null,
-      "bucket": "wrong",
-      "failure_stage": "gate",
-      "justification": "no input type (derived from equality_check)"
+      "result": "palindrome_number",
+      "bucket": "correct",
+      "failure_stage": "matcher",
+      "justification": "The statement asks to check if a number is a palindrome, which directly matches the palindrome_number problem in the registry. Input is an integer, output is boolean, objective is palindrome check. No extraneous operations or constraints."
     },
     {
       "input": "i have a roman numeral like IX and want to convert it to its number value",
@@ -311,10 +311,10 @@
     {
       "input": "given n pairs of parentheses, generate all the ways to write them out validly",
       "expected": "generate_parenthesis",
-      "result": null,
-      "bucket": "wrong",
-      "failure_stage": "gate",
-      "justification": "no input type (derived from transformation)"
+      "result": "generate_parenthesis",
+      "bucket": "correct",
+      "failure_stage": "matcher",
+      "justification": "The statement directly asks to generate all valid ways to write n pairs of parentheses, which is exactly the problem 'Generate Parentheses' (generate_parenthesis) in the registry. Input type (integer n), output type (list of valid strings), and objective align perfectly with no extraneous operations or constraints."
     },
     {
       "input": "i have two sorted arrays and need to find the median of the combined sorted array, optimally",
@@ -335,10 +335,10 @@
     {
       "input": "given an elevation map with bar heights, how much water can be trapped between them after it rains",
       "expected": "trap",
-      "result": null,
-      "bucket": "wrong",
-      "failure_stage": "gate",
-      "justification": "no input type (derived from counting)"
+      "result": "trap",
+      "bucket": "correct",
+      "failure_stage": "matcher",
+      "justification": "The statement describes the classic Trapping Rain Water problem: given bar heights, compute water trapped after rain. This matches the registry entry 'trap' exactly with no extraneous operations or constraints."
     },
     {
       "input": "in an unsorted array, whats the smallest positive integer thats missing",
@@ -447,10 +447,10 @@
     {
       "input": "given coin denominations and a target amount, whats the fewest coins needed to make that amount",
       "expected": "coin_change",
-      "result": null,
-      "bucket": "wrong",
-      "failure_stage": "gate",
-      "justification": "no input type (derived from optimization)"
+      "result": "coin_change",
+      "bucket": "correct",
+      "failure_stage": "matcher",
+      "justification": "The problem statement matches the classic coin change problem (minimum number of coins) exactly. The registry contains 'coin_change' with the same input/output type and objective."
     },
     {
       "input": "given a string, find the length of the longest substring without repeating characters",
