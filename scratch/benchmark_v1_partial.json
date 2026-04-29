@@ -186,3 +186,4 @@
     {"input": "arrange numbers 0 to n-1 so that the absolute difference between adjacent numbers is divisible by at least one value in list k", "expected": "arrange_numbers_divisible", "bucket_target": "correct_match"}
   ]
 }
+
