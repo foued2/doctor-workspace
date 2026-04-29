@@ -94,52 +94,52 @@
   ],
   "invalid_cases": [
     {
-      "input": "Make it faster",
+      "input": "Find the best path",
       "expected": null,
       "bucket_target": "reject"
     },
     {
-      "input": "Sort the array and also find the sum and also reverse the string",
+      "input": "Optimize my function for large inputs",
       "expected": null,
       "bucket_target": "reject"
     },
     {
-      "input": "Help me with my homework",
+      "input": "Given numbers, make it work",
       "expected": null,
       "bucket_target": "reject"
     },
     {
-      "input": "What is the weather like today",
+      "input": "Check if the array is good",
       "expected": null,
       "bucket_target": "reject"
     },
     {
-      "input": "Fix this code: def add(a,b): return a+b",
+      "input": "I need to process the data efficiently",
       "expected": null,
       "bucket_target": "reject"
     },
     {
-      "input": "Can you explain recursion to me",
+      "input": "Find something in the list",
       "expected": null,
       "bucket_target": "reject"
     },
     {
-      "input": "I want to build a web app",
+      "input": "The algorithm should handle edge cases",
       "expected": null,
       "bucket_target": "reject"
     },
     {
-      "input": "The function should probably do something with numbers maybe",
+      "input": "Given a sequence, compute the result",
       "expected": null,
       "bucket_target": "reject"
     },
     {
-      "input": "Write a program",
+      "input": "Write code that solves the problem",
       "expected": null,
       "bucket_target": "reject"
     },
     {
-      "input": "Given an array, do something",
+      "input": "Find the answer for n elements",
       "expected": null,
       "bucket_target": "reject"
     }
