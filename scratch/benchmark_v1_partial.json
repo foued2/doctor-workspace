@@ -1,0 +1,147 @@
+{
+  "registry_problems": [
+    "two_sum",
+    "palindrome_number",
+    "roman_to_integer",
+    "longest_common_prefix",
+    "valid_parentheses",
+    "merge_two_sorted_lists",
+    "remove_duplicates",
+    "strStr",
+    "search_insert",
+    "longest_palindrome",
+    "zigzag_conversion",
+    "reverse_integer",
+    "string_to_integer",
+    "max_area",
+    "int_to_roman",
+    "three_sum",
+    "letter_combinations",
+    "four_sum",
+    "generate_parenthesis",
+    "find_median_sorted_arrays",
+    "regular_expression_matching",
+    "trap",
+    "first_missing_positive",
+    "solve_n_queens",
+    "wildcard_matching",
+    "min_distance",
+    "min_window",
+    "largest_rectangle_area",
+    "max_sliding_window",
+    "euler_1",
+    "euler_2",
+    "euler_3",
+    "longest_increasing_subsequence",
+    "max_subarray",
+    "climing_stairs",
+    "coin_change",
+    "longest_substring_without_repeating_characters",
+    "alternating_string",
+    "arrange_numbers_divisible"
+  ],
+  "out_of_registry_cases": [
+    {
+      "input": "Given an array of integers, find the maximum difference between two elements such that the larger element appears after the smaller one",
+      "expected": null,
+      "bucket_target": "reject"
+    },
+    {
+      "input": "Write a function to check if a given number is a power of two",
+      "expected": null,
+      "bucket_target": "reject"
+    },
+    {
+      "input": "How do I merge two sorted arrays into one sorted array",
+      "expected": null,
+      "bucket_target": "reject"
+    },
+    {
+      "input": "Find the kth largest element in an unsorted array",
+      "expected": null,
+      "bucket_target": "reject"
+    },
+    {
+      "input": "Given a binary tree, return the inorder traversal of its nodes values",
+      "expected": null,
+      "bucket_target": "reject"
+    },
+    {
+      "input": "Detect if a linked list has a cycle in it",
+      "expected": null,
+      "bucket_target": "reject"
+    },
+    {
+      "input": "Calculate the factorial of a non-negative integer n",
+      "expected": null,
+      "bucket_target": "reject"
+    },
+    {
+      "input": "Find all duplicate elements in an array where each element appears at most twice",
+      "expected": null,
+      "bucket_target": "reject"
+    },
+    {
+      "input": "Given a string, find the first non-repeating character and return its index",
+      "expected": null,
+      "bucket_target": "reject"
+    },
+    {
+      "input": "Implement a function to reverse a linked list iteratively",
+      "expected": null,
+      "bucket_target": "reject"
+    }
+  ],
+  "invalid_cases": [
+    {
+      "input": "Make it faster",
+      "expected": null,
+      "bucket_target": "reject"
+    },
+    {
+      "input": "Sort the array and also find the sum and also reverse the string",
+      "expected": null,
+      "bucket_target": "reject"
+    },
+    {
+      "input": "Help me with my homework",
+      "expected": null,
+      "bucket_target": "reject"
+    },
+    {
+      "input": "What is the weather like today",
+      "expected": null,
+      "bucket_target": "reject"
+    },
+    {
+      "input": "Fix this code: def add(a,b): return a+b",
+      "expected": null,
+      "bucket_target": "reject"
+    },
+    {
+      "input": "Can you explain recursion to me",
+      "expected": null,
+      "bucket_target": "reject"
+    },
+    {
+      "input": "I want to build a web app",
+      "expected": null,
+      "bucket_target": "reject"
+    },
+    {
+      "input": "The function should probably do something with numbers maybe",
+      "expected": null,
+      "bucket_target": "reject"
+    },
+    {
+      "input": "Write a program",
+      "expected": null,
+      "bucket_target": "reject"
+    },
+    {
+      "input": "Given an array, do something",
+      "expected": null,
+      "bucket_target": "reject"
+    }
+  ]
+}
