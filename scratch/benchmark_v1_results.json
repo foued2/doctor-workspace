@@ -1,0 +1,421 @@
+{
+  "out_of_registry": [
+    {
+      "input": "Given an array of integers, find the maximum difference between two elements such that the larger element appears after the smaller one",
+      "expected": null,
+      "result": null,
+      "bucket": "reject",
+      "failure_stage": "gate"
+    },
+    {
+      "input": "Write a function to check if a given number is a power of two",
+      "expected": null,
+      "result": null,
+      "bucket": "reject",
+      "failure_stage": "gate"
+    },
+    {
+      "input": "How do I merge two sorted arrays into one sorted array",
+      "expected": null,
+      "result": null,
+      "bucket": "reject",
+      "failure_stage": "gate"
+    },
+    {
+      "input": "Find the kth largest element in an unsorted array",
+      "expected": null,
+      "result": null,
+      "bucket": "reject",
+      "failure_stage": "gate"
+    },
+    {
+      "input": "Given a binary tree, return the inorder traversal of its nodes values",
+      "expected": null,
+      "result": null,
+      "bucket": "reject",
+      "failure_stage": "gate"
+    },
+    {
+      "input": "Detect if a linked list has a cycle in it",
+      "expected": null,
+      "result": null,
+      "bucket": "reject",
+      "failure_stage": "gate"
+    },
+    {
+      "input": "Calculate the factorial of a non-negative integer n",
+      "expected": null,
+      "result": null,
+      "bucket": "reject",
+      "failure_stage": "gate"
+    },
+    {
+      "input": "Find all duplicate elements in an array where each element appears at most twice",
+      "expected": null,
+      "result": null,
+      "bucket": "reject",
+      "failure_stage": "gate"
+    },
+    {
+      "input": "Given a string, find the first non-repeating character and return its index",
+      "expected": null,
+      "result": null,
+      "bucket": "reject",
+      "failure_stage": "gate"
+    },
+    {
+      "input": "Implement a function to reverse a linked list iteratively",
+      "expected": null,
+      "result": null,
+      "bucket": "reject",
+      "failure_stage": "gate"
+    }
+  ],
+  "invalid": [
+    {
+      "input": "Find the best path",
+      "expected": null,
+      "result": null,
+      "bucket": "reject",
+      "failure_stage": "gate"
+    },
+    {
+      "input": "Optimize my function for large inputs",
+      "expected": null,
+      "result": null,
+      "bucket": "reject",
+      "failure_stage": "gate"
+    },
+    {
+      "input": "Given numbers, make it work",
+      "expected": null,
+      "result": null,
+      "bucket": "reject",
+      "failure_stage": "gate"
+    },
+    {
+      "input": "Check if the array is good",
+      "expected": null,
+      "result": null,
+      "bucket": "reject",
+      "failure_stage": "gate"
+    },
+    {
+      "input": "I need to process the data efficiently",
+      "expected": null,
+      "result": null,
+      "bucket": "reject",
+      "failure_stage": "gate"
+    },
+    {
+      "input": "Find something in the list",
+      "expected": null,
+      "result": null,
+      "bucket": "reject",
+      "failure_stage": "gate"
+    },
+    {
+      "input": "The algorithm should handle edge cases",
+      "expected": null,
+      "result": null,
+      "bucket": "reject",
+      "failure_stage": "gate"
+    },
+    {
+      "input": "Given a sequence, compute the result",
+      "expected": null,
+      "result": null,
+      "bucket": "reject",
+      "failure_stage": "gate"
+    },
+    {
+      "input": "Write code that solves the problem",
+      "expected": null,
+      "result": null,
+      "bucket": "reject",
+      "failure_stage": "gate"
+    },
+    {
+      "input": "Find the answer for n elements",
+      "expected": null,
+      "result": null,
+      "bucket": "reject",
+      "failure_stage": "gate"
+    }
+  ],
+  "in_registry": [
+    {
+      "input": "given a list of numbers and a target, i need to find the two indices where the values add up to the target",
+      "expected": "two_sum",
+      "result": null,
+      "bucket": "wrong",
+      "failure_stage": "gate"
+    },
+    {
+      "input": "how do i check if a number is a palindrome",
+      "expected": "palindrome_number",
+      "result": null,
+      "bucket": "wrong",
+      "failure_stage": "gate"
+    },
+    {
+      "input": "i have a roman numeral like IX and want to convert it to its number value",
+      "expected": "roman_to_integer",
+      "result": null,
+      "bucket": "wrong",
+      "failure_stage": "gate"
+    },
+    {
+      "input": "given a bunch of strings, whats the longest prefix they all share",
+      "expected": "longest_common_prefix",
+      "result": null,
+      "bucket": "wrong",
+      "failure_stage": "gate"
+    },
+    {
+      "input": "i need to check if a string with parentheses brackets and braces is valid",
+      "expected": "valid_parentheses",
+      "result": null,
+      "bucket": "wrong",
+      "failure_stage": "gate"
+    },
+    {
+      "input": "how can i merge two sorted linked lists into one sorted list",
+      "expected": "merge_two_sorted_lists",
+      "result": null,
+      "bucket": "wrong",
+      "failure_stage": "gate"
+    },
+    {
+      "input": "given a sorted array, remove the duplicates in place and return how many unique elements there are",
+      "expected": "remove_duplicates",
+      "result": null,
+      "bucket": "wrong",
+      "failure_stage": "gate"
+    },
+    {
+      "input": "i want to find the first occurrence of a substring in a string and return its index, or -1 if not found",
+      "expected": "strStr",
+      "result": null,
+      "bucket": "wrong",
+      "failure_stage": "gate"
+    },
+    {
+      "input": "given a sorted array and a target, return the index if found, otherwise return where it should be inserted",
+      "expected": "search_insert",
+      "result": null,
+      "bucket": "wrong",
+      "failure_stage": "gate"
+    },
+    {
+      "input": "i need to find the longest substring that reads the same forwards and backwards",
+      "expected": "longest_palindrome",
+      "result": null,
+      "bucket": "wrong",
+      "failure_stage": "gate"
+    },
+    {
+      "input": "write a function that takes a string and number of rows, then writes the characters in a zigzag pattern and reads them row by row",
+      "expected": "zigzag_conversion",
+      "result": null,
+      "bucket": "wrong",
+      "failure_stage": "gate"
+    },
+    {
+      "input": "how do i reverse an integer, like turning 123 into 321, but handle overflow and negative numbers",
+      "expected": "reverse_integer",
+      "result": null,
+      "bucket": "wrong",
+      "failure_stage": "gate"
+    },
+    {
+      "input": "i need to convert a string to an integer, handling whitespace, optional sign, and stopping at non-digit characters",
+      "expected": "string_to_integer",
+      "result": null,
+      "bucket": "wrong",
+      "failure_stage": "gate"
+    },
+    {
+      "input": "given an array of heights, find two lines that together with the x-axis form a container holding the most water",
+      "expected": "max_area",
+      "result": null,
+      "bucket": "wrong",
+      "failure_stage": "gate"
+    },
+    {
+      "input": "how do i convert a regular number to a roman numeral string",
+      "expected": "int_to_roman",
+      "result": null,
+      "bucket": "wrong",
+      "failure_stage": "gate"
+    },
+    {
+      "input": "given an array of numbers, i need to find all sets of three numbers that add up to zero, without duplicates",
+      "expected": "three_sum",
+      "result": null,
+      "bucket": "wrong",
+      "failure_stage": "gate"
+    },
+    {
+      "input": "if i have a phone number with digits 2-9, what are all the possible letter combinations it could represent",
+      "expected": "letter_combinations",
+      "result": null,
+      "bucket": "wrong",
+      "failure_stage": "gate"
+    },
+    {
+      "input": "similar to 3sum but i need to find all groups of 4 numbers that add up to a target value",
+      "expected": "four_sum",
+      "result": null,
+      "bucket": "wrong",
+      "failure_stage": "gate"
+    },
+    {
+      "input": "given n pairs of parentheses, generate all the ways to write them out validly",
+      "expected": "generate_parenthesis",
+      "result": null,
+      "bucket": "wrong",
+      "failure_stage": "gate"
+    },
+    {
+      "input": "i have two sorted arrays and need to find the median of the combined sorted array, optimally",
+      "expected": "find_median_sorted_arrays",
+      "result": null,
+      "bucket": "wrong",
+      "failure_stage": "gate"
+    },
+    {
+      "input": "how do i check if a string matches a pattern where . matches any char and * means zero or more of the previous char",
+      "expected": "regular_expression_matching",
+      "result": null,
+      "bucket": "wrong",
+      "failure_stage": "gate"
+    },
+    {
+      "input": "given an elevation map with bar heights, how much water can be trapped between them after it rains",
+      "expected": "trap",
+      "result": null,
+      "bucket": "wrong",
+      "failure_stage": "gate"
+    },
+    {
+      "input": "in an unsorted array, whats the smallest positive integer thats missing",
+      "expected": "first_missing_positive",
+      "result": null,
+      "bucket": "wrong",
+      "failure_stage": "gate"
+    },
+    {
+      "input": "given n, i need to place n queens on an n×n chessboard so no two attack each other, and return all solutions",
+      "expected": "solve_n_queens",
+      "result": null,
+      "bucket": "wrong",
+      "failure_stage": "gate"
+    },
+    {
+      "input": "check if a string matches a pattern where ? matches any single char and * matches any sequence",
+      "expected": "wildcard_matching",
+      "result": null,
+      "bucket": "wrong",
+      "failure_stage": "gate"
+    },
+    {
+      "input": "whats the minimum number of operations (insert, delete, replace) to turn one string into another",
+      "expected": "min_distance",
+      "result": null,
+      "bucket": "wrong",
+      "failure_stage": "gate"
+    },
+    {
+      "input": "given strings s and t, find the smallest substring of s that has all the characters from t",
+      "expected": "min_window",
+      "result": null,
+      "bucket": "wrong",
+      "failure_stage": "gate"
+    },
+    {
+      "input": "given histogram bar heights, whats the area of the largest rectangle you can form",
+      "expected": "largest_rectangle_area",
+      "result": null,
+      "bucket": "wrong",
+      "failure_stage": "gate"
+    },
+    {
+      "input": "for an array and window size k, i need to find the maximum value in each sliding window",
+      "expected": "max_sliding_window",
+      "result": null,
+      "bucket": "wrong",
+      "failure_stage": "gate"
+    },
+    {
+      "input": "find the sum of all numbers below n that are divisible by 3 or 5",
+      "expected": "euler_1",
+      "result": null,
+      "bucket": "wrong",
+      "failure_stage": "gate"
+    },
+    {
+      "input": "sum all the even-valued fibonacci numbers that dont exceed n",
+      "expected": "euler_2",
+      "result": null,
+      "bucket": "wrong",
+      "failure_stage": "gate"
+    },
+    {
+      "input": "whats the largest prime factor of a given number",
+      "expected": "euler_3",
+      "result": null,
+      "bucket": "wrong",
+      "failure_stage": "gate"
+    },
+    {
+      "input": "given an array, find the length of the longest subsequence where elements are in strictly increasing order",
+      "expected": "longest_increasing_subsequence",
+      "result": null,
+      "bucket": "wrong",
+      "failure_stage": "gate"
+    },
+    {
+      "input": "i need to find the contiguous subarray with the largest sum",
+      "expected": "max_subarray",
+      "result": null,
+      "bucket": "wrong",
+      "failure_stage": "gate"
+    },
+    {
+      "input": "if i can climb 1 or 2 steps at a time, how many ways can i climb n stairs",
+      "expected": "climbing_stairs",
+      "result": null,
+      "bucket": "wrong",
+      "failure_stage": "gate"
+    },
+    {
+      "input": "given coin denominations and a target amount, whats the fewest coins needed to make that amount",
+      "expected": "coin_change",
+      "result": null,
+      "bucket": "wrong",
+      "failure_stage": "gate"
+    },
+    {
+      "input": "given a string, find the length of the longest substring without repeating characters",
+      "expected": "longest_substring_without_repeating_characters",
+      "result": null,
+      "bucket": "wrong",
+      "failure_stage": "gate"
+    },
+    {
+      "input": "given a string of a and b, whats the minimum changes to make it alternating with no two adjacent chars the same",
+      "expected": "alternating_string",
+      "result": null,
+      "bucket": "wrong",
+      "failure_stage": "gate"
+    },
+    {
+      "input": "arrange numbers 0 to n-1 so that the absolute difference between adjacent numbers is divisible by at least one value in list k",
+      "expected": "arrange_numbers_divisible",
+      "result": null,
+      "bucket": "wrong",
+      "failure_stage": "gate"
+    }
+  ]
+}
