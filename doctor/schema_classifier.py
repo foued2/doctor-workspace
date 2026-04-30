@@ -9,7 +9,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from doctor.ingest.problem_parser import _call_llm_with_stats
+from doctor.llm_client import _call_llm_with_stats
 
 # Few-shot examples drawn from ground truth labels
 FEW_SHOT = (
@@ -63,14 +63,20 @@ PROMPT_START = (
     "{\n"
     '  "domain": "array|string|math|matrix|linked_list|tree|graph",\n'
     '  "paradigm": "hashing|two_pointer|reversal|backtracking|dynamic_programming|recursive|iterative|greedy|stack_based|sliding_window|binary_search|other",\n'
+    '  "traversal": "specific algorithm pattern (e.g., two_pointer, expand_around_center, bottom_up, backtracking)",\n'
+    '  "data_structures": ["list", "of", "data", "structures", "needed"],\n'
+    '  "tags": ["relevant", "context", "tags"],\n'
     '  "dp_type": "1D|2D|",\n'
     '  "confidence": "high|low"\n'
     "}\n\n"
     "Rules:\n"
     "- domain: structural data type the problem operates on\n"
     "- paradigm: primary algorithmic technique\n"
+    "- traversal: specific algorithm pattern or approach\n"
+    "- data_structures: list of data structures the solution will use\n"
+    "- tags: list of relevant context tags (difficulty, techniques, etc.)\n"
     "- dp_type: only fill if problem uses dynamic programming\n"
-    "- confidence: high if clear, low if ambiguous\n\n"
+    "- confidence: high if clear, low if ambiguous.\n\n"
 )
 
 PROMPT_END = "\n\nOutput JSON:"
@@ -82,13 +88,16 @@ def classify_schema(statement):
     Returns: {"domain": str, "paradigm": str, "dp_type": str, "confidence": str}
     """
     prompt = PROMPT_START + FEW_SHOT + "Statement: " + statement + PROMPT_END
-    
+
     try:
         response, _ = _call_llm_with_stats(prompt)
         data = json.loads(response.strip())
         return {
             "domain": data.get("domain", ""),
             "paradigm": data.get("paradigm", ""),
+            "traversal": data.get("traversal", ""),
+            "data_structures": data.get("data_structures", []),
+            "tags": data.get("tags", []),
             "dp_type": data.get("dp_type", ""),
             "confidence": data.get("confidence", "low")
         }

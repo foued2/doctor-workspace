@@ -241,18 +241,95 @@ Continue tuning heuristics.
 
 ---
 
-# WHAT IS NEXT
+# ACTIVE ROADMAP — DOCTOR SYSTEMIZATION
 
-## Immediate (Option A - Hard Contract)
+This roadmap supersedes the older "Immediate / Hard Contract" next-step list.
 
-1. Replace `_check_structural_sufficiency()` with hard schema validation
-2. Require: input_type + operation + objective_or_constraint
-3. Hard reject if any field empty
-4. Rerun Phase 3 filtered by valid inputs
-5. Measure accuracy on contracted inputs only
+## Phase 0 — Complete This Session
 
-## Pending Items
-- Item 6 — OOD Detection via Embedding (Phase 4)
+Canonical pipeline now exists as `doctor/pipeline.py`.
+
+Status:
+- `run_pipeline()` is the single callable system path.
+- `doctor/run_doctor.py` delegates to `run_pipeline()`.
+- `doctor/benchmark/run_benchmark.py` delegates to `run_pipeline()` for recognition benchmarking.
+- `doctor/ingest/unified_engine.py` is deprecated and no longer the live Doctor decision path.
+- `doctor/llm_client.py` owns shared LLM calls.
+- `doctor/schema_classifier.py` is the canonical `classify_schema()` location.
+- `doctor/ingest/problem_parser.py` no longer owns duplicate schema classification.
+- `MIN_ALIGNMENT_SCORE = 0.85` blocks zero/low-alignment false accepts in both `problem_parser` and `registry_matcher`.
+
+Important caveat:
+- Doctor is structurally wired, but not yet safe to run on untrusted code because submitted code still reaches in-process `exec()`.
+
+## Phase 1 — Next Session
+
+Sandbox execution.
+
+Implement first:
+1. `doctor/core/sandbox_worker.py`
+   - Reads JSON from stdin: `{code, problem_id, tests}`.
+   - Normalizes/extracts the submitted function inside the child process.
+   - Runs tests.
+   - Writes a JSON execution report to stdout.
+
+2. `doctor/core/sandbox_runner.py`
+   - Parent process launches worker with `subprocess.run(...)`.
+   - Use `py -I -S doctor/core/sandbox_worker.py`.
+   - Pass a minimal environment and temporary working directory.
+   - Enforce timeout from the parent.
+   - On Windows, wrap the child process in a Job Object with kill-on-close and memory/time limits.
+
+3. Update `doctor/core/test_executor.py`
+   - Replace direct in-process function execution with sandbox runner calls.
+   - Preserve the existing `ExecutionReport` contract.
+
+Goal:
+- Doctor must not execute submitted code inside the main process.
+- Infinite loops and malicious imports must not hang or poison Doctor itself.
+
+## Phase 2 — Session 2
+
+Deterministic matcher boundary.
+
+Goal:
+- LLM parsing/classification becomes advisory only.
+- Final acceptance is made by Doctor code, not by an LLM `decision` field.
+- Acceptance must be based on schema alignment, required field matching, OOR checks, and thresholds.
+
+## Phase 3 — Session 3
+
+Delete non-canonical code.
+
+Targets:
+- `doctor/ingest/unified_engine.py`
+- `doctor/llm_cache.py`
+- orphan benchmark/audit scripts
+- orphan `DoctorGrader` class while preserving helper functions still used by `test_executor`
+
+Goal:
+- One system path, one cache strategy, one benchmark story.
+
+## Phase 4 — Session 4
+
+Evidence redesign.
+
+Replace the misleading single scalar with separate fields:
+- `pass_rate`
+- `coverage_strength`
+- `has_runtime_error`
+- `failed_core_cases`
+- `failed_edge_cases`
+
+Do not feed a blended evidence scalar to trust as if it were correctness support.
+
+## Phase 5 — Session 5
+
+Rebuild benchmarks on the full canonical pipeline with real solution code.
+
+Goal:
+- Produce actual Doctor system numbers, not isolated recognition/classifier numbers.
+- Benchmarks must exercise: gate → classify_schema → matcher → sandboxed executor → evidence → trust → report.
 
 ---
 

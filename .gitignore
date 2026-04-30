@@ -161,3 +161,5 @@ debug_*.py
 test_*.py
 fix_*.py
 *_runner.py
+!doctor/core/sandbox_runner.py
+!tests/test_sandbox_executor.py

@@ -8,10 +8,12 @@ from .core.test_executor import TestExecutor, TestCase, TestResult, ExecutionRep
 from .grading.evidence import compute_evidence_strength, get_final_label
 from .grading.trust import compute_trust_v1, compute_risk
 from .normalize.solution_normalizer import normalize_solution, extract_function, extract_function_for_problem
+from .pipeline import run_pipeline
 
 __all__ = [
     "TestExecutor", "TestCase", "TestResult", "ExecutionReport",
     "compute_evidence_strength", "get_final_label",
     "compute_trust_v1", "compute_risk",
     "normalize_solution", "extract_function", "extract_function_for_problem",
+    "run_pipeline",
 ]

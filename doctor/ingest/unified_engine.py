@@ -1,5 +1,10 @@
 #!/usr/bin/env python3
 """
+DEPRECATED: this module is no longer the live Doctor decision path.
+
+Use doctor.pipeline.run_pipeline() for the canonical system flow:
+gate -> classify_schema -> matcher -> normalizer -> executor -> evidence -> trust -> report.
+
 Unified Doctor Engine - Single LLM call for parse + match + confidence + decision.
 
 Architecture:

@@ -16,6 +16,7 @@ from typing import Any, Dict, Optional, Tuple
 SINGLE_CALL_ANALYSIS_KEY = "_single_call_analysis"
 NO_MATCH = "no match"
 VALID_DECISIONS = {"accept", "reject"}
+MIN_ALIGNMENT_SCORE = 0.85
 
 # Retained for compatibility with older helpers that import this symbol.
 _MATCH_PROMPT = (
@@ -205,6 +206,15 @@ def match_to_registry(model: Dict[str, Any]) -> Tuple[Optional[str], str, dict]:
 
     if decision == "accept" and normalized_match is None:
         return None, "Accepted decision without a valid registry match", trace
+
+    if decision == "accept" and alignment_score < MIN_ALIGNMENT_SCORE:
+        trace["decision"] = "reject"
+        trace["final"] = "reject"
+        return (
+            None,
+            f"Alignment score {alignment_score:.2f} below minimum {MIN_ALIGNMENT_SCORE:.2f}",
+            trace,
+        )
 
     if decision == "reject":
         reason = justification or "Rejected by single-call analysis"

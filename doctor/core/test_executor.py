@@ -8,12 +8,10 @@ No API calls. No structural analysis. Pure execution + verification.
 """
 from __future__ import annotations
 
-import copy
-import traceback
 from dataclasses import dataclass, field
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, List, Optional
 
-from .execution_trace import run_test_with_trace
+from .sandbox_runner import run_solution_in_sandbox
 from ..grading.doctor_grader import (
     classify_failure_severity,
     classify_failure_type,
@@ -282,18 +280,6 @@ def validate_arrangement(output, input_args):
     return True
 
 
-def _safe_exec(code: str, problem_name: str = None) -> Optional[callable]:
-    """Execute solution code and return the function, or None on error."""
-    from ..normalize.solution_normalizer import normalize_solution, extract_function
-    
-    # Normalize GPT-generated solutions through the normalizer
-    code = normalize_solution(code)
-    if code is None:
-        return None
-    
-    return extract_function(code, problem_name)
-
-
 # ===========================================================================
 # MAIN EXECUTOR
 # ===========================================================================
@@ -302,20 +288,28 @@ class TestExecutor:
 
     def _run_single_test(self, problem_identifier: str, solution_code: str, test_case: dict) -> dict:
         """Run a single test case and return trace dict."""
-        from doctor.normalize.solution_normalizer import normalize_solution, extract_function
-        
         suite_key = _resolve_suite_key(problem_identifier)
         if suite_key is None:
             return {"passed": False, "output": None, "error": "No problem found"}
-        
-        func = _safe_exec(solution_code, suite_key)
-        if func is None:
-            return {"passed": False, "output": None, "error": "Failed to parse solution"}
-        
-        test_input = test_case.get("input", [])
-        expected = test_case.get("expected")
-        
-        return run_test_with_trace(func, tuple(test_input), expected)
+
+        tc = TestCase(
+            input=_to_test_input(test_case.get("input", []), suite_key),
+            expected=test_case.get("expected"),
+            label=test_case.get("label", ""),
+            validation_type=test_case.get("validation_type"),
+        )
+        sandbox = run_solution_in_sandbox(
+            code=solution_code,
+            problem_id=suite_key,
+            tests=[tc],
+        )
+        if not sandbox.ok:
+            return {"passed": False, "output": None, "error": sandbox.error}
+        if sandbox.traces:
+            trace = sandbox.traces[0]
+            trace["passed"] = bool(sandbox.results[0].get("passed")) if sandbox.results else False
+            return trace
+        return {"passed": False, "output": None, "error": "No sandbox trace returned"}
 
     def verify(self, problem_identifier: str, solution_code: str) -> ExecutionReport:
         """Execute solution against test cases and return verdict.
@@ -343,47 +337,29 @@ class TestExecutor:
                 error=f"No test cases for suite key: {suite_key}",
             )
 
-        # Extract function
-        func = _safe_exec(solution_code, suite_key)
-        if func is None:
+        sandbox = run_solution_in_sandbox(
+            code=solution_code,
+            problem_id=suite_key,
+            tests=test_cases,
+        )
+        if not sandbox.ok:
             return ExecutionReport(
                 verdict="incorrect", pass_rate=0.0, total=len(test_cases), passed=0,
-                error="Failed to parse/execute solution code",
+                error=sandbox.error or "Sandbox execution failed",
             )
 
-        # Run test cases using execution tracing
         results: List[TestResult] = []
-        traces: List[dict] = []
-        for tc in test_cases:
-            trace = run_test_with_trace(func, tc.input, tc.expected)
-            traces.append(trace)
-
-            # Arrangement validator: use validator for pass/fail
-            if tc.validation_type == "arrangement_validator":
-                if trace["error"] is not None:
-                    passed = False
-                else:
-                    passed = validate_arrangement(trace["output"], tc.input)
-                validator_result = passed
-                validator_kind = "arrangement_validator"
-            else:
-                # E = _results_equal is the ONLY correctness criterion
-                if trace["error"] is not None:
-                    passed = False
-                else:
-                    passed = _results_equal(trace["output"], tc.expected)
-                validator_result, validator_kind = _verify_with_validator(
-                    suite_key, trace.get("output"), tc.input
-                )
-
+        for item in sandbox.results:
             results.append(TestResult(
-                label=tc.label, passed=passed,
-                got=trace["output"], expected=tc.expected,
-                error=trace["error"].split("\n")[-2] if trace["error"] else "",
+                label=item.get("label", ""),
+                passed=bool(item.get("passed")),
+                got=item.get("got"),
+                expected=item.get("expected"),
+                error=item.get("error", ""),
             ))
             # Store validator result for diagnostics (not used in pass/fail)
-            results[-1].validator_passed = validator_result
-            results[-1].validator_kind = validator_kind
+            results[-1].validator_passed = item.get("validator_passed")
+            results[-1].validator_kind = item.get("validator_kind")
 
         passed = sum(1 for r in results if r.passed)
         total = len(results)
@@ -449,5 +425,5 @@ class TestExecutor:
             severity=severity,
             core_failures=core_failures,
             edge_failures=edge_failures,
-            traces=traces,
+            traces=sandbox.traces,
         )
