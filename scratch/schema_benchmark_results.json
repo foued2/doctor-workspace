@@ -5,7 +5,7 @@
       "total": 38
     },
     "paradigm": {
-      "correct": 35,
+      "correct": 38,
       "total": 38
     },
     "dp_type": {
@@ -13,9 +13,9 @@
       "total": 8
     }
   },
-  "overall_correct": 80,
+  "overall_correct": 83,
   "overall_total": 84,
-  "overall_accuracy": 0.9523809523809523,
+  "overall_accuracy": 0.9880952380952381,
   "results": [
     {
       "problem_id": "two_sum",
@@ -70,8 +70,8 @@
       "problem_id": "three_sum",
       "field": "paradigm",
       "predicted": "two_pointer",
-      "ground_truth": "imperative",
-      "correct": false
+      "ground_truth": "two_pointer",
+      "correct": true
     },
     {
       "problem_id": "longest_palindrome",
@@ -231,8 +231,8 @@
       "problem_id": "merge_two_sorted_lists",
       "field": "paradigm",
       "predicted": "two_pointer",
-      "ground_truth": "iterative",
-      "correct": false
+      "ground_truth": "two_pointer",
+      "correct": true
     },
     {
       "problem_id": "strStr",
@@ -343,8 +343,8 @@
       "problem_id": "four_sum",
       "field": "paradigm",
       "predicted": "two_pointer",
-      "ground_truth": "nested_iteration",
-      "correct": false
+      "ground_truth": "two_pointer",
+      "correct": true
     },
     {
       "problem_id": "generate_parenthesis",
