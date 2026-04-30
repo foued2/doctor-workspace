@@ -1,0 +1,609 @@
+{
+  "field_scores": {
+    "domain": {
+      "correct": 38,
+      "total": 38
+    },
+    "paradigm": {
+      "correct": 26,
+      "total": 38
+    },
+    "dp_type": {
+      "correct": 7,
+      "total": 8
+    }
+  },
+  "overall_correct": 71,
+  "overall_total": 84,
+  "overall_accuracy": 0.8452380952380952,
+  "results": [
+    {
+      "problem_id": "two_sum",
+      "field": "domain",
+      "predicted": "array",
+      "ground_truth": "array",
+      "correct": true
+    },
+    {
+      "problem_id": "two_sum",
+      "field": "paradigm",
+      "predicted": "hashing",
+      "ground_truth": "hashing",
+      "correct": true
+    },
+    {
+      "problem_id": "palindrome_number",
+      "field": "domain",
+      "predicted": "math",
+      "ground_truth": "math",
+      "correct": true
+    },
+    {
+      "problem_id": "palindrome_number",
+      "field": "paradigm",
+      "predicted": "reversal",
+      "ground_truth": "reversal",
+      "correct": true
+    },
+    {
+      "problem_id": "remove_duplicates",
+      "field": "domain",
+      "predicted": "array",
+      "ground_truth": "array",
+      "correct": true
+    },
+    {
+      "problem_id": "remove_duplicates",
+      "field": "paradigm",
+      "predicted": "two_pointer",
+      "ground_truth": "two_pointer",
+      "correct": true
+    },
+    {
+      "problem_id": "three_sum",
+      "field": "domain",
+      "predicted": "array",
+      "ground_truth": "array",
+      "correct": true
+    },
+    {
+      "problem_id": "three_sum",
+      "field": "paradigm",
+      "predicted": "two_pointer",
+      "ground_truth": "imperative",
+      "correct": false
+    },
+    {
+      "problem_id": "longest_palindrome",
+      "field": "domain",
+      "predicted": "string",
+      "ground_truth": "string",
+      "correct": true
+    },
+    {
+      "problem_id": "longest_palindrome",
+      "field": "paradigm",
+      "predicted": "dynamic_programming",
+      "ground_truth": "dynamic_programming",
+      "correct": true
+    },
+    {
+      "problem_id": "longest_palindrome",
+      "field": "dp_type",
+      "predicted": "2D",
+      "ground_truth": "1D",
+      "correct": false
+    },
+    {
+      "problem_id": "letter_combinations",
+      "field": "domain",
+      "predicted": "string",
+      "ground_truth": "string",
+      "correct": true
+    },
+    {
+      "problem_id": "letter_combinations",
+      "field": "paradigm",
+      "predicted": "backtracking",
+      "ground_truth": "recursive",
+      "correct": false
+    },
+    {
+      "problem_id": "coin_change",
+      "field": "domain",
+      "predicted": "array",
+      "ground_truth": "array",
+      "correct": true
+    },
+    {
+      "problem_id": "coin_change",
+      "field": "paradigm",
+      "predicted": "dynamic_programming",
+      "ground_truth": "dynamic_programming",
+      "correct": true
+    },
+    {
+      "problem_id": "coin_change",
+      "field": "dp_type",
+      "predicted": "1D",
+      "ground_truth": "1D",
+      "correct": true
+    },
+    {
+      "problem_id": "solve_n_queens",
+      "field": "domain",
+      "predicted": "matrix",
+      "ground_truth": "matrix",
+      "correct": true
+    },
+    {
+      "problem_id": "solve_n_queens",
+      "field": "paradigm",
+      "predicted": "backtracking",
+      "ground_truth": "backtracking",
+      "correct": true
+    },
+    {
+      "problem_id": "regular_expression_matching",
+      "field": "domain",
+      "predicted": "string",
+      "ground_truth": "string",
+      "correct": true
+    },
+    {
+      "problem_id": "regular_expression_matching",
+      "field": "paradigm",
+      "predicted": "dynamic_programming",
+      "ground_truth": "dynamic_programming",
+      "correct": true
+    },
+    {
+      "problem_id": "regular_expression_matching",
+      "field": "dp_type",
+      "predicted": "2D",
+      "ground_truth": "2D",
+      "correct": true
+    },
+    {
+      "problem_id": "euler_3",
+      "field": "domain",
+      "predicted": "math",
+      "ground_truth": "math",
+      "correct": true
+    },
+    {
+      "problem_id": "euler_3",
+      "field": "paradigm",
+      "predicted": "iterative",
+      "ground_truth": "trial_division",
+      "correct": false
+    },
+    {
+      "problem_id": "roman_to_integer",
+      "field": "domain",
+      "predicted": "string",
+      "ground_truth": "string",
+      "correct": true
+    },
+    {
+      "problem_id": "roman_to_integer",
+      "field": "paradigm",
+      "predicted": "hashing",
+      "ground_truth": "accumulation",
+      "correct": false
+    },
+    {
+      "problem_id": "longest_common_prefix",
+      "field": "domain",
+      "predicted": "string",
+      "ground_truth": "string",
+      "correct": true
+    },
+    {
+      "problem_id": "longest_common_prefix",
+      "field": "paradigm",
+      "predicted": "iterative",
+      "ground_truth": "iterative",
+      "correct": true
+    },
+    {
+      "problem_id": "valid_parentheses",
+      "field": "domain",
+      "predicted": "string",
+      "ground_truth": "string",
+      "correct": true
+    },
+    {
+      "problem_id": "valid_parentheses",
+      "field": "paradigm",
+      "predicted": "stack_based",
+      "ground_truth": "stack_based",
+      "correct": true
+    },
+    {
+      "problem_id": "merge_two_sorted_lists",
+      "field": "domain",
+      "predicted": "linked_list",
+      "ground_truth": "linked_list",
+      "correct": true
+    },
+    {
+      "problem_id": "merge_two_sorted_lists",
+      "field": "paradigm",
+      "predicted": "iterative",
+      "ground_truth": "iterative",
+      "correct": true
+    },
+    {
+      "problem_id": "strStr",
+      "field": "domain",
+      "predicted": "string",
+      "ground_truth": "string",
+      "correct": true
+    },
+    {
+      "problem_id": "strStr",
+      "field": "paradigm",
+      "predicted": "two_pointer",
+      "ground_truth": "string_matching",
+      "correct": false
+    },
+    {
+      "problem_id": "search_insert",
+      "field": "domain",
+      "predicted": "array",
+      "ground_truth": "array",
+      "correct": true
+    },
+    {
+      "problem_id": "search_insert",
+      "field": "paradigm",
+      "predicted": "binary_search",
+      "ground_truth": "binary_search",
+      "correct": true
+    },
+    {
+      "problem_id": "zigzag_conversion",
+      "field": "domain",
+      "predicted": "string",
+      "ground_truth": "string",
+      "correct": true
+    },
+    {
+      "problem_id": "zigzag_conversion",
+      "field": "paradigm",
+      "predicted": "other",
+      "ground_truth": "simulation",
+      "correct": false
+    },
+    {
+      "problem_id": "reverse_integer",
+      "field": "domain",
+      "predicted": "math",
+      "ground_truth": "math",
+      "correct": true
+    },
+    {
+      "problem_id": "reverse_integer",
+      "field": "paradigm",
+      "predicted": "reversal",
+      "ground_truth": "reversal",
+      "correct": true
+    },
+    {
+      "problem_id": "string_to_integer",
+      "field": "domain",
+      "predicted": "string",
+      "ground_truth": "string",
+      "correct": true
+    },
+    {
+      "problem_id": "string_to_integer",
+      "field": "paradigm",
+      "predicted": "iterative",
+      "ground_truth": "finite_state_machine",
+      "correct": false
+    },
+    {
+      "problem_id": "max_area",
+      "field": "domain",
+      "predicted": "array",
+      "ground_truth": "array",
+      "correct": true
+    },
+    {
+      "problem_id": "max_area",
+      "field": "paradigm",
+      "predicted": "two_pointer",
+      "ground_truth": "two_pointer",
+      "correct": true
+    },
+    {
+      "problem_id": "int_to_roman",
+      "field": "domain",
+      "predicted": "math",
+      "ground_truth": "math",
+      "correct": true
+    },
+    {
+      "problem_id": "int_to_roman",
+      "field": "paradigm",
+      "predicted": "iterative",
+      "ground_truth": "greedy",
+      "correct": false
+    },
+    {
+      "problem_id": "four_sum",
+      "field": "domain",
+      "predicted": "array",
+      "ground_truth": "array",
+      "correct": true
+    },
+    {
+      "problem_id": "four_sum",
+      "field": "paradigm",
+      "predicted": "two_pointer",
+      "ground_truth": "nested_iteration",
+      "correct": false
+    },
+    {
+      "problem_id": "generate_parenthesis",
+      "field": "domain",
+      "predicted": "string",
+      "ground_truth": "string",
+      "correct": true
+    },
+    {
+      "problem_id": "generate_parenthesis",
+      "field": "paradigm",
+      "predicted": "backtracking",
+      "ground_truth": "backtracking",
+      "correct": true
+    },
+    {
+      "problem_id": "find_median_sorted_arrays",
+      "field": "domain",
+      "predicted": "array",
+      "ground_truth": "array",
+      "correct": true
+    },
+    {
+      "problem_id": "find_median_sorted_arrays",
+      "field": "paradigm",
+      "predicted": "binary_search",
+      "ground_truth": "binary_search",
+      "correct": true
+    },
+    {
+      "problem_id": "trap",
+      "field": "domain",
+      "predicted": "array",
+      "ground_truth": "array",
+      "correct": true
+    },
+    {
+      "problem_id": "trap",
+      "field": "paradigm",
+      "predicted": "two_pointer",
+      "ground_truth": "two_pointer",
+      "correct": true
+    },
+    {
+      "problem_id": "first_missing_positive",
+      "field": "domain",
+      "predicted": "array",
+      "ground_truth": "array",
+      "correct": true
+    },
+    {
+      "problem_id": "first_missing_positive",
+      "field": "paradigm",
+      "predicted": "other",
+      "ground_truth": "in_place_hashing",
+      "correct": false
+    },
+    {
+      "problem_id": "wildcard_matching",
+      "field": "domain",
+      "predicted": "string",
+      "ground_truth": "string",
+      "correct": true
+    },
+    {
+      "problem_id": "wildcard_matching",
+      "field": "paradigm",
+      "predicted": "dynamic_programming",
+      "ground_truth": "dynamic_programming",
+      "correct": true
+    },
+    {
+      "problem_id": "wildcard_matching",
+      "field": "dp_type",
+      "predicted": "2D",
+      "ground_truth": "2D",
+      "correct": true
+    },
+    {
+      "problem_id": "min_distance",
+      "field": "domain",
+      "predicted": "string",
+      "ground_truth": "string",
+      "correct": true
+    },
+    {
+      "problem_id": "min_distance",
+      "field": "paradigm",
+      "predicted": "dynamic_programming",
+      "ground_truth": "dynamic_programming",
+      "correct": true
+    },
+    {
+      "problem_id": "min_distance",
+      "field": "dp_type",
+      "predicted": "2D",
+      "ground_truth": "2D",
+      "correct": true
+    },
+    {
+      "problem_id": "min_window",
+      "field": "domain",
+      "predicted": "string",
+      "ground_truth": "string",
+      "correct": true
+    },
+    {
+      "problem_id": "min_window",
+      "field": "paradigm",
+      "predicted": "sliding_window",
+      "ground_truth": "sliding_window",
+      "correct": true
+    },
+    {
+      "problem_id": "largest_rectangle_area",
+      "field": "domain",
+      "predicted": "array",
+      "ground_truth": "array",
+      "correct": true
+    },
+    {
+      "problem_id": "largest_rectangle_area",
+      "field": "paradigm",
+      "predicted": "stack_based",
+      "ground_truth": "monotonic_stack",
+      "correct": false
+    },
+    {
+      "problem_id": "max_sliding_window",
+      "field": "domain",
+      "predicted": "array",
+      "ground_truth": "array",
+      "correct": true
+    },
+    {
+      "problem_id": "max_sliding_window",
+      "field": "paradigm",
+      "predicted": "sliding_window",
+      "ground_truth": "deque_based",
+      "correct": false
+    },
+    {
+      "problem_id": "euler_1",
+      "field": "domain",
+      "predicted": "math",
+      "ground_truth": "math",
+      "correct": true
+    },
+    {
+      "problem_id": "euler_1",
+      "field": "paradigm",
+      "predicted": "iterative",
+      "ground_truth": "iterative",
+      "correct": true
+    },
+    {
+      "problem_id": "euler_2",
+      "field": "domain",
+      "predicted": "math",
+      "ground_truth": "math",
+      "correct": true
+    },
+    {
+      "problem_id": "euler_2",
+      "field": "paradigm",
+      "predicted": "iterative",
+      "ground_truth": "iterative",
+      "correct": true
+    },
+    {
+      "problem_id": "longest_increasing_subsequence",
+      "field": "domain",
+      "predicted": "array",
+      "ground_truth": "array",
+      "correct": true
+    },
+    {
+      "problem_id": "longest_increasing_subsequence",
+      "field": "paradigm",
+      "predicted": "dynamic_programming",
+      "ground_truth": "dynamic_programming",
+      "correct": true
+    },
+    {
+      "problem_id": "longest_increasing_subsequence",
+      "field": "dp_type",
+      "predicted": "1D",
+      "ground_truth": "1D",
+      "correct": true
+    },
+    {
+      "problem_id": "max_subarray",
+      "field": "domain",
+      "predicted": "array",
+      "ground_truth": "array",
+      "correct": true
+    },
+    {
+      "problem_id": "max_subarray",
+      "field": "paradigm",
+      "predicted": "dynamic_programming",
+      "ground_truth": "dynamic_programming",
+      "correct": true
+    },
+    {
+      "problem_id": "max_subarray",
+      "field": "dp_type",
+      "predicted": "1D",
+      "ground_truth": "1D",
+      "correct": true
+    },
+    {
+      "problem_id": "climbing_stairs",
+      "field": "domain",
+      "predicted": "math",
+      "ground_truth": "math",
+      "correct": true
+    },
+    {
+      "problem_id": "climbing_stairs",
+      "field": "paradigm",
+      "predicted": "dynamic_programming",
+      "ground_truth": "dynamic_programming",
+      "correct": true
+    },
+    {
+      "problem_id": "climbing_stairs",
+      "field": "dp_type",
+      "predicted": "1D",
+      "ground_truth": "1D",
+      "correct": true
+    },
+    {
+      "problem_id": "longest_substring_without_repeating_characters",
+      "field": "domain",
+      "predicted": "string",
+      "ground_truth": "string",
+      "correct": true
+    },
+    {
+      "problem_id": "longest_substring_without_repeating_characters",
+      "field": "paradigm",
+      "predicted": "sliding_window",
+      "ground_truth": "sliding_window",
+      "correct": true
+    },
+    {
+      "problem_id": "alternating_string",
+      "field": "domain",
+      "predicted": "string",
+      "ground_truth": "string",
+      "correct": true
+    },
+    {
+      "problem_id": "alternating_string",
+      "field": "paradigm",
+      "predicted": "greedy",
+      "ground_truth": "greedy",
+      "correct": true
+    }
+  ]
+}
