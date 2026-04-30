@@ -312,7 +312,39 @@ Output JSON:"""
     except json.JSONDecodeError as e:
         return "none", "low", f"json parse error: {e}"
     except Exception as e:
-        return "none", "low", f"call error: {e}"
+        return ["none"], "low", f"call error: {e}"
+
+
+def classify_schema(statement: str) -> dict:
+    """Classify problem statement into schema fields using LLM."""
+    import json
+
+    prompt = (
+        "Classify this problem statement into schema fields.\n\n"
+        "Return only valid JSON:\n"
+        "{\n"
+        '  "domain": "array|string|math|matrix|linked_list|tree|graph",\n'
+        '  "paradigm": "hashing|two_pointer|reversal|backtracking|dynamic_programming|recursive|iterative|greedy|stack_based|sliding_window|binary_search|other",\n'
+        '  "dp_type": "1D|2D|"\n'
+        "}\n\n"
+        "Rules:\n"
+        "- domain: structural data type the problem operates on\n"
+        "- paradigm: primary algorithmic technique\n"
+        "- dp_type: only fill if problem uses dynamic programming\n\n"
+        f"Statement: {statement}\n\n"
+        "Output JSON:"
+    )
+
+    try:
+        response, _ = _call_llm_with_stats(prompt)
+        data = json.loads(response.strip())
+        return {
+            "domain": data.get("domain", ""),
+            "paradigm": data.get("paradigm", ""),
+            "dp_type": data.get("dp_type", "")
+        }
+    except Exception as e:
+        return {"domain": "", "paradigm": "", "dp_type": "", "error": str(e)}
 
 
 def _check_structural_sufficiency(statement: str) -> tuple[bool, str]:
@@ -409,11 +441,19 @@ def analyze_problem(statement: str) -> Dict[str, Any]:
             "justification": gate_reason,
             "retry_count": 0,
             "structural_gate_rejection": True,
+            "schema_classification": {},
         }
     
     problems = get_registry_problems()
     if not problems:
         raise ValueError("Registry empty")
+
+    # Classify schema after gate passes
+    try:
+        from doctor.schema_classifier import classify_schema
+        schema_info = classify_schema(statement)
+    except Exception as e:
+        schema_info = {"error": str(e)}
 
     registry_context = build_registry_context(problems)
     prompt = _PROMPT.format(
@@ -456,6 +496,7 @@ def analyze_problem(statement: str) -> Dict[str, Any]:
         "justification": justification,
         "retry_count": retry_count,
         "json_repair": repair_info,
+        "schema_classification": schema_info,
     }
 
 
