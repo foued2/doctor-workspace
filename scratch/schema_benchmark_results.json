@@ -5,7 +5,7 @@
       "total": 38
     },
     "paradigm": {
-      "correct": 26,
+      "correct": 35,
       "total": 38
     },
     "dp_type": {
@@ -13,9 +13,9 @@
       "total": 8
     }
   },
-  "overall_correct": 71,
+  "overall_correct": 80,
   "overall_total": 84,
-  "overall_accuracy": 0.8452380952380952,
+  "overall_accuracy": 0.9523809523809523,
   "results": [
     {
       "problem_id": "two_sum",
@@ -105,8 +105,8 @@
       "problem_id": "letter_combinations",
       "field": "paradigm",
       "predicted": "backtracking",
-      "ground_truth": "recursive",
-      "correct": false
+      "ground_truth": "backtracking",
+      "correct": true
     },
     {
       "problem_id": "coin_change",
@@ -174,9 +174,9 @@
     {
       "problem_id": "euler_3",
       "field": "paradigm",
-      "predicted": "iterative",
+      "predicted": "trial_division",
       "ground_truth": "trial_division",
-      "correct": false
+      "correct": true
     },
     {
       "problem_id": "roman_to_integer",
@@ -188,9 +188,9 @@
     {
       "problem_id": "roman_to_integer",
       "field": "paradigm",
-      "predicted": "hashing",
+      "predicted": "accumulation",
       "ground_truth": "accumulation",
-      "correct": false
+      "correct": true
     },
     {
       "problem_id": "longest_common_prefix",
@@ -230,9 +230,9 @@
     {
       "problem_id": "merge_two_sorted_lists",
       "field": "paradigm",
-      "predicted": "iterative",
+      "predicted": "two_pointer",
       "ground_truth": "iterative",
-      "correct": true
+      "correct": false
     },
     {
       "problem_id": "strStr",
@@ -244,9 +244,9 @@
     {
       "problem_id": "strStr",
       "field": "paradigm",
-      "predicted": "two_pointer",
+      "predicted": "string_matching",
       "ground_truth": "string_matching",
-      "correct": false
+      "correct": true
     },
     {
       "problem_id": "search_insert",
@@ -272,9 +272,9 @@
     {
       "problem_id": "zigzag_conversion",
       "field": "paradigm",
-      "predicted": "other",
+      "predicted": "simulation",
       "ground_truth": "simulation",
-      "correct": false
+      "correct": true
     },
     {
       "problem_id": "reverse_integer",
@@ -300,9 +300,9 @@
     {
       "problem_id": "string_to_integer",
       "field": "paradigm",
-      "predicted": "iterative",
+      "predicted": "finite_state_machine",
       "ground_truth": "finite_state_machine",
-      "correct": false
+      "correct": true
     },
     {
       "problem_id": "max_area",
@@ -328,9 +328,9 @@
     {
       "problem_id": "int_to_roman",
       "field": "paradigm",
-      "predicted": "iterative",
+      "predicted": "greedy",
       "ground_truth": "greedy",
-      "correct": false
+      "correct": true
     },
     {
       "problem_id": "four_sum",
@@ -398,9 +398,9 @@
     {
       "problem_id": "first_missing_positive",
       "field": "paradigm",
-      "predicted": "other",
+      "predicted": "in_place_hashing",
       "ground_truth": "in_place_hashing",
-      "correct": false
+      "correct": true
     },
     {
       "problem_id": "wildcard_matching",
@@ -468,9 +468,9 @@
     {
       "problem_id": "largest_rectangle_area",
       "field": "paradigm",
-      "predicted": "stack_based",
+      "predicted": "monotonic_stack",
       "ground_truth": "monotonic_stack",
-      "correct": false
+      "correct": true
     },
     {
       "problem_id": "max_sliding_window",
@@ -483,8 +483,8 @@
       "problem_id": "max_sliding_window",
       "field": "paradigm",
       "predicted": "sliding_window",
-      "ground_truth": "deque_based",
-      "correct": false
+      "ground_truth": "sliding_window",
+      "correct": true
     },
     {
       "problem_id": "euler_1",

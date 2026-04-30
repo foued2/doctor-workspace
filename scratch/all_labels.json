@@ -69,7 +69,7 @@
       "statement_summary": "Given an integer array nums, return all unique triplets [nums[i], nums[j], nums[k]] such that i != j != k and nums[i] + nums[j] + nums[k] == 0",
       "schema": {
         "domain": "array",
-        "paradigm": "imperative",
+        "paradigm": "two_pointer",
         "traversal": "sorting_plus_two_pointer",
         "data_structures": [
           "array"
@@ -106,7 +106,7 @@
       "statement_summary": "Given a string containing digits from 2 to 9 inclusive, return all possible letter combinations that the number could represent",
       "schema": {
         "domain": "string",
-        "paradigm": "recursive",
+        "paradigm": "backtracking",
         "traversal": "backtracking",
         "data_structures": [
           "string",
@@ -266,7 +266,7 @@
       "statement_summary": "Merge two sorted linked lists and return the merged list as a sorted linked list",
       "schema": {
         "domain": "linked_list",
-        "paradigm": "iterative",
+        "paradigm": "two_pointer",
         "traversal": "two_pointer_merge",
         "data_structures": [
           "linked_list"
@@ -420,7 +420,7 @@
       "statement_summary": "Given an integer array nums and an integer target, return all unique quadruplets [nums[i], nums[j], nums[k], nums[l]] where i < j < k < l and sum equals target",
       "schema": {
         "domain": "array",
-        "paradigm": "nested_iteration",
+        "paradigm": "two_pointer",
         "traversal": "sorting_plus_two_pointer",
         "data_structures": [
           "array"
@@ -596,7 +596,7 @@
       "statement_summary": "Given an array of integers nums and an integer k, return the maximum value in each sliding window of size k",
       "schema": {
         "domain": "array",
-        "paradigm": "deque_based",
+        "paradigm": "sliding_window",
         "traversal": "sliding_window",
         "data_structures": [
           "array",
